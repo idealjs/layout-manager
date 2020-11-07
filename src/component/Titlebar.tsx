@@ -7,7 +7,6 @@ const Titlebar = (props: { nodeIds: string[] }) => {
     const [selected, setSelected] = useState("");
 
     useEffect(() => {
-        console.log(nodeIds, selected);
         if (!nodeIds.includes(selected)) {
             setSelected(nodeIds[0]);
         }

@@ -1,5 +1,6 @@
 import interact from "interactjs";
 import React, {
+    Fragment,
     useCallback,
     useContext,
     useEffect,
@@ -7,7 +8,7 @@ import React, {
     useRef,
 } from "react";
 
-import { selectById, updateOne } from "../reducer/nodes";
+import { remove, selectById, updateOne } from "../reducer/nodes";
 import CustomTab from "./CustomTab";
 import { context } from "./Provider";
 
@@ -23,7 +24,6 @@ const Tab = (props: {
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
 
     const onClick = useCallback(() => {
-        console.log("test test", nodeId);
         onSelect(nodeId);
     }, [nodeId, onSelect]);
 
@@ -45,10 +45,15 @@ const Tab = (props: {
 
     const closeTab = useCallback(() => {
         console.log("test test ");
-    }, []);
+        dispatch(
+            remove({
+                nodeId,
+            })
+        );
+    }, [dispatch, nodeId]);
 
     return (
-        <div ref={ref} className={"Tab"}>
+        <Fragment>
             {node?.Tab ? (
                 <node.Tab
                     nodeId={nodeId}
@@ -66,7 +71,7 @@ const Tab = (props: {
                     onClose={closeTab}
                 />
             )}
-        </div>
+        </Fragment>
     );
 };
 

@@ -14,8 +14,19 @@ const nodes: INode[] = [
     },
     {
         id: "A",
-        type: NODE_TYPE.LAYOUT_NODE,
+        type: NODE_TYPE.WIDGET_NODE,
         parentId: "root",
+        children: ["A_A", "A_B"],
+    },
+    {
+        id: "A_A",
+        type: NODE_TYPE.PANEL,
+        parentId: "A",
+    },
+    {
+        id: "A_B",
+        type: NODE_TYPE.PANEL,
+        parentId: "A",
     },
     {
         id: "B",
