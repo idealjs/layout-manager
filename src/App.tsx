@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+import Layout from "./component/Layout";
+import Provider from "./component/Provider";
+import { DIRECTION, INode, NODE_TYPE } from "./reducer/nodes";
+
+const nodes: INode[] = [
+    {
+        id: "root",
+        type: NODE_TYPE.LAYOUT_NODE,
+        parentId: "",
+        direction: DIRECTION.COLUMN,
+        children: ["A", "B"],
+    },
+    {
+        id: "A",
+        type: NODE_TYPE.LAYOUT_NODE,
+        parentId: "root",
+    },
+    {
+        id: "B",
+        type: NODE_TYPE.LAYOUT_NODE,
+        parentId: "root",
+        children: ["B_A", "B_B"],
+        direction: DIRECTION.ROW,
+    },
+    {
+        id: "B_A",
+        type: NODE_TYPE.WIDGET_NODE,
+        parentId: "B",
+        children: ["B_A_B", "B_A_A"],
+    },
+    {
+        id: "B_B",
+        type: NODE_TYPE.WIDGET_NODE,
+        parentId: "B",
+        children: ["B_B_B", "B_B_A"],
+    },
+    {
+        id: "B_B_B",
+        type: NODE_TYPE.PANEL,
+        parentId: "B_B",
+    },
+    {
+        id: "B_B_A",
+        type: NODE_TYPE.PANEL,
+        parentId: "B_B",
+    },
+    {
+        id: "B_A_B",
+        type: NODE_TYPE.PANEL,
+        parentId: "B_A",
+    },
+    {
+        id: "B_A_A",
+        type: NODE_TYPE.PANEL,
+        parentId: "B_A",
+    },
+];
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    return (
+        <div
+            className="App"
+            style={{ height: 500, width: 500, backgroundColor: "grey" }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <Provider value={nodes}>
+                <Layout nodeId="root" />
+            </Provider>
+        </div>
+    );
 }
 
 export default App;
