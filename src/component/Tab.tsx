@@ -44,7 +44,6 @@ const Tab = (props: {
     }, [dispatch, nodeId, selected]);
 
     const closeTab = useCallback(() => {
-        console.log("test test ");
         dispatch(
             remove({
                 nodeId,

@@ -4,6 +4,7 @@ import {
     EntityState,
     PayloadAction,
 } from "@reduxjs/toolkit";
+import { uniqueId } from "lodash";
 import {
     ForwardRefExoticComponent,
     FunctionComponent,
@@ -89,9 +90,10 @@ const moveNode = (
     part: MASK_PART | null
 ): EntityState<INode> => {
     let nextState = state;
-    const moveNode = selectById(nextState, moveNodeId);
+
     switch (part) {
         case MASK_PART.CENTER: {
+            const moveNode = selectById(nextState, moveNodeId);
             nextState = removeNode(nextState, moveNodeId);
 
             if (moveNode != null) {
@@ -100,18 +102,87 @@ const moveNode = (
 
             const searchNode = selectById(nextState, searchNodeId);
 
-            nextState = adapter.updateOne(nextState, {
-                id: searchNodeId,
-                changes: {
-                    children:
-                        searchNode?.children != null
-                            ? searchNode.children.concat(moveNodeId)
-                            : [moveNodeId],
+            nextState = adapter.updateMany(nextState, [
+                {
+                    id: searchNodeId,
+                    changes: {
+                        children:
+                            searchNode?.children != null
+                                ? searchNode.children.concat(moveNodeId)
+                                : [moveNodeId],
+                    },
                 },
-            });
+                {
+                    id: moveNodeId,
+                    changes: {
+                        parentId: searchNodeId,
+                    },
+                },
+            ]);
             break;
         }
         case MASK_PART.TOP: {
+            const moveNode = selectById(nextState, moveNodeId);
+            nextState = removeNode(nextState, moveNodeId);
+
+            const searchNode = selectById(nextState, searchNodeId);
+
+            const layoutId = uniqueId();
+            const layout: INode = {
+                id: layoutId,
+                parentId: "",
+                type: NODE_TYPE.LAYOUT_NODE,
+                direction: DIRECTION.COLUMN,
+                children: [],
+            };
+            nextState = adapter.addOne(nextState, layout);
+
+            nextState = replaceNode(nextState, searchNodeId, layoutId);
+
+            const widgetId = uniqueId();
+            const widget: INode = {
+                id: widgetId,
+                parentId: "",
+                type: NODE_TYPE.WIDGET_NODE,
+                children: [],
+            };
+
+            if (searchNode != null && moveNode != null) {
+                nextState = adapter.addMany(nextState, [
+                    widget,
+                    searchNode,
+                    moveNode,
+                ]);
+            }
+
+            nextState = adapter.updateMany(nextState, [
+                {
+                    id: searchNodeId,
+                    changes: {
+                        parentId: layoutId,
+                    },
+                },
+                {
+                    id: widgetId,
+                    changes: {
+                        parentId: layoutId,
+                        children: [moveNodeId],
+                    },
+                },
+                {
+                    id: layoutId,
+                    changes: {
+                        children: [widgetId, searchNodeId],
+                    },
+                },
+                {
+                    id: moveNodeId,
+                    changes: {
+                        parentId: widgetId,
+                    },
+                },
+            ]);
+
             break;
         }
         case MASK_PART.BOTTOM: {
@@ -171,7 +242,6 @@ const removeNode = (
                     }
                 }
             }
-
             nextState = adapter.removeOne(nextState, nodeId);
             nextState = adapter.updateOne(nextState, {
                 id: node.parentId,
