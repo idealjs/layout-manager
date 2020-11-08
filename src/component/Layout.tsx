@@ -69,7 +69,7 @@ const Layout = (props: { nodeId: string }) => {
     }, [node, parent]);
 
     return (
-        <div ref={ref} style={style}>
+        <div id={nodeId} ref={ref} style={style}>
             {node?.children?.map((childId, index, array) => {
                 const child = selectById(nodes, childId);
                 return (

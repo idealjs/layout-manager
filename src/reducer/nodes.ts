@@ -203,42 +203,48 @@ const moveNode = (
 
 const removeNode = (
     state: EntityState<INode>,
-    nodeId: string
+    nodeId: string,
+    keepOffset: boolean = true
 ): EntityState<INode> => {
     let nextState = state;
     const node = adapter.getSelectors().selectById(state, nodeId);
+    console.log("test test", node?.id, node?.parentId);
     if (node?.parentId != null) {
         const parent = selectById(nextState, node?.parentId);
         if (parent?.children != null) {
-            const index = parent.children.findIndex(
-                (childId) => childId === nodeId
-            );
             //update borther's offset before node removed.
-            if (index !== -1) {
-                const prevNodeId = parent.children[index - 1];
-                const nextNodeId = parent.children[index + 1];
-                if (prevNodeId != null) {
-                    const prevNode = selectById(nextState, prevNodeId);
-                    if (prevNode != null) {
-                        nextState = adapter.updateOne(nextState, {
-                            id: prevNodeId,
-                            changes: {
-                                offset:
-                                    (prevNode.offset || 0) + (node.offset || 0),
-                            },
-                        });
+            if (keepOffset) {
+                const index = parent.children.findIndex(
+                    (childId) => childId === nodeId
+                );
+                if (index !== -1) {
+                    const prevNodeId = parent.children[index - 1];
+                    const nextNodeId = parent.children[index + 1];
+                    if (prevNodeId != null) {
+                        const prevNode = selectById(nextState, prevNodeId);
+                        if (prevNode != null) {
+                            nextState = adapter.updateOne(nextState, {
+                                id: prevNodeId,
+                                changes: {
+                                    offset:
+                                        (prevNode.offset || 0) +
+                                        (node.offset || 0),
+                                },
+                            });
+                        }
                     }
-                }
-                if (nextNodeId != null) {
-                    const nextNode = selectById(nextState, nextNodeId);
-                    if (nextNode != null) {
-                        nextState = adapter.updateOne(nextState, {
-                            id: nextNodeId,
-                            changes: {
-                                offset:
-                                    (nextNode.offset || 0) - (node.offset || 0),
-                            },
-                        });
+                    if (nextNodeId != null) {
+                        const nextNode = selectById(nextState, nextNodeId);
+                        if (nextNode != null) {
+                            nextState = adapter.updateOne(nextState, {
+                                id: nextNodeId,
+                                changes: {
+                                    offset:
+                                        (nextNode.offset || 0) -
+                                        (node.offset || 0),
+                                },
+                            });
+                        }
                     }
                 }
             }
@@ -259,7 +265,8 @@ const removeNode = (
 const replaceNode = (
     state: EntityState<INode>,
     searchNodeId: string,
-    replaceNodeId: string
+    replaceNodeId: string,
+    keepOffset: boolean = true
 ): EntityState<INode> => {
     let nextState = state;
     const searchNode = selectById(nextState, searchNodeId);
@@ -275,6 +282,7 @@ const replaceNode = (
                         id: replaceNodeId,
                         changes: {
                             parentId: searchNode.parentId,
+                            offset: keepOffset ? searchNode.offset : 0,
                         },
                     },
                     {
@@ -288,7 +296,7 @@ const replaceNode = (
                         },
                     },
                 ]);
-                nextState = removeNode(nextState, searchNodeId);
+                nextState = removeNode(nextState, searchNodeId, false);
             }
         }
     }
@@ -309,14 +317,12 @@ const shakeTree = (
         }, nextState);
 
         node = selectById(nextState, nodeId);
-        console.log(node?.id, node?.children?.length, node?.type);
         if (node?.children != null) {
             if (
                 node.children.length === 1 &&
                 node.id !== "root" &&
                 node.type === NODE_TYPE.LAYOUT_NODE
             ) {
-                console.log("replace node");
                 nextState = replaceNode(nextState, nodeId, node.children[0]);
             }
 
