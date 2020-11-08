@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 import useStateContainer from "../lib/useStateContainer";
-import { DIRECTION, selectById, updateMany, updateOne } from "../reducer/nodes";
+import { DIRECTION, move, selectById, updateOne } from "../reducer/nodes";
 import Panel from "./Panel";
 import { context } from "./Provider";
 import Titlebar from "./Titlebar";
@@ -151,180 +151,15 @@ const Widget = (props: { nodeId: string }) => {
                 accept: ".Tab",
             })
             .on("drop", (event) => {
-                // const dragNode = findNode(
-                //     node.root,
-                //     event.dragEvent.target.id
-                // ) as PanelNode;
-                const dragNode = selectById(nodes, event.dragEvent.target.id);
-                if (dragNode == null) {
-                    setMaskPart(null);
-                    return;
-                }
-                const dragNodeParent = selectById(nodes, dragNode.parentId);
-                if (dragNodeParent == null) {
-                    setMaskPart(null);
-                    return;
-                }
-                if (maskPartContainer.current === MASK_PART.CENTER) {
-                    dispatch(
-                        updateMany([
-                            {
-                                id: nodeId,
-                                changes: {
-                                    children: node?.children?.concat(
-                                        dragNode.id
-                                    ),
-                                },
-                            },
-                            {
-                                id: dragNode.id,
-                                changes: {
-                                    parentId: nodeId,
-                                },
-                            },
-                            {
-                                id: dragNodeParent.id,
-                                changes: {
-                                    children: dragNodeParent.children?.filter(
-                                        (childId) => childId !== dragNode.id
-                                    ),
-                                },
-                            },
-                        ])
-                    );
-                    // removeNode(dragNode);
-
-                    // movePanelToWidget(dragNode, dropNode);
-                }
-
-                // if (
-                //     (dropNode.parent?.direction === DIRECTION.ROW ||
-                //         dropNode.parent?.direction === DIRECTION.ROWREV) &&
-                //     (maskPosition === MASK_PART.RIGHT ||
-                //         maskPosition === MASK_PART.LEFT)
-                // ) {
-                //     let index = dropNode.parent.children.findIndex(
-                //         (child) => child.id === dropNode.id
-                //     );
-                //     if (index !== -1) {
-                //         const widget = new WidgetNode(
-                //             {
-                //                 id: uniqueId(),
-                //                 type: NODE_TYPE.WIDGET_NODE,
-                //                 children: [],
-                //             },
-                //             dropNode.root
-                //         );
-                //         removeNode(dragNode);
-                //         movePanelToWidget(dragNode, widget);
-                //         index =
-                //             maskPosition === MASK_PART.LEFT ? index : index + 1;
-                //         moveNodeToLayout(widget, dropNode.parent, index);
-                //     }
-                // }
-
-                // if (
-                //     (dropNode.parent?.direction === DIRECTION.COLUMN ||
-                //         dropNode.parent?.direction === DIRECTION.COLUMNREV) &&
-                //     (maskPosition === MASK_PART.BOTTOM ||
-                //         maskPosition === MASK_PART.TOP)
-                // ) {
-                //     let index = dropNode.parent.children.findIndex(
-                //         (child) => child.id === dropNode.id
-                //     );
-                //     if (index !== -1) {
-                //         const widget = new WidgetNode(
-                //             {
-                //                 id: uniqueId(),
-                //                 type: NODE_TYPE.WIDGET_NODE,
-                //                 children: [],
-                //             },
-                //             dropNode.root
-                //         );
-                //         removeNode(dragNode);
-                //         movePanelToWidget(dragNode, widget);
-
-                //         index =
-                //             maskPosition === MASK_PART.TOP ? index : index + 1;
-                //         moveNodeToLayout(widget, dropNode.parent, index);
-                //     }
-                // }
-
-                // if (
-                //     (dropNode.parent?.direction === DIRECTION.ROW ||
-                //         dropNode.parent?.direction === DIRECTION.ROWREV) &&
-                //     (maskPosition === MASK_PART.BOTTOM ||
-                //         maskPosition === MASK_PART.TOP)
-                // ) {
-                //     const layout = new LayoutNode(
-                //         {
-                //             id: uniqueId(),
-                //             type: NODE_TYPE.LAYOUT_NODE,
-                //             direction: DIRECTION.COLUMN,
-                //             children: [],
-                //         },
-                //         dropNode.root
-                //     );
-
-                //     const widget = new WidgetNode(
-                //         {
-                //             id: uniqueId(),
-                //             type: NODE_TYPE.WIDGET_NODE,
-                //             children: [],
-                //         },
-                //         dropNode.root
-                //     );
-
-                //     replaceNode(dropNode, layout);
-
-                //     removeNode(dragNode);
-                //     movePanelToWidget(dragNode, widget);
-
-                //     moveNodeToLayout(dropNode, layout);
-
-                //     maskPosition === MASK_PART.TOP
-                //         ? moveNodeToLayout(widget, layout, 0)
-                //         : moveNodeToLayout(widget, layout);
-                // }
-
-                // if (
-                //     (dropNode.parent?.direction === DIRECTION.COLUMN ||
-                //         dropNode.parent?.direction === DIRECTION.COLUMNREV) &&
-                //     (maskPosition === MASK_PART.RIGHT ||
-                //         maskPosition === MASK_PART.LEFT)
-                // ) {
-                //     const layout = new LayoutNode(
-                //         {
-                //             id: uniqueId(),
-                //             type: NODE_TYPE.LAYOUT_NODE,
-                //             direction: DIRECTION.ROW,
-                //             children: [],
-                //         },
-                //         dropNode.root
-                //     );
-
-                //     const widget = new WidgetNode(
-                //         {
-                //             id: uniqueId(),
-                //             type: NODE_TYPE.WIDGET_NODE,
-                //             children: [],
-                //         },
-                //         dropNode.root
-                //     );
-
-                //     replaceNode(dropNode, layout);
-
-                //     removeNode(dragNode);
-                //     movePanelToWidget(dragNode, widget);
-
-                //     moveNodeToLayout(dropNode, layout);
-
-                //     maskPosition === MASK_PART.LEFT
-                //         ? moveNodeToLayout(widget, layout, 0)
-                //         : moveNodeToLayout(widget, layout);
-                // }
                 setMaskPart(null);
-                // moveNode(dragNode, node, maskPartContainer.current!);
+
+                dispatch(
+                    move({
+                        searchNodeId: nodeId,
+                        moveNodeId: event.dragEvent.target.id,
+                        part: maskPartContainer.current,
+                    })
+                );
             })
             .on("dropmove", (event) => {
                 const rect = widgetRef.current?.getBoundingClientRect();

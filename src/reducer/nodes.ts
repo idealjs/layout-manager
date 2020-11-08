@@ -2,12 +2,15 @@ import {
     createEntityAdapter,
     createSlice,
     EntityState,
+    PayloadAction,
 } from "@reduxjs/toolkit";
 import {
     ForwardRefExoticComponent,
     FunctionComponent,
     RefAttributes,
 } from "react";
+
+import { MASK_PART } from "../component/Widget";
 
 export enum NODE_TYPE {
     LAYOUT_NODE = "LAYOUT_NODE",
@@ -55,36 +58,123 @@ const slice = createSlice({
         addMany: adapter.addMany,
         updateOne: adapter.updateOne,
         updateMany: adapter.updateMany,
-        // move: (
-        //     state,
-        //     action: PayloadAction<{ nodeId: string; toNodeId: string }>
-        // ) => {
-        //     return state;
-        // },
         removeOne: adapter.removeOne,
-        remove: (
+        move: (
             state,
-            action: { type: string; payload: { nodeId: string } }
+            action: PayloadAction<{
+                searchNodeId: string;
+                moveNodeId: string;
+                part: MASK_PART | null;
+            }>
         ) => {
+            const nextState = moveNode(
+                state,
+                action.payload.searchNodeId,
+                action.payload.moveNodeId,
+                action.payload.part
+            );
+            return shakeTree(nextState, "root");
+        },
+        remove: (state, action: PayloadAction<{ nodeId: string }>) => {
             const nextState = removeNode(state, action.payload.nodeId);
             return shakeTree(nextState, "root");
         },
     },
 });
 
+const moveNode = (
+    state: EntityState<INode>,
+    searchNodeId: string,
+    moveNodeId: string,
+    part: MASK_PART | null
+): EntityState<INode> => {
+    let nextState = state;
+    const moveNode = selectById(nextState, moveNodeId);
+    switch (part) {
+        case MASK_PART.CENTER: {
+            nextState = removeNode(nextState, moveNodeId);
+
+            if (moveNode != null) {
+                nextState = adapter.addOne(nextState, moveNode);
+            }
+
+            const searchNode = selectById(nextState, searchNodeId);
+
+            nextState = adapter.updateOne(nextState, {
+                id: searchNodeId,
+                changes: {
+                    children:
+                        searchNode?.children != null
+                            ? searchNode.children.concat(moveNodeId)
+                            : [moveNodeId],
+                },
+            });
+            break;
+        }
+        case MASK_PART.TOP: {
+            break;
+        }
+        case MASK_PART.BOTTOM: {
+            break;
+        }
+        case MASK_PART.LEFT: {
+            break;
+        }
+        case MASK_PART.RIGHT: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    return nextState;
+};
+
 const removeNode = (
     state: EntityState<INode>,
     nodeId: string
 ): EntityState<INode> => {
+    let nextState = state;
     const node = adapter.getSelectors().selectById(state, nodeId);
     if (node?.parentId != null) {
-        let nextState = adapter.removeOne(state, nodeId);
-        const parent = adapter
-            .getSelectors()
-            .selectById(nextState, node?.parentId);
+        const parent = selectById(nextState, node?.parentId);
         if (parent?.children != null) {
+            const index = parent.children.findIndex(
+                (childId) => childId === nodeId
+            );
+            //update borther's offset before node removed.
+            if (index !== -1) {
+                const prevNodeId = parent.children[index - 1];
+                const nextNodeId = parent.children[index + 1];
+                if (prevNodeId != null) {
+                    const prevNode = selectById(nextState, prevNodeId);
+                    if (prevNode != null) {
+                        nextState = adapter.updateOne(nextState, {
+                            id: prevNodeId,
+                            changes: {
+                                offset:
+                                    (prevNode.offset || 0) + (node.offset || 0),
+                            },
+                        });
+                    }
+                }
+                if (nextNodeId != null) {
+                    const nextNode = selectById(nextState, nextNodeId);
+                    if (nextNode != null) {
+                        nextState = adapter.updateOne(nextState, {
+                            id: nextNodeId,
+                            changes: {
+                                offset:
+                                    (nextNode.offset || 0) - (node.offset || 0),
+                            },
+                        });
+                    }
+                }
+            }
+
+            nextState = adapter.removeOne(nextState, nodeId);
             nextState = adapter.updateOne(nextState, {
-                id: parent.id,
+                id: node.parentId,
                 changes: {
                     children: parent.children.filter(
                         (childId) => childId !== nodeId
@@ -92,37 +182,84 @@ const removeNode = (
                 },
             });
         }
-        return nextState;
-    } else {
-        return state;
     }
+    return nextState;
+};
+
+const replaceNode = (
+    state: EntityState<INode>,
+    searchNodeId: string,
+    replaceNodeId: string
+): EntityState<INode> => {
+    let nextState = state;
+    const searchNode = selectById(nextState, searchNodeId);
+    if (searchNode?.parentId != null) {
+        const parent = selectById(nextState, searchNode.parentId);
+        if (parent?.children != null) {
+            const index = parent.children.findIndex(
+                (childId) => childId === searchNodeId
+            );
+            if (index !== -1) {
+                nextState = adapter.updateMany(nextState, [
+                    {
+                        id: replaceNodeId,
+                        changes: {
+                            parentId: searchNode.parentId,
+                        },
+                    },
+                    {
+                        id: searchNode.parentId,
+                        changes: {
+                            children: parent.children.splice(
+                                index,
+                                0,
+                                replaceNodeId
+                            ),
+                        },
+                    },
+                ]);
+                nextState = removeNode(nextState, searchNodeId);
+            }
+        }
+    }
+    return nextState;
 };
 
 const shakeTree = (
     state: EntityState<INode>,
     nodeId: string
 ): EntityState<INode> => {
-    console.debug("[Info] shakeTree", nodeId);
+    let nextState = state;
+    let node = selectById(nextState, nodeId);
 
-    const node = selectById(state, nodeId);
     if (node?.children != null) {
-        let nextState = node.children.reduce((previousValue, currentValue) => {
-            const state = shakeTree(previousValue, currentValue);
-            return state;
-        }, state);
+        nextState = node.children.reduce((previousValue, currentValue) => {
+            const s = shakeTree(previousValue, currentValue);
+            return s;
+        }, nextState);
 
-        if (
-            node?.children?.length === 0 &&
-            nodeId !== "root" &&
-            node.type !== NODE_TYPE.PANEL
-        ) {
-            removeNode(nextState, nodeId);
+        node = selectById(nextState, nodeId);
+        console.log(node?.id, node?.children?.length, node?.type);
+        if (node?.children != null) {
+            if (
+                node.children.length === 1 &&
+                node.id !== "root" &&
+                node.type === NODE_TYPE.LAYOUT_NODE
+            ) {
+                console.log("replace node");
+                nextState = replaceNode(nextState, nodeId, node.children[0]);
+            }
+
+            if (
+                node.children.length === 0 &&
+                nodeId !== "root" &&
+                node.type !== NODE_TYPE.PANEL
+            ) {
+                nextState = removeNode(nextState, nodeId);
+            }
         }
-
-        return nextState;
-    } else {
-        return state;
     }
+    return nextState;
 };
 
 export default slice.reducer;
@@ -133,6 +270,7 @@ export const {
     updateMany,
     removeOne,
     remove,
+    move,
 } = slice.actions;
 
 export type NodeState = ReturnType<typeof slice.reducer>;
