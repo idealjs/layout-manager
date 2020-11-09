@@ -12,7 +12,7 @@ import {
 } from "react";
 
 import { MASK_PART } from "../component/Widget";
-
+import immutableSplice from "../lib/immutableSplice";
 export enum NODE_TYPE {
     LAYOUT_NODE = "LAYOUT_NODE",
     WIDGET_NODE = "WIDGET_NODE",
@@ -138,7 +138,7 @@ const moveNode = (
             nextState = adapter.addOne(nextState, layout);
 
             nextState = replaceNode(nextState, searchNodeId, layoutId);
-
+            // nextState = removeNode(nextState, searchNodeId, false);
             const widgetId = uniqueId();
             const widget: INode = {
                 id: widgetId,
@@ -207,7 +207,8 @@ const removeNode = (
     keepOffset: boolean = true
 ): EntityState<INode> => {
     let nextState = state;
-    const node = adapter.getSelectors().selectById(state, nodeId);
+    console.debug("[Info] removeNode", nodeId);
+    const node = selectById(state, nodeId);
     console.log("test test", node?.id, node?.parentId);
     if (node?.parentId != null) {
         const parent = selectById(nextState, node?.parentId);
@@ -268,15 +269,26 @@ const replaceNode = (
     replaceNodeId: string,
     keepOffset: boolean = true
 ): EntityState<INode> => {
+    console.debug("[Info] replaceNode", searchNodeId, replaceNodeId);
     let nextState = state;
     const searchNode = selectById(nextState, searchNodeId);
     if (searchNode?.parentId != null) {
-        const parent = selectById(nextState, searchNode.parentId);
-        if (parent?.children != null) {
-            const index = parent.children.findIndex(
+        const replaceParent = selectById(nextState, searchNode.parentId);
+        if (replaceParent?.children != null) {
+            const index = replaceParent.children.findIndex(
                 (childId) => childId === searchNodeId
             );
             if (index !== -1) {
+                console.log(
+                    "test test replaceNode update",
+                    searchNode.parentId,
+                    immutableSplice(
+                        replaceParent.children,
+                        index,
+                        1,
+                        replaceNodeId
+                    )
+                );
                 nextState = adapter.updateMany(nextState, [
                     {
                         id: replaceNodeId,
@@ -288,15 +300,15 @@ const replaceNode = (
                     {
                         id: searchNode.parentId,
                         changes: {
-                            children: parent.children.splice(
+                            children: immutableSplice(
+                                replaceParent.children,
                                 index,
-                                0,
+                                1,
                                 replaceNodeId
                             ),
                         },
                     },
                 ]);
-                nextState = removeNode(nextState, searchNodeId, false);
             }
         }
     }
@@ -317,20 +329,20 @@ const shakeTree = (
         }, nextState);
 
         node = selectById(nextState, nodeId);
-        if (node?.children != null) {
-            if (
-                node.children.length === 1 &&
-                node.id !== "root" &&
-                node.type === NODE_TYPE.LAYOUT_NODE
-            ) {
-                nextState = replaceNode(nextState, nodeId, node.children[0]);
+        console.debug("[Info] shakeTree", nodeId);
+        if (node?.children != null && nodeId !== "root") {
+            let parent = selectById(nextState, node.parentId);
+
+            if (node.children.length === 0 && node.type !== NODE_TYPE.PANEL) {
+                nextState = removeNode(nextState, nodeId);
             }
 
             if (
-                node.children.length === 0 &&
-                nodeId !== "root" &&
-                node.type !== NODE_TYPE.PANEL
+                node.type === NODE_TYPE.LAYOUT_NODE &&
+                parent?.type === NODE_TYPE.LAYOUT_NODE &&
+                node.children.length === 1
             ) {
+                nextState = replaceNode(nextState, nodeId, node.children[0]);
                 nextState = removeNode(nextState, nodeId);
             }
         }
