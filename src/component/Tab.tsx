@@ -8,7 +8,8 @@ import React, {
     useRef,
 } from "react";
 
-import { remove, selectById, updateOne } from "../reducer/nodes";
+import { removeNode, shakeTree } from "../lib";
+import { selectAll, selectById, updateOne, upsertMany } from "../reducer/nodes";
 import CustomTab from "./CustomTab";
 import { context } from "./Provider";
 
@@ -44,12 +45,10 @@ const Tab = (props: {
     }, [dispatch, nodeId, selected]);
 
     const closeTab = useCallback(() => {
-        dispatch(
-            remove({
-                nodeId,
-            })
-        );
-    }, [dispatch, nodeId]);
+        let nextState = removeNode(nodes, nodeId);
+        nextState = shakeTree(nextState, "root");
+        dispatch(upsertMany(selectAll(nextState)));
+    }, [dispatch, nodeId, nodes]);
 
     return (
         <Fragment>
