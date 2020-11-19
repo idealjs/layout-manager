@@ -21,6 +21,7 @@ const Titlebar = (props: { nodeIds: string[] }) => {
             style={{
                 height: "25px",
                 display: "flex",
+                userSelect: "none",
             }}
         >
             {nodeIds.map((id) => (

@@ -58,7 +58,7 @@ const Splitter = (props: {
         }
     }, [secondary?.offset]);
 
-    const splitterStyle = useMemo(() => {
+    const splitterStyle: CSSProperties = useMemo(() => {
         const parentDirection = parent?.direction;
         const hoverBackgroundColor = "#00000085";
         return {
@@ -73,7 +73,7 @@ const Splitter = (props: {
                     ? "100%"
                     : 10,
             backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
-            touchAction: "none",
+            userSelect: "none",
         };
     }, [dragging, parent]);
 

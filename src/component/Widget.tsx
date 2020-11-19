@@ -109,7 +109,7 @@ const Widget = (props: { nodeId: string }) => {
         }
     }, [node?.parentId, nodes]);
 
-    const widgetStyle = useMemo(() => {
+    const widgetStyle: CSSProperties = useMemo(() => {
         const parentDirection = parent?.direction;
         const length = parent?.children?.length;
         const offset = node?.offset;
@@ -136,6 +136,7 @@ const Widget = (props: { nodeId: string }) => {
         return {
             width,
             height,
+            userSelect: "none",
         };
     }, [node, parent]);
     const maskPartStyle = useMemo(() => {

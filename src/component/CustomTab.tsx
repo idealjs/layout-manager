@@ -1,8 +1,8 @@
-import React, { forwardRef } from "react";
+import React, { CSSProperties, forwardRef } from "react";
 
 import Close from "../svg/Close";
 
-const root = {
+const root: CSSProperties = {
     touchAction: "none",
     backgroundColor: "#00000025",
     display: "flex",
@@ -10,6 +10,7 @@ const root = {
     borderStyle: "solid",
     borderWidth: "thin",
     margin: "2px",
+    userSelect: "none",
 };
 const close = {
     "&:hover": {

@@ -41,14 +41,6 @@ const Tab = (props: {
         };
     }, [dnd, nodeId]);
 
-    // useEffect(() => {
-    //     interact(ref.current!).draggable({
-    //         cursorChecker: () => {
-    //             return "default";
-    //         },
-    //     });
-    // }, [onClick]);
-
     useEffect(() => {
         if (nodeId === selected) {
             dispatch(updateOne({ id: nodeId, changes: { selected: true } }));
