@@ -1,5 +1,4 @@
-import interact from "interactjs";
-import lodash from "lodash";
+import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import React, {
     CSSProperties,
     useContext,
@@ -25,6 +24,8 @@ const Splitter = (props: {
 
     const ref = useRef<HTMLDivElement>(null);
     const shadowRef = useRef<HTMLDivElement>(null);
+
+    const dnd = useDnd();
 
     const parent = useMemo(() => selectById(nodes, parentId), [
         nodes,
@@ -103,16 +104,39 @@ const Splitter = (props: {
 
     useEffect(() => {
         let offset = 0;
-        const interactable = interact(ref.current!).draggable({
-            onstart: () => {
+        const listenable = dnd
+            .draggable(ref.current!, {
+                id: `${parentId}-${primaryId}-${secondaryId}`,
+            })
+            .addListener(DND_EVENT.DRAG_START, (data) => {
                 setDragging(true);
-            },
-            onmove: lodash.throttle((event) => {
+            })
+            .addListener(DND_EVENT.DRAG_END, (data) => {
+                setDragging(false);
+                setMovingOffset(0);
+                dispatch(
+                    updateMany([
+                        {
+                            id: primaryId,
+                            changes: {
+                                offset: primaryOffsetRef.current + offset,
+                            },
+                        },
+                        {
+                            id: secondaryId,
+                            changes: {
+                                offset: secondaryOffsetRef.current - offset,
+                            },
+                        },
+                    ])
+                );
+            })
+            .addListener(DND_EVENT.DRAG_MOVE, (data) => {
                 offset =
                     parent?.direction === DIRECTION.ROW ||
                     parent?.direction === DIRECTION.ROWREV
-                        ? event.client.x - event.clientX0
-                        : event.client.y - event.clientY0;
+                        ? data.offset.x
+                        : data.offset.y;
                 if (
                     ref.current != null &&
                     shadowRef.current != null &&
@@ -130,11 +154,11 @@ const Splitter = (props: {
                     ) {
                         primaryValue = primary.width;
                         secondaryValue = secondary.width;
-                        velocity = event.velocityX;
+                        velocity = data.vector.x;
                     } else {
                         primaryValue = primary.height;
                         secondaryValue = secondary.height;
-                        velocity = event.velocityY;
+                        velocity = data.vector.y;
                     }
 
                     if (velocity >= 0 && secondaryValue - offset < 100) {
@@ -154,43 +178,20 @@ const Splitter = (props: {
                     }
                     setMovingOffset(offset);
                 }
-            }, 16),
-            onend: () => {
-                setDragging(false);
-                setMovingOffset(0);
-                dispatch(
-                    updateMany([
-                        {
-                            id: primaryId,
-                            changes: {
-                                offset: primaryOffsetRef.current + offset,
-                            },
-                        },
-                        {
-                            id: secondaryId,
-                            changes: {
-                                offset: secondaryOffsetRef.current - offset,
-                            },
-                        },
-                    ])
-                );
-            },
-            cursorChecker: () => {
-                return parent?.direction === DIRECTION.ROW ||
-                    parent?.direction === DIRECTION.ROWREV
-                    ? "ew-resize"
-                    : "ns-resize";
-            },
-            lockAxis:
-                parent?.direction === DIRECTION.ROW ||
-                parent?.direction === DIRECTION.ROWREV
-                    ? "x"
-                    : "y",
-        });
+            });
         return () => {
-            interactable.unset();
+            listenable.removeAllListeners();
         };
-    }, [primary, parent, secondary, dispatch, primaryId, secondaryId]);
+    }, [
+        dispatch,
+        dnd,
+        parent,
+        parentId,
+        primary,
+        primaryId,
+        secondary,
+        secondaryId,
+    ]);
 
     return (
         <div ref={ref} style={splitterStyle}>

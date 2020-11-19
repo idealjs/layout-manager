@@ -1,4 +1,4 @@
-import interact from "interactjs";
+import { useDnd } from "@idealjs/drag-drop";
 import React, {
     Fragment,
     useCallback,
@@ -22,6 +22,9 @@ const Tab = (props: {
     const ref = useRef(null);
 
     const [nodes, dispatch] = useContext(context)!;
+
+    const dnd = useDnd();
+
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
 
     const onClick = useCallback(() => {
@@ -29,12 +32,22 @@ const Tab = (props: {
     }, [nodeId, onSelect]);
 
     useEffect(() => {
-        interact(ref.current!).draggable({
-            cursorChecker: () => {
-                return "default";
-            },
+        const listenable = dnd.draggable(ref.current!, {
+            id: nodeId,
+            type: "Tab",
         });
-    }, [onClick]);
+        return () => {
+            listenable.removeAllListeners();
+        };
+    }, [dnd, nodeId]);
+
+    // useEffect(() => {
+    //     interact(ref.current!).draggable({
+    //         cursorChecker: () => {
+    //             return "default";
+    //         },
+    //     });
+    // }, [onClick]);
 
     useEffect(() => {
         if (nodeId === selected) {

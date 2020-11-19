@@ -1,4 +1,4 @@
-import interact from "interactjs";
+import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import React, {
     CSSProperties,
     useContext,
@@ -93,6 +93,9 @@ const Widget = (props: { nodeId: string }) => {
     ] = useStateContainer<MASK_PART | null>(null);
 
     const [nodes, dispatch] = useContext(context)!;
+
+    const dnd = useDnd();
+
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
     const selectedNodeId = useMemo(() => {
         return node?.children
@@ -153,77 +156,83 @@ const Widget = (props: { nodeId: string }) => {
     }, [maskPart]);
 
     useEffect(() => {
-        const interactable = interact(widgetRef.current!)
-            .dropzone({
-                accept: ".Tab",
-            })
-            .on("drop", (event) => {
-                setMaskPart(null);
-                let nextState = moveNode(
-                    nodes,
-                    nodeId,
-                    event.dragEvent.target.id,
-                    maskPartContainer.current
-                );
-                nextState = shakeTree(nextState, "root");
-                dispatch(upsertMany(selectAll(nextState)));
-            })
-            .on("dropmove", (event) => {
-                const rect = widgetRef.current?.getBoundingClientRect();
-                if (rect) {
-                    if (
-                        event.dragEvent.client.x > rect.x + rect.width / 4 &&
-                        event.dragEvent.client.x <
-                            rect.x + (rect.width / 4) * 3 &&
-                        event.dragEvent.client.y > rect.y + rect.height / 4 &&
-                        event.dragEvent.client.y <
-                            rect.y + (rect.height / 4) * 3
-                    ) {
-                        setMaskPart(MASK_PART.CENTER);
-                        return;
-                    }
-                    if (
-                        event.dragEvent.client.x > rect.x &&
-                        event.dragEvent.client.x < rect.x + rect.width / 4
-                    ) {
-                        setMaskPart(MASK_PART.LEFT);
-                        return;
-                    }
-
-                    if (
-                        event.dragEvent.client.x >
-                            rect.x + (rect.width / 4) * 3 &&
-                        event.dragEvent.client.x < rect.x + rect.width
-                    ) {
-                        setMaskPart(MASK_PART.RIGHT);
-                        return;
-                    }
-
-                    if (
-                        event.dragEvent.client.y > rect.y &&
-                        event.dragEvent.client.y < rect.y + rect.height / 4
-                    ) {
-                        setMaskPart(MASK_PART.TOP);
-                        return;
-                    }
-
-                    if (
-                        event.dragEvent.client.y >
-                            rect.y + (rect.height / 4) * 3 &&
-                        event.dragEvent.client.y < rect.y + rect.height
-                    ) {
-                        setMaskPart(MASK_PART.BOTTOM);
-                        return;
-                    }
+        const listenable = dnd
+            .droppable(widgetRef.current!)
+            .addListener(DND_EVENT.DROP, (data) => {
+                if (data.item.type === "Tab") {
+                    console.log("test test drop", data);
+                    setMaskPart(null);
+                    let nextState = moveNode(
+                        nodes,
+                        nodeId,
+                        data.item.id,
+                        maskPartContainer.current
+                    );
+                    nextState = shakeTree(nextState, "root");
+                    dispatch(upsertMany(selectAll(nextState)));
                 }
             })
-            .on("dragleave", () => {
-                setMaskPart(null);
+            .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
+                if (data.item.type === "Tab") {
+                    setMaskPart(null);
+                }
+            })
+            .addListener(DND_EVENT.DROP_MOVE, (data) => {
+                if (data.item.type === "Tab") {
+                    console.log("test test dropmove", data);
+                    const rect = widgetRef.current?.getBoundingClientRect();
+                    if (rect) {
+                        if (
+                            data.clientPosition.x > rect.x + rect.width / 4 &&
+                            data.clientPosition.x <
+                                rect.x + (rect.width / 4) * 3 &&
+                            data.clientPosition.y > rect.y + rect.height / 4 &&
+                            data.clientPosition.y <
+                                rect.y + (rect.height / 4) * 3
+                        ) {
+                            setMaskPart(MASK_PART.CENTER);
+                            return;
+                        }
+                        if (
+                            data.clientPosition.x > rect.x &&
+                            data.clientPosition.x < rect.x + rect.width / 4
+                        ) {
+                            setMaskPart(MASK_PART.LEFT);
+                            return;
+                        }
+
+                        if (
+                            data.clientPosition.x >
+                                rect.x + (rect.width / 4) * 3 &&
+                            data.clientPosition.x < rect.x + rect.width
+                        ) {
+                            setMaskPart(MASK_PART.RIGHT);
+                            return;
+                        }
+
+                        if (
+                            data.clientPosition.y > rect.y &&
+                            data.clientPosition.y < rect.y + rect.height / 4
+                        ) {
+                            setMaskPart(MASK_PART.TOP);
+                            return;
+                        }
+
+                        if (
+                            data.clientPosition.y >
+                                rect.y + (rect.height / 4) * 3 &&
+                            data.clientPosition.y < rect.y + rect.height
+                        ) {
+                            setMaskPart(MASK_PART.BOTTOM);
+                            return;
+                        }
+                    }
+                }
             });
         return () => {
-            interactable.unset();
+            listenable.removeAllListeners();
         };
-    }, [dispatch, maskPartContainer, node, nodeId, nodes, setMaskPart]);
+    }, [dispatch, dnd, maskPartContainer, nodeId, nodes, setMaskPart]);
 
     useEffect(() => {
         if (

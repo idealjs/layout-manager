@@ -1081,11 +1081,6 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interactjs/types@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.npm.taobao.org/@interactjs/types/download/@interactjs/types-1.10.0.tgz#c2232ed3ba503891349912fa74aa05aa467403e9"
-  integrity sha1-wiMu07pQOJE0mRL6dKoFqkZ0A+k=
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -5725,13 +5720,6 @@ inquirer@7.3.3:
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
     through "^2.3.6"
-
-interactjs@^1.10.0:
-  version "1.10.0"
-  resolved "https://registry.npm.taobao.org/interactjs/download/interactjs-1.10.0.tgz#0fafd725b1fddfc9671cacd98c4f92ceae73a197"
-  integrity sha1-D6/XJbH938lnHKzZjE+Szq5zoZc=
-  dependencies:
-    "@interactjs/types" "1.10.0"
 
 internal-ip@^4.3.0:
   version "4.3.0"

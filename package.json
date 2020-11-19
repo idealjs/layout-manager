@@ -1,5 +1,5 @@
 {
-    "name": "layout-manager",
+    "name": "@idealjs/layout-manager",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -12,7 +12,6 @@
         "@types/node": "^12.0.0",
         "@types/react": "^16.9.53",
         "@types/react-dom": "^16.9.8",
-        "interactjs": "^1.10.0",
         "lodash": "^4.17.20",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
@@ -36,7 +35,13 @@
             "simple-import-sort"
         ],
         "rules": {
-            "simple-import-sort/sort": "warn"
+            "simple-import-sort/sort": "warn",
+            "react-hooks/exhaustive-deps": [
+                1,
+                {
+                    "enableDangerousAutofixThisMayCauseInfiniteLoops": true
+                }
+            ]
         }
     },
     "browserslist": {
