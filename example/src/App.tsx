@@ -1,8 +1,12 @@
 import React from "react";
 
-import Layout from "./component/Layout";
-import Provider from "./component/Provider";
-import { DIRECTION, INode, NODE_TYPE } from "./reducer/nodes";
+import {
+    Layout,
+    Provider,
+    DIRECTION,
+    INode,
+    NODE_TYPE,
+} from "@idealjs/layout-manager";
 
 const nodes: INode[] = [
     {
