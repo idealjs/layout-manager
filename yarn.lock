@@ -1081,6 +1081,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@idealjs/drag-drop@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npm.taobao.org/@idealjs/drag-drop/download/@idealjs/drag-drop-0.1.0.tgz?cache=0&sync_timestamp=1605967982220&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40idealjs%2Fdrag-drop%2Fdownload%2F%40idealjs%2Fdrag-drop-0.1.0.tgz#e3d4d3ceef826dfc2405fa52efd9a5240b9230b4"
+  integrity sha1-49TTzu+CbfwkBfpS79mlJAuSMLQ=
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
