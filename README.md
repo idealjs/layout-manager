@@ -3,7 +3,7 @@
 ## Install
 
 ```
-yarn add @idealjs/drag-drop @idealjs/@idealjs/layout-manager
+yarn add @idealjs/drag-drop @idealjs/layout-manager
 ```
 
 ## Example
