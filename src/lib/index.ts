@@ -457,6 +457,8 @@ export const shakeTree = (
     let nextState = state;
     let node = selectById(nextState, nodeId);
 
+    console.debug("[Info] shakeTree", nodeId);
+
     if (node?.children == null || node?.type === NODE_TYPE.PANEL) {
         return nextState;
     }
@@ -469,24 +471,27 @@ export const shakeTree = (
 
     // reselect node after tree shake.
     node = selectById(nextState, nodeId);
-    console.debug("[Info] shakeTree", nodeId);
     if (nodeId === "root" || node?.children == null) {
         return nextState;
     }
 
+    // move children outward if node direction is same as parent;
     let parent = selectById(nextState, node.parentId);
+    if (node.direction === parent?.direction) {
+        nextState = outwardMigration(nextState, nodeId);
+        nextState = removeNode(nextState, nodeId);
+    }
+
+    // remove layout if there is no widget
+    parent = selectById(nextState, node.parentId);
     if (node.children.length === 0 && node.type !== NODE_TYPE.PANEL) {
         nextState = removeNode(nextState, nodeId);
     }
 
     // move children outward if node only has one child;
-    // move children outward if node direction is same as parent;
-    parent = selectById(nextState, node.parentId);
-    if (
-        (node.type === NODE_TYPE.LAYOUT_NODE && node.children.length === 1) ||
-        node.direction === parent?.direction
-    ) {
-        nextState = outwardMigration(nextState, nodeId);
+    if (node.type === NODE_TYPE.LAYOUT_NODE && node.children.length === 1) {
+        console.log("test test replace", nodeId);
+        nextState = replaceNode(nextState, nodeId, node.children[0], false);
         nextState = removeNode(nextState, nodeId);
     }
 
