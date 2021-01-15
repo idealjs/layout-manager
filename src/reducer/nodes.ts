@@ -53,6 +53,7 @@ const slice = createSlice({
         updateMany: adapter.updateMany,
         removeOne: adapter.removeOne,
         upsertMany: adapter.upsertMany,
+        setAll: adapter.setAll,
     },
 });
 
@@ -64,6 +65,7 @@ export const {
     updateMany,
     removeOne,
     upsertMany,
+    setAll,
 } = slice.actions;
 
 export type NodeState = ReturnType<typeof slice.reducer>;

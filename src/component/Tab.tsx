@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 import { removeNode, shakeTree } from "../lib";
-import { selectAll, selectById, updateOne, upsertMany } from "../reducer/nodes";
+import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";
 import CustomTab from "./CustomTab";
 import { context } from "./Provider";
 
@@ -22,7 +22,9 @@ const Tab = (props: {
     const ref = useRef(null);
 
     const [nodes, dispatch] = useContext(context)!;
-
+    useEffect(() => {
+        console.log("update nodes", nodeId, nodes);
+    }, [nodeId, nodes]);
     const dnd = useDnd();
 
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
@@ -50,9 +52,17 @@ const Tab = (props: {
     }, [dispatch, nodeId, selected]);
 
     const closeTab = useCallback(() => {
+        console.log(nodes.ids.toString());
+
         let nextState = removeNode(nodes, nodeId);
         nextState = shakeTree(nextState, "root");
-        dispatch(upsertMany(selectAll(nextState)));
+        console.log(nextState.ids.toString());
+        console.log(
+            selectAll(nextState)
+                .map((n) => n.id)
+                .toString()
+        );
+        dispatch(setAll(selectAll(nextState)));
     }, [dispatch, nodeId, nodes]);
 
     return (

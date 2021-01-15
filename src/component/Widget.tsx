@@ -13,8 +13,8 @@ import {
     DIRECTION,
     selectAll,
     selectById,
+    setAll,
     updateOne,
-    upsertMany,
 } from "../reducer/nodes";
 import Panel from "./Panel";
 import { context } from "./Provider";
@@ -170,7 +170,7 @@ const Widget = (props: { nodeId: string }) => {
                         maskPartContainer.current
                     );
                     nextState = shakeTree(nextState, "root");
-                    dispatch(upsertMany(selectAll(nextState)));
+                    dispatch(setAll(selectAll(nextState)));
                 }
             })
             .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
