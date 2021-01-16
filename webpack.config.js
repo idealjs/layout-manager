@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: "./src/index.ts",
     devtool: "source-map",
     module: {
@@ -13,7 +13,7 @@ module.exports = {
             },
             {
                 test: /\.svg/,
-                type: "asset/inline",
+                use: "svg-inline-loader",
             },
         ],
     },
@@ -24,5 +24,5 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         filename: "index.js",
     },
-    externals: ["react", "react-dom", "@reduxjs/toolkit"],
+    externals: ["react", "react-dom"],
 };
