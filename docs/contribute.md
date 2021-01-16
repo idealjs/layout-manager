@@ -2,7 +2,7 @@
 为了规范 git commit ，方便追踪每次提交的功能，制定以下 git commit 规范。
 
 # commit 规范
-commit 以 `type(module): message` 为统一规范，其中 type、module、message 均为每次提交的实际值，每一个字段的解释如下：
+commit 以 `type: message` 为统一规范，其中 type、module、message 均为每次提交的实际值，每一个字段的解释如下：
 
 ## type
 * feat：新功能（feature）
@@ -12,10 +12,6 @@ commit 以 `type(module): message` 为统一规范，其中 type、module、mess
 * refactor：重构（即不是新增功能，也不是修改bug的代码变动）
 * test：增加测试 case
 * chore：构建过程或辅助工具的变动
-
-## module
-指的是更新的模块，当前的值为：
-* (layout)
 
 括号内可不填。
 
