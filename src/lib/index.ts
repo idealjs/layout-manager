@@ -22,7 +22,7 @@ export const moveNode = (
     switch (part) {
         case MASK_PART.CENTER: {
             const moveNode = selectById(nextState, moveNodeId);
-            nextState = removeNode(nextState, moveNodeId);
+            nextState = removeNode(nextState, moveNodeId, true);
 
             if (moveNode != null) {
                 nextState = adapter.addOne(nextState, moveNode);
@@ -328,7 +328,34 @@ export const removeNode = (
                 if (index !== -1) {
                     const prevNodeId = parent.children[index - 1];
                     const nextNodeId = parent.children[index + 1];
-                    if (prevNodeId != null) {
+                    // has both brother,avg the offset
+                    if (prevNodeId != null && nextNodeId != null) {
+                        const prevNode = selectById(nextState, prevNodeId);
+                        if (prevNode != null) {
+                            nextState = adapter.updateOne(nextState, {
+                                id: prevNodeId,
+                                changes: {
+                                    offset:
+                                        (prevNode.offset || 0) +
+                                        (node.offset || 0) / 2,
+                                },
+                            });
+                        }
+                        const nextNode = selectById(nextState, nextNodeId);
+                        if (nextNode != null) {
+                            nextState = adapter.updateOne(nextState, {
+                                id: nextNodeId,
+                                changes: {
+                                    offset:
+                                        (nextNode.offset || 0) +
+                                        (node.offset || 0) / 2,
+                                },
+                            });
+                        }
+                    }
+
+                    // only has one brother, remove borther's offset
+                    if (prevNodeId != null && nextNodeId == null) {
                         const prevNode = selectById(nextState, prevNodeId);
                         if (prevNode != null) {
                             nextState = adapter.updateOne(nextState, {
@@ -341,14 +368,14 @@ export const removeNode = (
                             });
                         }
                     }
-                    if (nextNodeId != null) {
+                    if (prevNodeId == null && nextNodeId != null) {
                         const nextNode = selectById(nextState, nextNodeId);
                         if (nextNode != null) {
                             nextState = adapter.updateOne(nextState, {
                                 id: nextNodeId,
                                 changes: {
                                     offset:
-                                        (nextNode.offset || 0) -
+                                        (nextNode.offset || 0) +
                                         (node.offset || 0),
                                 },
                             });
@@ -365,7 +392,6 @@ export const removeNode = (
                     ),
                 },
             });
-            selectById(nextState, nodeId);
         }
     }
     return nextState;
@@ -490,7 +516,6 @@ export const shakeTree = (
 
     // move children outward if node only has one child;
     if (node.type === NODE_TYPE.LAYOUT_NODE && node.children.length === 1) {
-        console.log("test test replace", nodeId);
         nextState = replaceNode(nextState, nodeId, node.children[0], false);
         nextState = removeNode(nextState, nodeId);
     }
