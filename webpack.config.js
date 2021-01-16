@@ -13,7 +13,7 @@ module.exports = {
             },
             {
                 test: /\.svg/,
-                use: "svg-inline-loader",
+                use: "url-loader",
             },
         ],
     },
@@ -22,7 +22,14 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"),
+        libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["react", "react-dom"],
+    externals: [
+        "react",
+        "react-dom",
+        "@reduxjs/toolkit",
+        "@idealjs/drag-drop",
+        "lodash.uniqueid",
+    ],
 };
