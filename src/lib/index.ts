@@ -1,5 +1,5 @@
 import { EntityState } from "@reduxjs/toolkit";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash.uniqueid";
 
 import { MASK_PART } from "../component/Widget";
 import {
@@ -440,6 +440,7 @@ export const replaceNode = (
 };
 
 export const outwardMigration = (state: EntityState<INode>, nodeId: string) => {
+    console.debug("[Info] outwardMigration", nodeId);
     let nextState = state;
 
     let node = selectById(nextState, nodeId);
@@ -516,7 +517,7 @@ export const shakeTree = (
 
     // move children outward if node only has one child;
     if (node.type === NODE_TYPE.LAYOUT_NODE && node.children.length === 1) {
-        nextState = replaceNode(nextState, nodeId, node.children[0], false);
+        nextState = replaceNode(nextState, nodeId, node.children[0]);
         nextState = removeNode(nextState, nodeId);
     }
 

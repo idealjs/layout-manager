@@ -14,24 +14,29 @@
         "README.md"
     ],
     "dependencies": {
-        "@reduxjs/toolkit": "^1.4.0",
-        "lodash": "^4.17.20"
+        "@idealjs/drag-drop": "^0.1.0",
+        "@reduxjs/toolkit": "^1.5.0",
+        "lodash.uniqueid": "^4.0.1",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1"
     },
     "scripts": {
         "postbuild": "rsync -avum --include='*.svg' --include='*/' --exclude='*' './src/' './dist'",
         "build": "rm -rf dist | tsc",
-        "lint": "eslint src/**/*.{tsx,ts} --fix"
+        "lint": "eslint src/**/*.{tsx,ts} --fix",
+        "build:react-scripts": "react-scripts build",
+        "build:webpack": "webpack"
     },
     "eslintConfig": {
         "extends": [
-            "react-app",
-            "react-app/jest"
+            "react-app"
         ],
         "plugins": [
             "simple-import-sort"
         ],
         "rules": {
-            "simple-import-sort/sort": "warn",
+            "simple-import-sort/imports": "warn",
+            "simple-import-sort/exports": "warn",
             "react-hooks/exhaustive-deps": [
                 1,
                 {
@@ -40,6 +45,9 @@
             ]
         }
     },
+    "eslintIgnore": [
+        "dist"
+    ],
     "browserslist": {
         "production": [
             ">0.2%",
@@ -53,21 +61,27 @@
         ]
     },
     "devDependencies": {
-        "@testing-library/jest-dom": "^5.11.4",
-        "@testing-library/react": "^11.1.0",
-        "@testing-library/user-event": "^12.1.10",
-        "@types/jest": "^26.0.15",
-        "@types/lodash": "^4.14.165",
-        "@types/node": "^12.0.0",
-        "@types/react": "^16.9.53",
-        "@types/react-dom": "^16.9.8",
-        "eslint-plugin-simple-import-sort": "^5.0.3",
-        "react-scripts": "4.0.0",
-        "typescript": "^4.0.3"
-    },
-    "peerDependencies": {
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "@idealjs/drag-drop": "^0.1.0"
+        "@types/jest": "^26.0.20",
+        "@types/lodash": "^4.14.167",
+        "@types/lodash.uniqueid": "^4.0.6",
+        "@types/node": "^14.14.21",
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "@typescript-eslint/eslint-plugin": "^4.13.0",
+        "@typescript-eslint/parser": "^4.13.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.18.0",
+        "eslint-config-react-app": "^6.0.0",
+        "eslint-plugin-flowtype": "^5.2.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-react": "^7.22.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "eslint-plugin-simple-import-sort": "^7.0.0",
+        "ts-loader": "^8.0.14",
+        "typescript": "^4.1.3",
+        "webpack": "^5.15.0",
+        "webpack-cli": "^4.3.1",
+        "webpack-dev-server": "^3.11.2"
     }
 }
