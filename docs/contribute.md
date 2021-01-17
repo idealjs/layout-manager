@@ -13,13 +13,11 @@ commit 以 `type: message` 为统一规范，其中 type、module、message 均�
 * test：增加测试 case
 * chore：构建过程或辅助工具的变动
 
-括号内可不填。
-
 ## message
 message 是本次实际的提交信息，统一使用 `英文` 提交。
 
 # 例子
 例如，本次提交新增了 layout 的 addWidget 接口，那么 commit 可能是：
 ```
-$ git commit -a -m "feat(layout): add addWidget api"
+$ git commit -a -m "feat: add addWidget api"
 ```
