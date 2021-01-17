@@ -18,6 +18,7 @@ Layout-Manager 有三种重要节点
 
 ### IWidgetNode
 负责将子节点以 `Tab` 组件的形式显示在 `Titlebar` 组件上
+
 并且，在其余空白处显示点击了对应 `Tab` 的子节点。
 
 子节点：`IPanelNode`
