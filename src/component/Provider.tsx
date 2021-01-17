@@ -8,7 +8,7 @@ import React, {
     useReducer,
 } from "react";
 
-import reducer, { adapter, INode, setAll } from "../reducer/nodes";
+import reducer, { adapter, INode, setAll, TABCMPT } from "../reducer/nodes";
 
 const context = createContext<
     [EntityState<INode>, React.Dispatch<AnyAction>] | null
@@ -18,7 +18,9 @@ type CMPTFactory = (page: string) => FunctionComponent<{}> | void;
 
 const CMPTContext = createContext<CMPTFactory | null>(null);
 
-const Provider: FC<{ value: INode[]; factory: CMPTFactory }> = (props) => {
+const Provider: FC<{ value: INode[]; factory: CMPTFactory; Tab?: TABCMPT }> = (
+    props
+) => {
     const { value, children, factory } = props;
     const [state, dispatch] = useReducer(reducer, adapter.getInitialState());
 

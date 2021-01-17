@@ -18,6 +18,15 @@ export enum DIRECTION {
     ROWREV = "row-reverse",
 }
 
+export type TABCMPT = ForwardRefExoticComponent<
+    {
+        nodeId: string;
+        nodeTitle: string;
+        onClose: () => void;
+        onSelect: () => void;
+    } & RefAttributes<HTMLDivElement>
+>;
+
 export interface INode {
     id: string;
     type: NODE_TYPE;

@@ -1,5 +1,6 @@
 import React, { CSSProperties, forwardRef } from "react";
 
+import { TABCMPT } from "../reducer/nodes";
 import Close from "../svg/Close";
 
 const root: CSSProperties = {
@@ -20,15 +21,7 @@ const close = {
     height: "20px",
 };
 
-const CustomTab = forwardRef<
-    HTMLDivElement,
-    {
-        nodeId: string;
-        nodeTitle: string;
-        onClose: () => void;
-        onSelect: () => void;
-    }
->((props, ref) => {
+const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
 
     return (
