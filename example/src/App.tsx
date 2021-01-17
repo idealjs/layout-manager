@@ -6,6 +6,7 @@ import {
     DIRECTION,
     INode,
     NODE_TYPE,
+    CMPTFactory,
 } from "@idealjs/layout-manager";
 
 const nodes: INode[] = [
@@ -65,13 +66,28 @@ const nodes: INode[] = [
         id: "B_A_B",
         type: NODE_TYPE.PANEL,
         parentId: "B_A",
+        page: "test2",
     },
     {
         id: "B_A_A",
         type: NODE_TYPE.PANEL,
         parentId: "B_A",
+        page: "test",
     },
 ];
+
+const factory: CMPTFactory = (page: string) => {
+    switch (page) {
+        case "test":
+            return () => {
+                return <div>test</div>;
+            };
+        default:
+            return () => {
+                return <div>page {page} not found</div>;
+            };
+    }
+};
 
 function App() {
     return (
@@ -79,7 +95,7 @@ function App() {
             className="App"
             style={{ height: 500, width: 500, backgroundColor: "grey" }}
         >
-            <Provider value={nodes}>
+            <Provider value={nodes} factory={factory}>
                 <Layout nodeId="root" />
             </Provider>
         </div>

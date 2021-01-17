@@ -1,9 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import {
-    ForwardRefExoticComponent,
-    FunctionComponent,
-    RefAttributes,
-} from "react";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export enum NODE_TYPE {
     LAYOUT_NODE = "LAYOUT_NODE",
@@ -27,6 +23,33 @@ export type TABCMPT = ForwardRefExoticComponent<
     } & RefAttributes<HTMLDivElement>
 >;
 
+export interface IBaseNode {
+    id: string;
+    type: NODE_TYPE;
+    parentId: string;
+}
+
+export interface IPanelNode extends IBaseNode {
+    page: string;
+    selected: boolean;
+}
+
+export interface IWidgetNode extends IBaseNode {
+    children: string[];
+    offset: number;
+    height: number;
+    width: number;
+}
+
+export interface ILayoutNode extends IBaseNode {
+    children: string[];
+
+    direction?: DIRECTION;
+    offset: number;
+    height: number;
+    width: number;
+}
+
 export interface INode {
     id: string;
     type: NODE_TYPE;
@@ -38,15 +61,7 @@ export interface INode {
     width?: number;
     selected?: boolean;
     children?: string[];
-    Page?: FunctionComponent;
-    Tab?: ForwardRefExoticComponent<
-        {
-            nodeId: string;
-            nodeTitle: string;
-            onClose: () => void;
-            onSelect: () => void;
-        } & RefAttributes<HTMLDivElement>
-    >;
+    page?: string;
 }
 
 export const adapter = createEntityAdapter<INode>({

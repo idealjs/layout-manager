@@ -9,8 +9,7 @@ import React, {
 
 import { removeNode, shakeTree } from "../lib";
 import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";
-import CustomTab from "./CustomTab";
-import { useNode } from "./Provider";
+import { useNode, useTab } from "./Provider";
 
 const Tab = (props: {
     nodeId: string;
@@ -22,7 +21,7 @@ const Tab = (props: {
 
     const [nodes, dispatch] = useNode();
     useEffect(() => {
-        console.log("update nodes", nodeId, nodes);
+        console.debug("update nodes", nodeId, nodes);
     }, [nodeId, nodes]);
     const dnd = useDnd();
 
@@ -63,26 +62,16 @@ const Tab = (props: {
         );
         dispatch(setAll(selectAll(nextState)));
     }, [dispatch, nodeId, nodes]);
-
+    const Tab = useTab();
     return (
         <Fragment>
-            {node?.Tab ? (
-                <node.Tab
-                    nodeId={nodeId}
-                    nodeTitle={nodeId}
-                    ref={ref}
-                    onSelect={onClick}
-                    onClose={closeTab}
-                />
-            ) : (
-                <CustomTab
-                    nodeId={nodeId}
-                    nodeTitle={nodeId}
-                    ref={ref}
-                    onSelect={onClick}
-                    onClose={closeTab}
-                />
-            )}
+            <Tab
+                nodeId={nodeId}
+                nodeTitle={node?.id!}
+                ref={ref}
+                onSelect={onClick}
+                onClose={closeTab}
+            />
         </Fragment>
     );
 };
