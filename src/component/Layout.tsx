@@ -1,14 +1,14 @@
-import React, { Fragment, useContext, useEffect, useMemo, useRef } from "react";
+import React, { Fragment, useEffect, useMemo, useRef } from "react";
 
 import { DIRECTION, NODE_TYPE, selectById, updateOne } from "../reducer/nodes";
-import { context } from "./Provider";
+import { useNode } from "./Provider";
 import Splitter from "./Splitter";
 import Widget from "./Widget";
 
 const Layout = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
-    const [nodes, dispatch] = useContext(context)!;
+    const [nodes, dispatch] = useNode();
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
     const parent = useMemo(() => {
         if (node?.parentId) {

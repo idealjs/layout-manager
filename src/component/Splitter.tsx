@@ -1,7 +1,6 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import React, {
     CSSProperties,
-    useContext,
     useEffect,
     useMemo,
     useRef,
@@ -9,7 +8,7 @@ import React, {
 } from "react";
 
 import { DIRECTION, selectById, updateMany } from "../reducer/nodes";
-import { context } from "./Provider";
+import { useNode } from "./Provider";
 
 const Splitter = (props: {
     parentId: string;
@@ -17,7 +16,7 @@ const Splitter = (props: {
     secondaryId: string;
 }) => {
     const { parentId, primaryId, secondaryId } = props;
-    const [nodes, dispatch] = useContext(context)!;
+    const [nodes, dispatch] = useNode();
 
     const [movingOffset, setMovingOffset] = useState(0);
     const [dragging, setDragging] = useState(false);

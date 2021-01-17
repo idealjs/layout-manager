@@ -1,11 +1,5 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
-import React, {
-    CSSProperties,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-} from "react";
+import React, { CSSProperties, useEffect, useMemo, useRef } from "react";
 
 import { moveNode, shakeTree } from "../lib";
 import useStateContainer from "../lib/useStateContainer";
@@ -17,7 +11,7 @@ import {
     updateOne,
 } from "../reducer/nodes";
 import Panel from "./Panel";
-import { context } from "./Provider";
+import { useNode } from "./Provider";
 import Titlebar from "./Titlebar";
 
 export enum MASK_PART {
@@ -92,7 +86,7 @@ const Widget = (props: { nodeId: string }) => {
         setMaskPart,
     ] = useStateContainer<MASK_PART | null>(null);
 
-    const [nodes, dispatch] = useContext(context)!;
+    const [nodes, dispatch] = useNode();
 
     const dnd = useDnd();
 

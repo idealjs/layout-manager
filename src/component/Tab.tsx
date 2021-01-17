@@ -2,7 +2,6 @@ import { useDnd } from "@idealjs/drag-drop";
 import React, {
     Fragment,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useRef,
@@ -11,7 +10,7 @@ import React, {
 import { removeNode, shakeTree } from "../lib";
 import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";
 import CustomTab from "./CustomTab";
-import { context } from "./Provider";
+import { useNode } from "./Provider";
 
 const Tab = (props: {
     nodeId: string;
@@ -21,7 +20,7 @@ const Tab = (props: {
     const { nodeId, selected, onSelect } = props;
     const ref = useRef(null);
 
-    const [nodes, dispatch] = useContext(context)!;
+    const [nodes, dispatch] = useNode();
     useEffect(() => {
         console.log("update nodes", nodeId, nodes);
     }, [nodeId, nodes]);
