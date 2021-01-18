@@ -1,5 +1,3 @@
-import React from "react";
-
 import close from "./24dp/close-black.svg";
 
 const Close = () => {

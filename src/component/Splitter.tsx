@@ -1,11 +1,5 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
-import React, {
-    CSSProperties,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 import { DIRECTION, selectById, updateMany } from "../reducer/nodes";
 import { useNode } from "./Provider";

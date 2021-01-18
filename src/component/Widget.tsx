@@ -1,5 +1,5 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
-import React, { CSSProperties, useEffect, useMemo, useRef } from "react";
+import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
 import { moveNode, shakeTree } from "../lib";
 import useStateContainer from "../lib/useStateContainer";

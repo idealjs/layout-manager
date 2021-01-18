@@ -1,5 +1,5 @@
 import { AnyAction, EntityState } from "@reduxjs/toolkit";
-import React, {
+import {
     createContext,
     FC,
     FunctionComponent,

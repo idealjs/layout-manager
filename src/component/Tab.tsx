@@ -1,11 +1,5 @@
 import { useDnd } from "@idealjs/drag-drop";
-import React, {
-    Fragment,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-} from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { removeNode, shakeTree } from "../lib";
 import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";

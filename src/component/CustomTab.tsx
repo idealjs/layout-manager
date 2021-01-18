@@ -1,4 +1,4 @@
-import React, { CSSProperties, forwardRef } from "react";
+import { CSSProperties, forwardRef } from "react";
 
 import { TABCMPT } from "../reducer/nodes";
 import Close from "../svg/Close";
