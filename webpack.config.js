@@ -19,6 +19,9 @@ module.exports = {
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
+        alias: {
+            "react/jsx-runtime": "react/jsx-runtime.js",
+        },
     },
     output: {
         path: path.resolve(__dirname, "dist"),

@@ -64,6 +64,8 @@
         "@types/react": "^17.0.0",
         "@types/react-dom": "^17.0.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
         "react-scripts": "^4.0.1",
         "svg-inline-loader": "^0.8.2",
         "ts-loader": "^8.0.14",
