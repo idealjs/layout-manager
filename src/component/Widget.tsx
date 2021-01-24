@@ -172,7 +172,7 @@ const Widget = (props: { nodeId: string }) => {
                     setMaskPart(null);
                 }
             })
-            .addListener(DND_EVENT.DROP_MOVE, (data) => {
+            .addListener(DND_EVENT.DRAG_OVER, (data) => {
                 if (data.item.type === "Tab") {
                     console.log("test test dropmove", data);
                     const rect = widgetRef.current?.getBoundingClientRect();

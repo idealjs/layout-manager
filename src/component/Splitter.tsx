@@ -124,7 +124,7 @@ const Splitter = (props: {
                     ])
                 );
             })
-            .addListener(DND_EVENT.DRAG_MOVE, (data) => {
+            .addListener(DND_EVENT.DRAG, (data) => {
                 offset =
                     parent?.direction === DIRECTION.ROW ||
                     parent?.direction === DIRECTION.ROWREV
