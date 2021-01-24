@@ -8,6 +8,7 @@ import {
     NODE_TYPE,
     CMPTFactory,
 } from "@idealjs/layout-manager";
+import CustomTab from "./component/CustomTab";
 
 const nodes: INode[] = [
     {
@@ -95,7 +96,7 @@ function App() {
             className="App"
             style={{ height: 500, width: 500, backgroundColor: "grey" }}
         >
-            <Provider value={nodes} factory={factory}>
+            <Provider value={nodes} factory={factory} Tab={CustomTab}>
                 <Layout nodeId="root" />
             </Provider>
         </div>

@@ -1,6 +1,5 @@
+import { TABCMPT } from "@idealjs/layout-manager";
 import { CSSProperties, forwardRef } from "react";
-
-import { TABCMPT } from "../reducer/nodes";
 import Close from "../svg/Close";
 
 const root: CSSProperties = {
@@ -17,6 +16,7 @@ const close = {
     "&:hover": {
         backgroundColor: "#00000025",
     },
+
     width: "20px",
     height: "20px",
 };
@@ -33,7 +33,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             >
                 {nodeTitle}
             </div>
-            <div style={close} onClick={onClose}>
+            <div style={close} onClick={onClose} draggable={false}>
                 <Close />
             </div>
         </div>
