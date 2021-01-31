@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef } from "react";
 
-import { DIRECTION, NODE_TYPE, selectById, updateOne } from "../reducer/nodes";
+import useUpdateNodeRect from "../lib/useUpdateNodeRect";
+import { DIRECTION, NODE_TYPE, selectById } from "../reducer/nodes";
 import { useNode } from "./Provider";
 import Splitter from "./Splitter";
 import Widget from "./Widget";
@@ -16,22 +17,14 @@ const Layout = (props: { nodeId: string }) => {
         }
     }, [node?.parentId, nodes]);
 
-    useEffect(() => {
-        if (
-            node?.width !== ref.current?.getBoundingClientRect().width ||
-            node?.height !== ref.current?.getBoundingClientRect().height
-        ) {
-            dispatch(
-                updateOne({
-                    id: nodeId,
-                    changes: {
-                        width: ref.current?.getBoundingClientRect().width,
-                        height: ref.current?.getBoundingClientRect().height,
-                    },
-                })
-            );
-        }
-    });
+    const nodeWidth = useMemo(() => (node?.width ? node.width : 0), [
+        node?.width,
+    ]);
+    const nodeHeight = useMemo(() => (node?.height ? node.height : 0), [
+        node?.height,
+    ]);
+
+    useUpdateNodeRect(nodeId, nodeWidth, nodeHeight, ref, dispatch);
 
     const style = useMemo(() => {
         const nodeDirection = node?.direction;
@@ -66,9 +59,14 @@ const Layout = (props: { nodeId: string }) => {
             display: "flex",
             flexDirection: nodeDirection as Exclude<DIRECTION, "tab">,
         };
-    }, [node, parent]);
+    }, [
+        node?.direction,
+        node?.offset,
+        parent?.children?.length,
+        parent?.direction,
+    ]);
 
-    return node?.direction !== DIRECTION.TAB ? (
+    return node?.direction === DIRECTION.TAB ? (
         <Widget nodeId={nodeId} />
     ) : (
         <div id={nodeId} ref={ref} style={style}>

@@ -70,6 +70,8 @@ const Splitter = (props: {
         };
     }, [dragging, parent]);
 
+    console.log("test", movingOffset);
+
     const shadowStyle = useMemo(() => {
         const parentDirection = parent?.direction;
 
@@ -125,6 +127,15 @@ const Splitter = (props: {
                 );
             })
             .addListener(DND_EVENT.DRAG, (data) => {
+                console.log(
+                    "test test",
+                    primary,
+                    secondary,
+                    primary?.width,
+                    primary?.height,
+                    secondary?.width,
+                    secondary?.height
+                );
                 offset =
                     parent?.direction === DIRECTION.ROW ||
                     parent?.direction === DIRECTION.ROWREV
@@ -136,7 +147,7 @@ const Splitter = (props: {
                     primary?.width != null &&
                     primary.height != null &&
                     secondary?.width != null &&
-                    secondary?.height != null
+                    secondary.height != null
                 ) {
                     let velocity = 0;
                     let primaryValue = 0;

@@ -4,17 +4,11 @@ import { CSSProperties, useEffect, useMemo, useRef } from "react";
 import moveNode from "../lib/moveNode";
 import shakeTree from "../lib/shakeTree";
 import useStateContainer from "../lib/useStateContainer";
-import {
-    DIRECTION,
-    selectAll,
-    selectById,
-    setAll,
-    updateOne,
-} from "../reducer/nodes";
+import useUpdateNodeRect from "../lib/useUpdateNodeRect";
+import { DIRECTION, selectAll, selectById, setAll } from "../reducer/nodes";
 import Panel from "./Panel";
 import { useNode } from "./Provider";
 import Titlebar from "./Titlebar";
-
 export enum MASK_PART {
     TOP = "top",
     LEFT = "left",
@@ -165,6 +159,8 @@ const Widget = (props: { nodeId: string }) => {
                         maskPartContainer.current
                     );
                     nextState = shakeTree(nextState, "root");
+                    console.log("test test 2");
+
                     dispatch(setAll(selectAll(nextState)));
                 }
             })
@@ -230,22 +226,14 @@ const Widget = (props: { nodeId: string }) => {
         };
     }, [dispatch, dnd, maskPartContainer, nodeId, nodes, setMaskPart]);
 
-    useEffect(() => {
-        if (
-            node?.width !== ref.current?.getBoundingClientRect().width ||
-            node?.height !== ref.current?.getBoundingClientRect().height
-        ) {
-            dispatch(
-                updateOne({
-                    id: nodeId,
-                    changes: {
-                        width: ref.current?.getBoundingClientRect().width,
-                        height: ref.current?.getBoundingClientRect().height,
-                    },
-                })
-            );
-        }
-    });
+    const nodeWidth = useMemo(() => (node?.width ? node.width : 0), [
+        node?.width,
+    ]);
+    const nodeHeight = useMemo(() => (node?.height ? node.height : 0), [
+        node?.height,
+    ]);
+
+    useUpdateNodeRect(nodeId, nodeWidth, nodeHeight, ref, dispatch);
 
     return (
         <div ref={ref} id={nodeId} style={widgetStyle}>
