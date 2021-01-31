@@ -1,7 +1,8 @@
 import { useDnd } from "@idealjs/drag-drop";
 import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
-import { removeNode, shakeTree } from "../lib";
+import removeNode from "../lib/removeNode";
+import shakeTree from "../lib/shakeTree";
 import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";
 import { useNode, useTab } from "./Provider";
 
