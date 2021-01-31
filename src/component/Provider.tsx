@@ -11,7 +11,7 @@ import {
 import reducer, { adapter, INode, setAll, TABCMPT } from "../reducer/nodes";
 import CustomTab from "./CustomTab";
 
-const context = createContext<
+const NodeContext = createContext<
     [EntityState<INode>, React.Dispatch<AnyAction>] | null
 >(null);
 
@@ -34,15 +34,15 @@ const Provider: FC<{ value: INode[]; factory: CMPTFactory; Tab?: TABCMPT }> = (
 
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
-            <context.Provider value={[state, dispatch]}>
+            <NodeContext.Provider value={[state, dispatch]}>
                 {children}
-            </context.Provider>
+            </NodeContext.Provider>
         </CMPTContext.Provider>
     );
 };
 
 export const useNode = () => {
-    const content = useContext(context);
+    const content = useContext(NodeContext);
     if (content == null) {
         throw new Error("Node Context not Provide");
     }
