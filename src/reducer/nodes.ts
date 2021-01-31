@@ -3,7 +3,6 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export enum NODE_TYPE {
     LAYOUT_NODE = "LAYOUT_NODE",
-    WIDGET_NODE = "WIDGET_NODE",
     PANEL = "PANEL",
 }
 
@@ -12,6 +11,7 @@ export enum DIRECTION {
     COLUMNREV = "column-reverse",
     ROW = "row",
     ROWREV = "row-reverse",
+    TAB = "tab",
 }
 
 export type TABCMPT = ForwardRefExoticComponent<
@@ -34,17 +34,10 @@ export interface IPanelNode extends IBaseNode {
     selected: boolean;
 }
 
-export interface IWidgetNode extends IBaseNode {
-    children: string[];
-    offset: number;
-    height: number;
-    width: number;
-}
-
 export interface ILayoutNode extends IBaseNode {
     children: string[];
 
-    direction?: DIRECTION;
+    direction: DIRECTION;
     offset: number;
     height: number;
     width: number;

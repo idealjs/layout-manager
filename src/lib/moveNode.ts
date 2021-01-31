@@ -5,6 +5,7 @@ import { MASK_PART } from "../component/Widget";
 import {
     adapter,
     DIRECTION,
+    ILayoutNode,
     INode,
     NODE_TYPE,
     selectById,
@@ -68,11 +69,15 @@ const moveNode = (
 
             nextState = replaceNode(nextState, searchNodeId, layoutId);
             const widgetId = uniqueId();
-            const widget: INode = {
+            const widget: ILayoutNode = {
                 id: widgetId,
                 parentId: "",
-                type: NODE_TYPE.WIDGET_NODE,
+                type: NODE_TYPE.LAYOUT_NODE,
+                direction: DIRECTION.TAB,
                 children: [],
+                offset: 0,
+                height: 0,
+                width: 0,
             };
 
             if (searchNode != null && moveNode != null) {
@@ -132,11 +137,15 @@ const moveNode = (
 
             nextState = replaceNode(nextState, searchNodeId, layoutId);
             const widgetId = uniqueId();
-            const widget: INode = {
+            const widget: ILayoutNode = {
                 id: widgetId,
                 parentId: "",
-                type: NODE_TYPE.WIDGET_NODE,
+                type: NODE_TYPE.LAYOUT_NODE,
+                direction: DIRECTION.TAB,
                 children: [],
+                offset: 0,
+                height: 0,
+                width: 0,
             };
 
             if (searchNode != null && moveNode != null) {
@@ -195,11 +204,15 @@ const moveNode = (
 
             nextState = replaceNode(nextState, searchNodeId, layoutId);
             const widgetId = uniqueId();
-            const widget: INode = {
+            const widget: ILayoutNode = {
                 id: widgetId,
                 parentId: "",
-                type: NODE_TYPE.WIDGET_NODE,
+                type: NODE_TYPE.LAYOUT_NODE,
+                direction: DIRECTION.TAB,
                 children: [],
+                offset: 0,
+                height: 0,
+                width: 0,
             };
 
             if (searchNode != null && moveNode != null) {
@@ -258,11 +271,15 @@ const moveNode = (
 
             nextState = replaceNode(nextState, searchNodeId, layoutId);
             const widgetId = uniqueId();
-            const widget: INode = {
+            const widget: ILayoutNode = {
                 id: widgetId,
                 parentId: "",
-                type: NODE_TYPE.WIDGET_NODE,
+                type: NODE_TYPE.LAYOUT_NODE,
+                direction: DIRECTION.TAB,
                 children: [],
+                offset: 0,
+                height: 0,
+                width: 0,
             };
 
             if (searchNode != null && moveNode != null) {

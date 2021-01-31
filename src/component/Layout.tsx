@@ -64,19 +64,18 @@ const Layout = (props: { nodeId: string }) => {
             width,
             height,
             display: "flex",
-            flexDirection: nodeDirection,
+            flexDirection: nodeDirection as Exclude<DIRECTION, "tab">,
         };
     }, [node, parent]);
 
-    return (
+    return node?.direction !== DIRECTION.TAB ? (
+        <Widget nodeId={nodeId} />
+    ) : (
         <div id={nodeId} ref={ref} style={style}>
             {node?.children?.map((childId, index, array) => {
                 const child = selectById(nodes, childId);
                 return (
                     <Fragment key={childId}>
-                        {child?.type === NODE_TYPE.WIDGET_NODE ? (
-                            <Widget key={childId} nodeId={childId} />
-                        ) : null}
                         {child?.type === NODE_TYPE.LAYOUT_NODE ? (
                             <Layout key={childId} nodeId={childId} />
                         ) : null}
