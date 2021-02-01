@@ -20,7 +20,8 @@ const nodes: INode[] = [
     },
     {
         id: "A",
-        type: NODE_TYPE.WIDGET_NODE,
+        type: NODE_TYPE.LAYOUT_NODE,
+        direction: DIRECTION.TAB,
         parentId: "root",
         children: ["A_A", "A_B"],
     },
@@ -43,13 +44,15 @@ const nodes: INode[] = [
     },
     {
         id: "B_A",
-        type: NODE_TYPE.WIDGET_NODE,
+        type: NODE_TYPE.LAYOUT_NODE,
+        direction: DIRECTION.TAB,
         parentId: "B",
         children: ["B_A_B", "B_A_A"],
     },
     {
         id: "B_B",
-        type: NODE_TYPE.WIDGET_NODE,
+        type: NODE_TYPE.LAYOUT_NODE,
+        direction: DIRECTION.TAB,
         parentId: "B",
         children: ["B_B_B", "B_B_A"],
     },
