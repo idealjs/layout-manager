@@ -20,7 +20,7 @@
     },
     "scripts": {
         "postbuild": "rsync -avum --include='*.svg' --include='*/' --exclude='*' './src/' './dist'",
-        "build": "rm -rf dist | tsc",
+        "build": "tsc",
         "lint": "eslint src/**/*.{tsx,ts} --fix",
         "build:react-scripts": "react-scripts build",
         "build:webpack": "webpack"
