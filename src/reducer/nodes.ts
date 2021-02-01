@@ -43,19 +43,21 @@ export interface ILayoutNode extends IBaseNode {
     width: number;
 }
 
-export interface INode {
-    id: string;
-    type: NODE_TYPE;
-    parentId: string;
+export type INode = Partial<ILayoutNode> & Partial<IPanelNode> & IBaseNode;
 
-    direction?: DIRECTION;
-    offset?: number;
-    height?: number;
-    width?: number;
-    selected?: boolean;
-    children?: string[];
-    page?: string;
-}
+// export interface INode {
+//     id: string;
+//     type: NODE_TYPE;
+//     parentId: string;
+
+//     direction?: DIRECTION;
+//     offset?: number;
+//     height?: number;
+//     width?: number;
+//     selected?: boolean;
+//     children?: string[];
+//     page?: string;
+// }
 
 export const adapter = createEntityAdapter<INode>({
     selectId: (n) => n.id,
