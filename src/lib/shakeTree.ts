@@ -3,7 +3,6 @@ import { EntityState } from "@reduxjs/toolkit";
 import { adapter, INode, NODE_TYPE, selectById } from "../reducer/nodes";
 import outwardMigration from "./outwardMigration";
 import removeNode from "./removeNode";
-import replaceNode from "./replaceNode";
 
 const shakeTree = (
     state: EntityState<INode>,
@@ -40,12 +39,6 @@ const shakeTree = (
     // remove layout if there is no widget
     parent = selectById(nextState, node.parentId);
     if (node.children.length === 0 && node.type !== NODE_TYPE.PANEL) {
-        nextState = removeNode(nextState, nodeId);
-    }
-
-    // move children outward if node only has one child;
-    if (node.type === NODE_TYPE.LAYOUT_NODE && node.children.length === 1) {
-        nextState = replaceNode(nextState, nodeId, node.children[0]);
         nextState = removeNode(nextState, nodeId);
     }
 
