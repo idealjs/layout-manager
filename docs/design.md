@@ -1,12 +1,11 @@
 # 结构设计
 
 ## 节点介绍
-Layout-Manager 有三种重要节点
+Layout-Manager 有两种重要节点
 
 他们是
 
 - IPanelNode
-- IWidgetNode
 - ILayoutNode
 
 节点之间通过 `parentId` 属性与 `children` 相互关联。
@@ -14,14 +13,9 @@ Layout-Manager 有三种重要节点
 ### ILayoutNode
 负责控制子节点的布局
 
-子节点：`ILayoutNode` ，`IWidgetNode`。
-
-### IWidgetNode
-负责将子节点以 `Tab` 组件的形式显示在 `Titlebar` 组件上
-
-并且，在其余空白处显示点击了对应 `Tab` 的子节点。
-
-子节点：`IPanelNode`
+子节点：`ILayoutNode`，`IPanelNode`。
+ILayoutNode 拥有 Direction 属性，表示Layout的具体布局方式。
+如果是 Tab 则采用 Widget 组件布局，其他则递归使用Layout布局
 
 ### IPanelNode
 负责存储一些信息
