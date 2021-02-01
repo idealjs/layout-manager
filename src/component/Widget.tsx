@@ -5,7 +5,13 @@ import moveNode from "../lib/moveNode";
 import shakeTree from "../lib/shakeTree";
 import useStateContainer from "../lib/useStateContainer";
 import useUpdateNodeRect from "../lib/useUpdateNodeRect";
-import { DIRECTION, selectAll, selectById, setAll } from "../reducer/nodes";
+import {
+    DIRECTION,
+    selectAll,
+    selectById,
+    setAll,
+    upsertMany,
+} from "../reducer/nodes";
 import Panel from "./Panel";
 import { useNode } from "./Provider";
 import Titlebar from "./Titlebar";
@@ -105,18 +111,14 @@ const Widget = (props: { nodeId: string }) => {
         const size = length || 1;
         const splitterOffset = (10 * (size - 1)) / size;
         const width =
-            length != null &&
-            (parentDirection === DIRECTION.ROW ||
-                parentDirection === DIRECTION.ROWREV)
+            length != null && parentDirection === DIRECTION.ROW
                 ? `calc(${100 / length}% - ${splitterOffset}px + ${
                       offset || 0
                   }px)`
                 : "100%";
 
         const height =
-            length != null &&
-            (parentDirection === DIRECTION.COLUMN ||
-                parentDirection === DIRECTION.COLUMNREV)
+            length != null && parentDirection === DIRECTION.COLUMN
                 ? `calc(${100 / length}% - ${splitterOffset}px + ${
                       offset || 0
                   }px)`
@@ -150,7 +152,6 @@ const Widget = (props: { nodeId: string }) => {
             .droppable(widgetRef.current!)
             .addListener(DND_EVENT.DROP, (data) => {
                 if (data.item.type === "Tab") {
-                    console.log("test test drop", data);
                     setMaskPart(null);
                     let nextState = moveNode(
                         nodes,
@@ -159,7 +160,7 @@ const Widget = (props: { nodeId: string }) => {
                         maskPartContainer.current
                     );
                     nextState = shakeTree(nextState, "root");
-                    console.log("test test 2");
+                    console.debug("[Info] at widget", selectAll(nextState));
 
                     dispatch(setAll(selectAll(nextState)));
                 }
@@ -171,7 +172,6 @@ const Widget = (props: { nodeId: string }) => {
             })
             .addListener(DND_EVENT.DRAG_OVER, (data) => {
                 if (data.item.type === "Tab") {
-                    console.log("test test dropmove", data);
                     const rect = widgetRef.current?.getBoundingClientRect();
                     if (rect) {
                         if (

@@ -8,9 +8,7 @@ export enum NODE_TYPE {
 
 export enum DIRECTION {
     COLUMN = "column",
-    COLUMNREV = "column-reverse",
     ROW = "row",
-    ROWREV = "row-reverse",
     TAB = "tab",
 }
 

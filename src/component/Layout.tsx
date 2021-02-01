@@ -36,18 +36,14 @@ const Layout = (props: { nodeId: string }) => {
         const splitterOffset = (10 * (size - 1)) / size;
 
         const width =
-            length != null &&
-            (parentDirection === DIRECTION.ROW ||
-                parentDirection === DIRECTION.ROWREV)
+            length != null && parentDirection === DIRECTION.ROW
                 ? `calc(${100 / (length || 1)}% - ${splitterOffset}px + ${
                       offset || 0
                   }px)`
                 : "100%";
 
         const height =
-            length != null &&
-            (parentDirection === DIRECTION.COLUMN ||
-                parentDirection === DIRECTION.COLUMNREV)
+            length != null && parentDirection === DIRECTION.COLUMN
                 ? `calc(${100 / (length || 1)}% - ${splitterOffset}px + ${
                       offset || 0
                   }px)`

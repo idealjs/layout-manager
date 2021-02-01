@@ -38,7 +38,7 @@ const shakeTree = (
 
     // remove layout if there is no widget
     parent = selectById(nextState, node.parentId);
-    if (node.children.length === 0 && node.type !== NODE_TYPE.PANEL) {
+    if (node.children.length === 0 && node.type === NODE_TYPE.LAYOUT_NODE) {
         nextState = removeNode(nextState, nodeId);
     }
 

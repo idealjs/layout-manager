@@ -8,8 +8,10 @@ import {
     ILayoutNode,
     INode,
     NODE_TYPE,
+    selectAll,
     selectById,
 } from "../reducer/nodes";
+import addNode, { ADD_RULE } from "./addNode";
 import removeNode from "./removeNode";
 import replaceNode from "./replaceNode";
 
@@ -54,68 +56,74 @@ const moveNode = (
         case MASK_PART.TOP: {
             const moveNode = selectById(nextState, moveNodeId);
             nextState = removeNode(nextState, moveNodeId);
+            nextState = addNode(
+                nextState,
+                searchNodeId,
+                moveNode?.page ? moveNode?.page : "",
+                ADD_RULE.TOP
+            );
+            console.log(selectAll(nextState));
+            // const searchNode = selectById(nextState, searchNodeId);
 
-            const searchNode = selectById(nextState, searchNodeId);
+            // const layoutId = uniqueId();
+            // const layout: INode = {
+            //     id: layoutId,
+            //     parentId: "",
+            //     type: NODE_TYPE.LAYOUT_NODE,
+            //     direction: DIRECTION.COLUMN,
+            //     children: [],
+            // };
+            // nextState = adapter.addOne(nextState, layout);
 
-            const layoutId = uniqueId();
-            const layout: INode = {
-                id: layoutId,
-                parentId: "",
-                type: NODE_TYPE.LAYOUT_NODE,
-                direction: DIRECTION.COLUMN,
-                children: [],
-            };
-            nextState = adapter.addOne(nextState, layout);
+            // nextState = replaceNode(nextState, searchNodeId, layoutId);
+            // const widgetId = uniqueId();
+            // const widget: ILayoutNode = {
+            //     id: widgetId,
+            //     parentId: "",
+            //     type: NODE_TYPE.LAYOUT_NODE,
+            //     direction: DIRECTION.TAB,
+            //     children: [],
+            //     offset: 0,
+            //     height: 0,
+            //     width: 0,
+            // };
 
-            nextState = replaceNode(nextState, searchNodeId, layoutId);
-            const widgetId = uniqueId();
-            const widget: ILayoutNode = {
-                id: widgetId,
-                parentId: "",
-                type: NODE_TYPE.LAYOUT_NODE,
-                direction: DIRECTION.TAB,
-                children: [],
-                offset: 0,
-                height: 0,
-                width: 0,
-            };
+            // if (searchNode != null && moveNode != null) {
+            //     nextState = adapter.addMany(nextState, [
+            //         widget,
+            //         searchNode,
+            //         moveNode,
+            //     ]);
+            // }
 
-            if (searchNode != null && moveNode != null) {
-                nextState = adapter.addMany(nextState, [
-                    widget,
-                    searchNode,
-                    moveNode,
-                ]);
-            }
-
-            nextState = adapter.updateMany(nextState, [
-                {
-                    id: searchNodeId,
-                    changes: {
-                        parentId: layoutId,
-                        offset: 0,
-                    },
-                },
-                {
-                    id: widgetId,
-                    changes: {
-                        parentId: layoutId,
-                        children: [moveNodeId],
-                    },
-                },
-                {
-                    id: layoutId,
-                    changes: {
-                        children: [widgetId, searchNodeId],
-                    },
-                },
-                {
-                    id: moveNodeId,
-                    changes: {
-                        parentId: widgetId,
-                    },
-                },
-            ]);
+            // nextState = adapter.updateMany(nextState, [
+            //     {
+            //         id: searchNodeId,
+            //         changes: {
+            //             parentId: layoutId,
+            //             offset: 0,
+            //         },
+            //     },
+            //     {
+            //         id: widgetId,
+            //         changes: {
+            //             parentId: layoutId,
+            //             children: [moveNodeId],
+            //         },
+            //     },
+            //     {
+            //         id: layoutId,
+            //         changes: {
+            //             children: [widgetId, searchNodeId],
+            //         },
+            //     },
+            //     {
+            //         id: moveNodeId,
+            //         changes: {
+            //             parentId: widgetId,
+            //         },
+            //     },
+            // ]);
 
             break;
         }

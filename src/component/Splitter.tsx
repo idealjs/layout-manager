@@ -55,16 +55,8 @@ const Splitter = (props: {
         const parentDirection = parent?.direction;
         const hoverBackgroundColor = "#00000085";
         return {
-            width:
-                parentDirection === DIRECTION.ROW ||
-                parentDirection === DIRECTION.ROWREV
-                    ? 10
-                    : "100%",
-            height:
-                parentDirection === DIRECTION.ROW ||
-                parentDirection === DIRECTION.ROWREV
-                    ? "100%"
-                    : 10,
+            width: parentDirection === DIRECTION.ROW ? 10 : "100%",
+            height: parentDirection === DIRECTION.ROW ? "100%" : 10,
             backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
             userSelect: "none",
         };
@@ -75,16 +67,8 @@ const Splitter = (props: {
     const shadowStyle = useMemo(() => {
         const parentDirection = parent?.direction;
 
-        let x =
-            parentDirection === DIRECTION.ROW ||
-            parentDirection === DIRECTION.ROWREV
-                ? movingOffset
-                : 0;
-        let y =
-            parentDirection === DIRECTION.ROW ||
-            parentDirection === DIRECTION.ROWREV
-                ? 0
-                : movingOffset;
+        let x = parentDirection === DIRECTION.ROW ? movingOffset : 0;
+        let y = parentDirection === DIRECTION.ROW ? 0 : movingOffset;
         const transform = `translate(${x}px, ${y}px)`;
         return {
             display: dragging ? undefined : "none",
@@ -127,18 +111,8 @@ const Splitter = (props: {
                 );
             })
             .addListener(DND_EVENT.DRAG, (data) => {
-                console.log(
-                    "test test",
-                    primary,
-                    secondary,
-                    primary?.width,
-                    primary?.height,
-                    secondary?.width,
-                    secondary?.height
-                );
                 offset =
-                    parent?.direction === DIRECTION.ROW ||
-                    parent?.direction === DIRECTION.ROWREV
+                    parent?.direction === DIRECTION.ROW
                         ? data.offset.x
                         : data.offset.y;
                 if (
@@ -152,10 +126,7 @@ const Splitter = (props: {
                     let velocity = 0;
                     let primaryValue = 0;
                     let secondaryValue = 0;
-                    if (
-                        parent?.direction === DIRECTION.ROW ||
-                        parent?.direction === DIRECTION.ROWREV
-                    ) {
+                    if (parent?.direction === DIRECTION.ROW) {
                         primaryValue = primary.width;
                         secondaryValue = secondary.width;
                         velocity = data.vector.x;
