@@ -52,7 +52,7 @@ export const useNode = () => {
 export const useFactory = (): CMPTFactory => {
     const content = useContext(CMPTContext);
     if (content == null) {
-        throw new Error("Factory not Provide");
+        throw new Error("CMPT Factory not Provide");
     }
     return content.factory;
 };
@@ -60,7 +60,7 @@ export const useFactory = (): CMPTFactory => {
 export const useTab = (): TABCMPT => {
     const content = useContext(CMPTContext);
     if (content == null) {
-        throw new Error("Factory not Provide");
+        throw new Error("Tab CMPT not Provide");
     }
     return content.Tab;
 };
