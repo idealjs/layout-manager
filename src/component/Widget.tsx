@@ -1,10 +1,9 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
-import moveNode from "../lib/moveNode";
-import shakeTree from "../lib/shakeTree";
+import useMoveNode from "../hook/useMoveNode";
 import useStateContainer from "../lib/useStateContainer";
-import { selectAll, selectById, setAll } from "../reducer/nodes";
+import { selectById } from "../reducer/nodes";
 import Panel from "./Panel";
 import { useNode } from "./Provider";
 import Titlebar from "./Titlebar";
@@ -79,7 +78,7 @@ const Widget = (props: { nodeId: string }) => {
         maskPart,
         setMaskPart,
     ] = useStateContainer<MASK_PART | null>(null);
-
+    const moveNode = useMoveNode();
     const [nodes, dispatch] = useNode();
 
     const dnd = useDnd();
@@ -124,17 +123,14 @@ const Widget = (props: { nodeId: string }) => {
             .droppable(widgetRef.current!)
             .addListener(DND_EVENT.DROP, (data) => {
                 if (data.item.type === "Tab") {
+                    if (maskPartContainer.current != null) {
+                        moveNode(
+                            nodeId,
+                            data.item.id,
+                            maskPartContainer.current
+                        );
+                    }
                     setMaskPart(null);
-                    let nextState = moveNode(
-                        nodes,
-                        nodeId,
-                        data.item.id,
-                        maskPartContainer.current
-                    );
-                    nextState = shakeTree(nextState, "root");
-                    console.debug("[Info] at widget", selectAll(nextState));
-
-                    dispatch(setAll(selectAll(nextState)));
                 }
             })
             .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
@@ -196,7 +192,15 @@ const Widget = (props: { nodeId: string }) => {
         return () => {
             listenable.removeAllListeners();
         };
-    }, [dispatch, dnd, maskPartContainer, nodeId, nodes, setMaskPart]);
+    }, [
+        dispatch,
+        dnd,
+        maskPartContainer,
+        moveNode,
+        nodeId,
+        nodes,
+        setMaskPart,
+    ]);
 
     return (
         <div ref={ref} style={widgetStyle}>

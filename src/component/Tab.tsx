@@ -1,9 +1,8 @@
 import { useDnd } from "@idealjs/drag-drop";
 import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
-import removeNode from "../lib/removeNode";
-import shakeTree from "../lib/shakeTree";
-import { selectAll, selectById, setAll, updateOne } from "../reducer/nodes";
+import useRemoveNode from "../hook/useRemoveNode";
+import { selectById, updateOne } from "../reducer/nodes";
 import { useNode, useTab } from "./Provider";
 
 const Tab = (props: {
@@ -15,6 +14,7 @@ const Tab = (props: {
     const ref = useRef(null);
 
     const [nodes, dispatch] = useNode();
+    const removeNode = useRemoveNode();
     useEffect(() => {
         console.debug("update nodes", nodeId, nodes);
     }, [nodeId, nodes]);
@@ -45,13 +45,8 @@ const Tab = (props: {
     }, [dispatch, nodeId, selected]);
 
     const closeTab = useCallback(() => {
-        console.log(nodes.ids.toString());
-
-        let nextState = removeNode(nodes, nodeId);
-        nextState = shakeTree(nextState, "root");
-
-        dispatch(setAll(selectAll(nextState)));
-    }, [dispatch, nodeId, nodes]);
+        removeNode(nodeId);
+    }, [nodeId, removeNode]);
     const Tab = useTab();
     return (
         <Fragment>

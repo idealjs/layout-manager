@@ -22,10 +22,15 @@ const CMPTContext = createContext<{
     Tab: TABCMPT;
 } | null>(null);
 
-const Provider: FC<{ value: INode[]; factory: CMPTFactory; Tab?: TABCMPT }> = (
-    props
-) => {
-    const { value, children, factory, Tab } = props;
+const RIDContext = createContext("RID");
+
+const Provider: FC<{
+    value: INode[];
+    factory: CMPTFactory;
+    Tab?: TABCMPT;
+    RID?: string;
+}> = (props) => {
+    const { value, children, factory, Tab, RID } = props;
     const [state, dispatch] = useReducer(reducer, adapter.getInitialState());
 
     useEffect(() => {
@@ -35,7 +40,9 @@ const Provider: FC<{ value: INode[]; factory: CMPTFactory; Tab?: TABCMPT }> = (
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
             <NodeContext.Provider value={[state, dispatch]}>
-                {children}
+                <RIDContext.Provider value={RID ? RID : "RID"}>
+                    {children}
+                </RIDContext.Provider>
             </NodeContext.Provider>
         </CMPTContext.Provider>
     );
