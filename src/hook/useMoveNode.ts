@@ -1,6 +1,6 @@
 import { useNode } from "../component/Provider";
 import { MASK_PART } from "../component/Widget";
-import { moveNode } from "../lib";
+import moveNode from "../lib/moveNode";
 import shakeTree from "../lib/shakeTree";
 import { selectAll, setAll } from "../reducer/nodes";
 
