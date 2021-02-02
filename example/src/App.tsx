@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     Layout,
@@ -84,7 +84,16 @@ const factory: CMPTFactory = (page: string) => {
     switch (page) {
         case "test":
             return () => {
-                return <div>test</div>;
+                const [counter, setCounter] = useState(0);
+                useEffect(() => {
+                    const handler = setInterval(() => {
+                        setCounter((c) => c + 1);
+                    }, 1000);
+                    return () => {
+                        clearInterval(handler);
+                    };
+                }, []);
+                return <div>{counter}</div>;
             };
         default:
             return () => {
