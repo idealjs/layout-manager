@@ -1,8 +1,10 @@
 import { EntityState } from "@reduxjs/toolkit";
 
-import { adapter, INode, NODE_TYPE, selectById } from "../reducer/nodes";
+import { adapter, INode, selectById } from "../reducer/nodes";
+import isLayoutNode from "./isLayoutNode";
 import outwardMigration from "./outwardMigration";
 import removeNode from "./removeNode";
+import replaceNode from "./replaceNode";
 
 const shakeTree = (
     state: EntityState<INode>,
@@ -11,9 +13,9 @@ const shakeTree = (
     let nextState = state;
     let node = selectById(nextState, nodeId);
 
-    console.debug("[Info] shakeTree", nodeId);
+    console.debug("[Info] shakeTree start", nodeId);
 
-    if (node?.children == null || node?.type === NODE_TYPE.PANEL) {
+    if (!isLayoutNode(node)) {
         return nextState;
     }
 
@@ -25,7 +27,7 @@ const shakeTree = (
 
     // reselect node after tree shake.
     node = selectById(nextState, nodeId);
-    if (nodeId === "root" || node?.children == null) {
+    if (nodeId === "root" || !isLayoutNode(node)) {
         return nextState;
     }
 
@@ -38,8 +40,15 @@ const shakeTree = (
 
     // remove layout if there is no widget
     parent = selectById(nextState, node.parentId);
-    if (node.children.length === 0 && node.type === NODE_TYPE.LAYOUT_NODE) {
+    if (node.children.length === 0) {
         nextState = removeNode(nextState, nodeId);
+    }
+
+    // replace parent if parent is layoutnode & only has one layoutnode as child
+    parent = selectById(nextState, node.parentId);
+    if (parent?.id !== "root" && parent?.children?.length === 1) {
+        nextState = replaceNode(nextState, parent.id, parent.children[0]);
+        nextState = removeNode(nextState, parent?.id);
     }
 
     // change offset if root only has one node
@@ -52,6 +61,8 @@ const shakeTree = (
             },
         });
     }
+
+    console.debug("[Info] shakeTree end", nodeId);
 
     return nextState;
 };

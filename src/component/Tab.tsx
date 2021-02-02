@@ -49,12 +49,7 @@ const Tab = (props: {
 
         let nextState = removeNode(nodes, nodeId);
         nextState = shakeTree(nextState, "root");
-        console.log(nextState.ids.toString());
-        console.log(
-            selectAll(nextState)
-                .map((n) => n.id)
-                .toString()
-        );
+
         dispatch(setAll(selectAll(nextState)));
     }, [dispatch, nodeId, nodes]);
     const Tab = useTab();

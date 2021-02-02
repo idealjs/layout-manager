@@ -11,6 +11,7 @@ import {
     selectById,
 } from "../reducer/nodes";
 import immutableSplice from "./immutableSplice";
+import isLayoutNode from "./isLayoutNode";
 
 export enum ADD_RULE {
     TOP = "TOP",
@@ -20,14 +21,10 @@ export enum ADD_RULE {
     TAB = "TAB",
 }
 
-const isLayoutNode = (node: INode | undefined): node is ILayoutNode => {
-    return node?.type === NODE_TYPE.LAYOUT_NODE;
-};
-
 const addNode = (
     state: EntityState<INode>,
     searchNodeId: string,
-    page: string,
+    panelNode: IPanelNode,
     addRule: ADD_RULE
 ) => {
     let nextState = state;
@@ -56,14 +53,6 @@ const addNode = (
         offset: 0,
         height: 0,
         width: 0,
-    };
-
-    const panelNode: IPanelNode = {
-        id: uniqueId(),
-        parentId: "",
-        type: NODE_TYPE.PANEL,
-        page: page,
-        selected: false,
     };
 
     if (isLayoutNode(searchNode)) {
@@ -159,7 +148,7 @@ const addNode = (
 
     if (searchNode?.type === NODE_TYPE.PANEL) {
         // panel's parent must be a node which direction is tab
-        nextState = addNode(nextState, searchNode.parentId, page, addRule);
+        nextState = addNode(nextState, searchNode.parentId, panelNode, addRule);
     }
 
     return nextState;

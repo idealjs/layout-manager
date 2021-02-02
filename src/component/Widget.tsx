@@ -4,14 +4,7 @@ import { CSSProperties, useEffect, useMemo, useRef } from "react";
 import moveNode from "../lib/moveNode";
 import shakeTree from "../lib/shakeTree";
 import useStateContainer from "../lib/useStateContainer";
-import useUpdateNodeRect from "../lib/useUpdateNodeRect";
-import {
-    DIRECTION,
-    selectAll,
-    selectById,
-    setAll,
-    upsertMany,
-} from "../reducer/nodes";
+import { selectAll, selectById, setAll } from "../reducer/nodes";
 import Panel from "./Panel";
 import { useNode } from "./Provider";
 import Titlebar from "./Titlebar";
@@ -92,44 +85,23 @@ const Widget = (props: { nodeId: string }) => {
     const dnd = useDnd();
 
     const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
+
     const selectedNodeId = useMemo(() => {
         return node?.children
             ?.map((childId) => selectById(nodes, childId))
             .find((child) => child?.selected === true)?.id;
     }, [node, nodes]);
 
-    const parent = useMemo(() => {
-        if (node?.parentId) {
-            return selectById(nodes, node?.parentId);
-        }
-    }, [node?.parentId, nodes]);
-
     const widgetStyle: CSSProperties = useMemo(() => {
-        const parentDirection = parent?.direction;
-        const length = parent?.children?.length;
-        const offset = node?.offset;
-        const size = length || 1;
-        const splitterOffset = (10 * (size - 1)) / size;
-        const width =
-            length != null && parentDirection === DIRECTION.ROW
-                ? `calc(${100 / length}% - ${splitterOffset}px + ${
-                      offset || 0
-                  }px)`
-                : "100%";
-
-        const height =
-            length != null && parentDirection === DIRECTION.COLUMN
-                ? `calc(${100 / length}% - ${splitterOffset}px + ${
-                      offset || 0
-                  }px)`
-                : "100%";
-
+        const width = "100%";
+        const height = "100%";
         return {
             width,
             height,
             userSelect: "none",
         };
-    }, [node, parent]);
+    }, []);
+
     const maskPartStyle = useMemo(() => {
         switch (maskPart) {
             case MASK_PART.BOTTOM:
@@ -226,17 +198,8 @@ const Widget = (props: { nodeId: string }) => {
         };
     }, [dispatch, dnd, maskPartContainer, nodeId, nodes, setMaskPart]);
 
-    const nodeWidth = useMemo(() => (node?.width ? node.width : 0), [
-        node?.width,
-    ]);
-    const nodeHeight = useMemo(() => (node?.height ? node.height : 0), [
-        node?.height,
-    ]);
-
-    useUpdateNodeRect(nodeId, nodeWidth, nodeHeight, ref, dispatch);
-
     return (
-        <div ref={ref} id={nodeId} style={widgetStyle}>
+        <div ref={ref} style={widgetStyle}>
             {node?.children ? <Titlebar nodeIds={node?.children} /> : null}
             <div
                 ref={widgetRef}

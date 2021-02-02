@@ -63,7 +63,9 @@ const Layout = (props: { nodeId: string }) => {
     ]);
 
     return node?.direction === DIRECTION.TAB ? (
-        <Widget nodeId={nodeId} />
+        <div id={nodeId} ref={ref} style={style}>
+            <Widget nodeId={nodeId} />
+        </div>
     ) : (
         <div id={nodeId} ref={ref} style={style}>
             {node?.children?.map((childId, index, array) => {
