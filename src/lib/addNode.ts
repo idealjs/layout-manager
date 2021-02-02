@@ -68,6 +68,7 @@ const addNode = (
                         parentId: searchNode.id,
                     },
                 ]);
+                return nextState;
             }
         } else {
             if (addRule === ADD_RULE.TAB) {
