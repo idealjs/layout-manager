@@ -30,6 +30,7 @@ export interface IBaseNode {
 export interface IPanelNode extends IBaseNode {
     page: string;
     selected: boolean;
+    data: any;
 }
 
 export interface ILayoutNode extends IBaseNode {
@@ -42,20 +43,6 @@ export interface ILayoutNode extends IBaseNode {
 }
 
 export type INode = Partial<ILayoutNode> & Partial<IPanelNode> & IBaseNode;
-
-// export interface INode {
-//     id: string;
-//     type: NODE_TYPE;
-//     parentId: string;
-
-//     direction?: DIRECTION;
-//     offset?: number;
-//     height?: number;
-//     width?: number;
-//     selected?: boolean;
-//     children?: string[];
-//     page?: string;
-// }
 
 export const adapter = createEntityAdapter<INode>({
     selectId: (n) => n.id,

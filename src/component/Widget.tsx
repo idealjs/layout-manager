@@ -210,7 +210,16 @@ const Widget = (props: { nodeId: string }) => {
                 style={{ position: "relative", height: "calc(100% - 25px)" }}
             >
                 <div style={maskPartStyle} />
-                {selectedNodeId ? <Panel nodeId={selectedNodeId} /> : null}
+                {node?.children?.map((nodeId) => {
+                    console.log(selectedNodeId, nodeId);
+                    return (
+                        <Panel
+                            key={nodeId}
+                            nodeId={nodeId}
+                            hidden={selectedNodeId !== nodeId}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

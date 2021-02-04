@@ -145,7 +145,8 @@ const addNodeByRules = async (
     state: EntityState<INode>,
     page: string,
     rules: IRule[],
-    max: number
+    max: number,
+    nodeData?: any
 ) => {
     let nextState = state;
     if (
@@ -161,6 +162,7 @@ const addNodeByRules = async (
         parentId: "",
         page,
         selected: false,
+        data: nodeData,
     };
 
     for (const [i, rule] of rules.entries()) {

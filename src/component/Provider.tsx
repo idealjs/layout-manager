@@ -15,7 +15,9 @@ const NodeContext = createContext<
     [EntityState<INode>, React.Dispatch<AnyAction>] | null
 >(null);
 
-export type CMPTFactory = (page: string) => FunctionComponent<{}>;
+export type CMPTFactory = (
+    page: string
+) => FunctionComponent<{ nodeData: any }>;
 
 const CMPTContext = createContext<{
     factory: CMPTFactory;

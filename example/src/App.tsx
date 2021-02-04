@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
     Layout,
@@ -109,7 +109,27 @@ const nodes: INode[] = [
 const factory: CMPTFactory = (page: string) => {
     switch (page) {
         case "test":
-            return () => {
+            return (props) => {
+                const { nodeData } = props;
+                const [counter, setCounter] = useState(0);
+                const [radom] = useState(Math.random());
+                useEffect(() => {
+                    const handler = setInterval(() => {
+                        setCounter((c) => c + 1);
+                    }, 1000);
+                    return () => {
+                        clearInterval(handler);
+                    };
+                }, []);
+                return (
+                    <div>
+                        {nodeData}:{counter}---{radom}
+                    </div>
+                );
+            };
+        case "test2":
+            return (props) => {
+                const { nodeData } = props;
                 const [counter, setCounter] = useState(0);
                 useEffect(() => {
                     const handler = setInterval(() => {
@@ -119,14 +139,10 @@ const factory: CMPTFactory = (page: string) => {
                         clearInterval(handler);
                     };
                 }, []);
-                return <div>{counter}</div>;
-            };
-        case "test2":
-            return () => {
-                const addNode = useAddNodeByRules();
-                const onClick = async () => {
+                const addNodeByRules = useAddNodeByRules();
+                const onClick = useCallback(async () => {
                     try {
-                        await addNode(
+                        await addNodeByRules(
                             "test",
                             [
                                 { addRule: ADD_RULE.RIGHT, limit: 3 },
@@ -138,10 +154,12 @@ const factory: CMPTFactory = (page: string) => {
                     } catch (error) {
                         console.log(error);
                     }
-                };
+                }, [addNodeByRules]);
                 return (
                     <div>
                         <button onClick={onClick}>test</button>
+                        {nodeData}
+                        {counter}
                     </div>
                 );
             };
