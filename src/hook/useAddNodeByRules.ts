@@ -6,8 +6,8 @@ import { selectAll, setAll } from "../reducer/nodes";
 
 const useAddNodeByRules = () => {
     const [nodes, dispatch] = useNode();
-    return async (page: string, rules: IRule[], max: number) => {
-        let nextState = await addNodeByRules(nodes, page, rules, max);
+    return async (page: string, rules: IRule[], max: number, nodeData: any) => {
+        let nextState = await addNodeByRules(nodes, page, rules, max, nodeData);
         nextState = shakeTree(nextState, ROOTID);
         dispatch(setAll(selectAll(nextState)));
     };

@@ -149,7 +149,8 @@ const factory: CMPTFactory = (page: string) => {
                                 { addRule: ADD_RULE.BOTTOM, limit: 3 },
                                 { addRule: ADD_RULE.TAB, limit: 3 },
                             ],
-                            10
+                            10,
+                            Math.random()
                         );
                     } catch (error) {
                         console.log(error);
