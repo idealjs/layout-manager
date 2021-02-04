@@ -1,6 +1,8 @@
 import { EntityState } from "@reduxjs/toolkit";
 import uniqueId from "lodash.uniqueid";
 
+import { ROOTID } from "../constant";
+import { ADD_RULE } from "../enum";
 import {
     DIRECTION,
     INode,
@@ -9,8 +11,13 @@ import {
     selectAll,
     selectById,
 } from "../reducer/nodes";
-import addNode, { ADD_RULE } from "./addNode";
+import addNode from "./addNode";
 import isLayoutNode from "./isLayoutNode";
+
+export interface IRule {
+    addRule: ADD_RULE;
+    limit: number;
+}
 
 const getDirection = (addRule: ADD_RULE) => {
     switch (addRule) {
@@ -60,8 +67,6 @@ const findNode = async (
     });
 };
 
-const rootId = "root";
-
 const addNodeByRule = async (
     state: EntityState<INode>,
     panelNode: IPanelNode,
@@ -75,9 +80,10 @@ const addNodeByRule = async (
     if (rule.addRule === ADD_RULE.TAB) {
         const targetNode = await findNode(
             nextState,
-            rootId,
+            ROOTID,
             (node) =>
                 isLayoutNode(node) &&
+                node.id !== ROOTID &&
                 node.direction === DIRECTION.TAB &&
                 node.children?.length < rule.limit
         );
@@ -93,9 +99,10 @@ const addNodeByRule = async (
     if (rule.addRule !== ADD_RULE.TAB && ruleIndex === 0) {
         const targetNode = await findNode(
             nextState,
-            rootId,
+            ROOTID,
             (node, level) =>
                 isLayoutNode(node) &&
+                node.id !== ROOTID &&
                 (node.direction === getDirection(rule.addRule) ||
                     node.direction === DIRECTION.TAB) &&
                 node.children?.length < rule.limit &&
@@ -111,9 +118,10 @@ const addNodeByRule = async (
     } else {
         const targetNode = await findNode(
             nextState,
-            rootId,
+            ROOTID,
             (node, level) =>
                 isLayoutNode(node) &&
+                node.id !== ROOTID &&
                 (node.direction === getDirection(rule.addRule) ||
                     node.direction === DIRECTION.TAB) &&
                 node.children?.length < rule.limit &&
@@ -135,17 +143,13 @@ const addNodeByRule = async (
 
 const addNodeByRules = async (
     state: EntityState<INode>,
-    searchNodeId: string,
     page: string,
-    rules: Array<{
-        addRule: ADD_RULE;
-        limit: number;
-    }>,
+    rules: IRule[],
     max: number
 ) => {
     let nextState = state;
     if (
-        selectAll(nextState).filter((n) => n.type === NODE_TYPE.PANEL).length <
+        selectAll(nextState).filter((n) => n.type === NODE_TYPE.PANEL).length >
         max
     ) {
         throw new Error(`Panel node up to limit ${max}`);

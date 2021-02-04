@@ -1,5 +1,6 @@
 import { EntityState } from "@reduxjs/toolkit";
 
+import { ROOTID } from "../constant";
 import { adapter, INode, selectById } from "../reducer/nodes";
 import isLayoutNode from "./isLayoutNode";
 import outwardMigration from "./outwardMigration";
@@ -27,7 +28,7 @@ const shakeTree = (
 
     // reselect node after tree shake.
     node = selectById(nextState, nodeId);
-    if (nodeId === "root" || !isLayoutNode(node)) {
+    if (nodeId === ROOTID || !isLayoutNode(node)) {
         return nextState;
     }
 
@@ -46,14 +47,14 @@ const shakeTree = (
 
     // replace parent if parent is layoutnode & only has one layoutnode as child
     parent = selectById(nextState, node.parentId);
-    if (parent?.id !== "root" && parent?.children?.length === 1) {
+    if (parent?.id !== ROOTID && parent?.children?.length === 1) {
         nextState = replaceNode(nextState, parent.id, parent.children[0]);
         nextState = removeNode(nextState, parent?.id);
     }
 
     // change offset if root only has one node
-    let root = selectById(nextState, "root");
-    if (node?.parentId === "root" && root?.children?.length === 1) {
+    let root = selectById(nextState, ROOTID);
+    if (node?.parentId === ROOTID && root?.children?.length === 1) {
         nextState = adapter.updateOne(nextState, {
             id: nodeId,
             changes: {

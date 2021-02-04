@@ -1,8 +1,9 @@
 import { EntityState } from "@reduxjs/toolkit";
 
 import { MASK_PART } from "../component/Widget";
+import { ADD_RULE } from "../enum";
 import { INode, IPanelNode, selectById } from "../reducer/nodes";
-import addNode, { ADD_RULE } from "./addNode";
+import addNode from "./addNode";
 import removeNode from "./removeNode";
 
 const moveNode = (

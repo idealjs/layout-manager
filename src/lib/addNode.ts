@@ -1,6 +1,7 @@
 import { EntityState } from "@reduxjs/toolkit";
 import uniqueId from "lodash.uniqueid";
 
+import { ADD_RULE } from "../enum";
 import {
     adapter,
     DIRECTION,
@@ -12,14 +13,6 @@ import {
 } from "../reducer/nodes";
 import immutableSplice from "./immutableSplice";
 import isLayoutNode from "./isLayoutNode";
-
-export enum ADD_RULE {
-    TOP = "TOP",
-    LEFT = "LEFT",
-    BOTTOM = "BOTTOM",
-    RIGHT = "RIGHT",
-    TAB = "TAB",
-}
 
 const addNode = (
     state: EntityState<INode>,

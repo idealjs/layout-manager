@@ -1,16 +1,16 @@
 import { useNode } from "../component/Provider";
 import { ROOTID } from "../constant";
-import removeNode from "../lib/removeNode";
+import addNodeByRules, { IRule } from "../lib/addNodeByRules";
 import shakeTree from "../lib/shakeTree";
 import { selectAll, setAll } from "../reducer/nodes";
 
-const useRemoveNode = () => {
+const useAddNodeByRules = () => {
     const [nodes, dispatch] = useNode();
-    return (nodeId: string, keepOffset = true) => {
-        let nextState = removeNode(nodes, nodeId, keepOffset);
+    return async (page: string, rules: IRule[], max: number) => {
+        let nextState = await addNodeByRules(nodes, page, rules, max);
         nextState = shakeTree(nextState, ROOTID);
         dispatch(setAll(selectAll(nextState)));
     };
 };
 
-export default useRemoveNode;
+export default useAddNodeByRules;
