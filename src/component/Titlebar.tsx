@@ -22,6 +22,7 @@ const Titlebar = (props: { nodeIds: string[] }) => {
                 height: "25px",
                 display: "flex",
                 userSelect: "none",
+                backgroundColor: "#c5c3c6",
             }}
         >
             {nodeIds.map((id) => (

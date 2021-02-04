@@ -16,6 +16,7 @@ const Panel = (props: { nodeId: string; hidden: boolean }) => {
                 height: "100%",
                 width: "100%",
                 overflow: "hidden",
+                backgroundColor: "#dcdcdd",
                 visibility: hidden ? "hidden" : undefined,
                 display: hidden ? "none" : undefined,
             }}
