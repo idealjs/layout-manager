@@ -27,9 +27,11 @@ const Tab = (props: {
     }, [nodeId, onSelect]);
 
     useEffect(() => {
-        const listenable = dnd.draggable(ref.current!, {
-            id: nodeId,
-            type: "Tab",
+        const listenable = dnd.draggable(ref.current!, true, {
+            item: {
+                id: nodeId,
+                type: "Tab",
+            },
         });
         return () => {
             listenable.removeAllListeners();

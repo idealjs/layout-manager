@@ -120,7 +120,7 @@ const Widget = (props: { nodeId: string }) => {
 
     useEffect(() => {
         const listenable = dnd
-            .droppable(widgetRef.current!)
+            .droppable(widgetRef.current!, true)
             .addListener(DND_EVENT.DROP, (data) => {
                 if (data.item.type === "Tab") {
                     if (maskPartContainer.current != null) {

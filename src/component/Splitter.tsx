@@ -62,8 +62,6 @@ const Splitter = (props: {
         };
     }, [dragging, parent]);
 
-    console.log("test", movingOffset);
-
     const shadowStyle = useMemo(() => {
         const parentDirection = parent?.direction;
 
@@ -84,8 +82,10 @@ const Splitter = (props: {
     useEffect(() => {
         let offset = 0;
         const listenable = dnd
-            .draggable(ref.current!, {
-                id: `${parentId}-${primaryId}-${secondaryId}`,
+            .draggable(ref.current!, false, {
+                item: {
+                    id: `${parentId}-${primaryId}-${secondaryId}`,
+                },
             })
             .addListener(DND_EVENT.DRAG_START, (data) => {
                 setDragging(true);
