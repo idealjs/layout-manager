@@ -32,12 +32,7 @@ const shakeTree = (
         return nextState;
     }
 
-    // move children outward if node direction is same as parent;
     let parent = selectById(nextState, node.parentId);
-    if (node.direction === parent?.direction) {
-        nextState = outwardMigration(nextState, nodeId);
-        nextState = removeNode(nextState, nodeId);
-    }
 
     // remove layout if there is no widget
     parent = selectById(nextState, node.parentId);
@@ -45,11 +40,20 @@ const shakeTree = (
         nextState = removeNode(nextState, nodeId);
     }
 
+    // move children outward if node direction is same as parent;
+    parent = selectById(nextState, node.parentId);
+    if (node.direction === parent?.direction) {
+        nextState = outwardMigration(nextState, nodeId);
+        nextState = removeNode(nextState, nodeId);
+        nextState = shakeTree(nextState, parent.id);
+    }
+
     // replace parent if parent is layoutnode & only has one layoutnode as child
     parent = selectById(nextState, node.parentId);
     if (parent?.id !== ROOTID && parent?.children?.length === 1) {
         nextState = replaceNode(nextState, parent.id, parent.children[0]);
         nextState = removeNode(nextState, parent?.id);
+        nextState = shakeTree(nextState, parent.children[0]);
     }
 
     // change offset if root only has one node

@@ -7,8 +7,19 @@ import { selectAll, setAll } from "../reducer/nodes";
 
 const useMoveNode = () => {
     const [nodes, dispatch] = useNode();
-    return (searchNodeId: string, moveNodeId: string, part: MASK_PART) => {
-        let nextState = moveNode(nodes, searchNodeId, moveNodeId, part);
+    return (
+        searchNodeId: string,
+        moveNodeId: string,
+        moveNodePage: string,
+        part: MASK_PART
+    ) => {
+        let nextState = moveNode(
+            nodes,
+            searchNodeId,
+            moveNodeId,
+            moveNodePage,
+            part
+        );
         nextState = shakeTree(nextState, ROOTID);
         dispatch(setAll(selectAll(nextState)));
     };

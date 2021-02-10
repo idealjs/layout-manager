@@ -173,10 +173,7 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     return (
-        <div
-            className="App"
-            style={{ height: 500, width: 500, backgroundColor: "grey" }}
-        >
+        <div className="App" style={{ height: 500, width: 500 }}>
             <Provider value={nodes} factory={factory} Tab={CustomTab}>
                 <Layout nodeId={ROOTID} />
             </Provider>

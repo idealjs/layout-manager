@@ -30,7 +30,7 @@ export interface IBaseNode {
 export interface IPanelNode extends IBaseNode {
     page: string;
     selected: boolean;
-    data: any;
+    data?: any;
 }
 
 export interface ILayoutNode extends IBaseNode {

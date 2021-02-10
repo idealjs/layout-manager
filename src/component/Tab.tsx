@@ -30,13 +30,14 @@ const Tab = (props: {
         const listenable = dnd.draggable(ref.current!, true, {
             item: {
                 id: nodeId,
+                page: node?.page,
                 type: "Tab",
             },
         });
         return () => {
             listenable.removeAllListeners();
         };
-    }, [dnd, nodeId]);
+    }, [dnd, node?.page, nodeId]);
 
     useEffect(() => {
         if (nodeId === selected) {
@@ -50,6 +51,7 @@ const Tab = (props: {
         removeNode(nodeId);
     }, [nodeId, removeNode]);
     const Tab = useTab();
+    
     return (
         <Fragment>
             <Tab

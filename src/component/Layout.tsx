@@ -52,7 +52,6 @@ const Layout = (props: { nodeId: string }) => {
         return {
             width,
             height,
-            display: "flex",
             flexDirection: nodeDirection as Exclude<DIRECTION, "tab">,
         };
     }, [
@@ -63,11 +62,11 @@ const Layout = (props: { nodeId: string }) => {
     ]);
 
     return node?.direction === DIRECTION.TAB ? (
-        <div id={nodeId} ref={ref} style={style}>
+        <div id={nodeId} ref={ref} style={{ ...style, display: "flex" }}>
             <Widget nodeId={nodeId} />
         </div>
     ) : (
-        <div id={nodeId} ref={ref} style={style}>
+        <div id={nodeId} ref={ref} style={{ ...style, display: "flex" }}>
             {node?.children?.map((childId, index, array) => {
                 const child = selectById(nodes, childId);
                 return (

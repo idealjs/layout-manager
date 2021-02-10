@@ -127,6 +127,7 @@ const Widget = (props: { nodeId: string }) => {
                         moveNode(
                             nodeId,
                             data.item.id,
+                            data.item.page,
                             maskPartContainer.current
                         );
                     }
@@ -211,7 +212,6 @@ const Widget = (props: { nodeId: string }) => {
             >
                 <div style={maskPartStyle} />
                 {node?.children?.map((nodeId) => {
-                    console.log(selectedNodeId, nodeId);
                     return (
                         <Panel
                             key={nodeId}
