@@ -1,9 +1,9 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
-import { selectById, updateMany } from "../reducer/layouts";
+import { updateMany } from "../reducer/layouts";
 import { LAYOUT_DIRECTION } from "../reducer/type";
-import { useLayouts } from "./Provider/LayoutsProvider";
+import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
 import { useWidget } from "./Provider/WidgetsProvider";
 
 const Splitter = (props: {
@@ -14,7 +14,7 @@ const Splitter = (props: {
 }) => {
     const { id, parentId, primaryId, secondaryId } = props;
 
-    const [, layoutNodes, dispatch] = useLayouts();
+    const [, , dispatch] = useLayouts();
 
     const [movingOffset, setMovingOffset] = useState(0);
     const [dragging, setDragging] = useState(false);
@@ -24,30 +24,19 @@ const Splitter = (props: {
 
     const dnd = useDnd();
 
-    const parent = useMemo(() => selectById(layoutNodes, parentId), [
-        layoutNodes,
-        parentId,
-    ]);
+    const parent = useLayout(parentId);
 
     const primary = useWidget(primaryId);
 
     const secondary = useWidget(secondaryId);
 
-    const primaryOffsetRef = useRef(0);
-
-    const secondaryOffsetRef = useRef(0);
+    const offsetRef = useRef(0);
 
     useEffect(() => {
-        if (primary?.offset != null) {
-            primaryOffsetRef.current = primary?.offset;
+        if (primary?.secondaryOffset != null) {
+            offsetRef.current = primary.secondaryOffset;
         }
-    }, [primary?.offset]);
-
-    useEffect(() => {
-        if (secondary?.offset != null) {
-            secondaryOffsetRef.current = secondary?.offset;
-        }
-    }, [secondary?.offset]);
+    }, [primary?.secondaryOffset]);
 
     const splitterStyle: CSSProperties = useMemo(() => {
         const hoverBackgroundColor = "#00000085";
@@ -95,13 +84,13 @@ const Splitter = (props: {
                         {
                             id: primaryId,
                             changes: {
-                                offset: primaryOffsetRef.current + offset,
+                                secondaryOffset: offsetRef.current + offset,
                             },
                         },
                         {
                             id: secondaryId,
                             changes: {
-                                offset: secondaryOffsetRef.current - offset,
+                                primaryOffset: -(offsetRef.current + offset),
                             },
                         },
                     ])

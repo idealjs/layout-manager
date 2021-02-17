@@ -2,12 +2,12 @@ import { EntityState } from "@reduxjs/toolkit";
 import { useEffect, useMemo } from "react";
 
 import { useLayouts } from "../component/Provider/LayoutsProvider";
+import { useSplitters } from "../component/Provider/SplittersProvider";
 import { useWidgets } from "../component/Provider/WidgetsProvider";
 import { ROOTID } from "../constant";
 import {
     adapter as layoutAdapter,
     selectAll,
-    selectById,
     selectById as selectLayoutById,
 } from "../reducer/layouts";
 import { ILayoutNode, ISplitterNode, LAYOUT_DIRECTION } from "../reducer/type";
@@ -43,6 +43,7 @@ const useParse = (rect: {
 }): [ILayoutNode[], ISplitterNode[]] => {
     const [, layoutNodes] = useLayouts();
     const [, , dispatch] = useWidgets();
+    const [, splitterNodes] = useSplitters();
 
     const [layouts, splitters] = useMemo((): [
         ILayoutNode[],
@@ -73,14 +74,21 @@ const useParse = (rect: {
 
                 nextState = layoutNode.children.reduce(
                     (previousValue, currentValue, currentIndex) => {
-                        const currentNode = selectById(
+                        if (layoutNode.direction === LAYOUT_DIRECTION.TAB) {
+                            return previousValue;
+                        }
+                        const currentNode = selectLayoutById(
                             previousValue,
-                            currentIndex
+                            currentValue
                         );
+
                         let childHeight = 0;
                         let childWidth = 0;
                         let childLeft = 0;
                         let childTop = 0;
+
+                        let avgHeight = 0;
+                        let avgWidth = 0;
 
                         let splitterHeight = 0;
                         let splitterWidth = 0;
@@ -88,47 +96,58 @@ const useParse = (rect: {
                         let splitterTop = 0;
 
                         if (layoutNode.direction === LAYOUT_DIRECTION.COL) {
-                            childHeight =
+                            avgHeight =
                                 (height - (length - 1) * splitterBlock) /
                                 length;
-                            childWidth = width;
+                            avgWidth = width;
+
+                            childHeight =
+                                avgHeight +
+                                ((currentNode?.primaryOffset || 0) +
+                                    (currentNode?.secondaryOffset || 0));
+                            childWidth = avgWidth;
                             childLeft = left;
                             childTop =
-                                currentIndex * childHeight +
+                                currentIndex * avgHeight +
                                 top +
-                                currentIndex * splitterBlock;
+                                currentIndex * splitterBlock -
+                                (currentNode?.primaryOffset || 0);
 
                             splitterHeight = splitterBlock;
                             splitterWidth = width;
                             splitterLeft = left;
                             splitterTop =
-                                currentIndex * childHeight +
-                                top +
-                                (currentNode?.offset || 0);
+                                currentIndex * avgHeight +
+                                top -
+                                (currentNode?.primaryOffset || 0);
                         }
 
                         if (layoutNode.direction === LAYOUT_DIRECTION.ROW) {
-                            childHeight = height;
-                            childWidth =
+                            avgHeight = height;
+                            avgWidth =
                                 (width - (length - 1) * splitterBlock) / length;
+
+                            childHeight = avgHeight;
+                            childWidth =
+                                avgWidth +
+                                ((currentNode?.primaryOffset || 0) +
+                                    (currentNode?.secondaryOffset || 0));
                             childLeft =
-                                currentIndex * childWidth +
+                                currentIndex * avgWidth +
                                 left +
-                                currentIndex * splitterBlock;
+                                currentIndex * splitterBlock -
+                                (currentNode?.primaryOffset || 0);
                             childTop = top;
                             splitterHeight = height;
                             splitterWidth = splitterBlock;
                             splitterLeft =
-                                currentIndex * childWidth +
-                                left +
-                                (currentNode?.offset || 0);
+                                currentIndex * avgWidth +
+                                left -
+                                (currentNode?.primaryOffset || 0);
                             splitterTop = top;
                         }
 
-                        if (
-                            currentIndex !== 0 &&
-                            layoutNode.direction !== LAYOUT_DIRECTION.TAB
-                        ) {
+                        if (currentIndex !== 0) {
                             const primaryId =
                                 layoutNode.children[currentIndex - 1];
                             const secondaryId =
@@ -144,6 +163,7 @@ const useParse = (rect: {
                                 width: splitterWidth,
                                 left: splitterLeft,
                                 top: splitterTop,
+                                offset: 0,
                             });
                         }
 
