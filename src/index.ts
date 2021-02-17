@@ -6,4 +6,4 @@ export * from "./enum";
 export { default as useAddNode } from "./hook/useAddNode";
 export { default as useAddNodeByRules } from "./hook/useAddNodeByRules";
 export { default as useRemoveNode } from "./hook/useRemoveNode";
-export * from "./reducer/nodes";
+export * from "./reducer/type";

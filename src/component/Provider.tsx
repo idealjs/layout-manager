@@ -1,19 +1,11 @@
-import { AnyAction, EntityState } from "@reduxjs/toolkit";
-import {
-    createContext,
-    FC,
-    FunctionComponent,
-    useContext,
-    useEffect,
-    useReducer,
-} from "react";
+import { createContext, FC, FunctionComponent, useContext } from "react";
 
-import reducer, { adapter, INode, setAll, TABCMPT } from "../reducer/nodes";
+import { ILayoutNode, IPanelNode, TABCMPT } from "../reducer/type";
 import CustomTab from "./CustomTab";
-
-const NodeContext = createContext<
-    [EntityState<INode>, React.Dispatch<AnyAction>] | null
->(null);
+import LayoutsProvider from "./Provider/LayoutsProvider";
+import PanelsProvider from "./Provider/PanelsProvider";
+import SplittersProvider from "./Provider/SplittersProvider";
+import WidgetsProvider from "./Provider/WidgetsProvider";
 
 export type CMPTFactory = (
     page: string
@@ -27,35 +19,29 @@ const CMPTContext = createContext<{
 const RIDContext = createContext("RID");
 
 const Provider: FC<{
-    value: INode[];
+    layouts: ILayoutNode[];
+    panels: IPanelNode[];
     factory: CMPTFactory;
     Tab?: TABCMPT;
     RID?: string;
 }> = (props) => {
-    const { value, children, factory, Tab, RID } = props;
-    const [state, dispatch] = useReducer(reducer, adapter.getInitialState());
-
-    useEffect(() => {
-        dispatch(setAll(value));
-    }, [value]);
+    const { layouts, panels, children, factory, Tab, RID } = props;
 
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
-            <NodeContext.Provider value={[state, dispatch]}>
-                <RIDContext.Provider value={RID ? RID : "RID"}>
-                    {children}
-                </RIDContext.Provider>
-            </NodeContext.Provider>
+            <LayoutsProvider value={layouts}>
+                <PanelsProvider value={panels}>
+                    <WidgetsProvider>
+                        <SplittersProvider>
+                            <RIDContext.Provider value={RID ? RID : "RID"}>
+                                {children}
+                            </RIDContext.Provider>
+                        </SplittersProvider>
+                    </WidgetsProvider>
+                </PanelsProvider>
+            </LayoutsProvider>
         </CMPTContext.Provider>
     );
-};
-
-export const useNode = () => {
-    const content = useContext(NodeContext);
-    if (content == null) {
-        throw new Error("Node Context not Provide");
-    }
-    return content;
 };
 
 export const useFactory = (): CMPTFactory => {

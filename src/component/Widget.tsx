@@ -3,9 +3,10 @@ import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
 import useMoveNode from "../hook/useMoveNode";
 import useStateContainer from "../lib/useStateContainer";
-import { selectById } from "../reducer/nodes";
 import Panel from "./Panel";
-import { useNode } from "./Provider";
+import { useLayout } from "./Provider/LayoutsProvider";
+import { usePanels } from "./Provider/PanelsProvider";
+import { useWidget } from "./Provider/WidgetsProvider";
 import Titlebar from "./Titlebar";
 export enum MASK_PART {
     TOP = "top",
@@ -71,7 +72,6 @@ const hide: CSSProperties = {
 
 const Widget = (props: { nodeId: string }) => {
     const { nodeId } = props;
-    const ref = useRef<HTMLDivElement>(null);
     const widgetRef = useRef<HTMLDivElement>(null);
     const [
         maskPartContainer,
@@ -79,17 +79,17 @@ const Widget = (props: { nodeId: string }) => {
         setMaskPart,
     ] = useStateContainer<MASK_PART | null>(null);
     const moveNode = useMoveNode();
-    const [nodes, dispatch] = useNode();
 
     const dnd = useDnd();
 
-    const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
+    const widgetNode = useLayout(nodeId);
+    const [panels] = usePanels();
 
-    const selectedNodeId = useMemo(() => {
-        return node?.children
-            ?.map((childId) => selectById(nodes, childId))
-            .find((child) => child?.selected === true)?.id;
-    }, [node, nodes]);
+    const selectedNode = useMemo(() => {
+        return panels
+            .filter((p) => p.parentId === nodeId)
+            .find((p) => p.selected === true);
+    }, [nodeId, panels]);
 
     const widgetStyle: CSSProperties = useMemo(() => {
         const width = "100%";
@@ -193,30 +193,24 @@ const Widget = (props: { nodeId: string }) => {
         return () => {
             listenable.removeAllListeners();
         };
-    }, [
-        dispatch,
-        dnd,
-        maskPartContainer,
-        moveNode,
-        nodeId,
-        nodes,
-        setMaskPart,
-    ]);
+    }, [dnd, maskPartContainer, moveNode, nodeId, setMaskPart]);
 
     return (
-        <div ref={ref} style={widgetStyle}>
-            {node?.children ? <Titlebar nodeIds={node?.children} /> : null}
+        <div style={widgetStyle}>
+            {widgetNode?.children ? (
+                <Titlebar nodeIds={widgetNode?.children} />
+            ) : null}
             <div
                 ref={widgetRef}
                 style={{ position: "relative", height: "calc(100% - 25px)" }}
             >
                 <div style={maskPartStyle} />
-                {node?.children?.map((nodeId) => {
+                {widgetNode?.children?.map((nodeId) => {
                     return (
                         <Panel
                             key={nodeId}
                             nodeId={nodeId}
-                            hidden={selectedNodeId !== nodeId}
+                            hidden={selectedNode?.id !== nodeId}
                         />
                     );
                 })}

@@ -3,106 +3,133 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
     Layout,
     Provider,
-    DIRECTION,
-    INode,
-    NODE_TYPE,
     CMPTFactory,
     useAddNodeByRules,
     ADD_RULE,
     ROOTID,
+    ILayoutNode,
+    IPanelNode,
+    LAYOUT_DIRECTION,
 } from "@idealjs/layout-manager";
 import CustomTab from "./component/CustomTab";
 
 // const nodes: INode[] = [
 //     {
-//         id: rootid,
+//         id: ROOTID,
 //         type: NODE_TYPE.LAYOUT_NODE,
 //         parentId: "",
-//         direction: DIRECTION.COLUMN,
-//         children: ["A", "B"],
+//         direction: LAYOUT_DIRECTION.COLUMN,
+//         children: ["A"],
 //     },
 //     {
 //         id: "A",
 //         type: NODE_TYPE.LAYOUT_NODE,
-//         direction: DIRECTION.TAB,
-//         parentId: rootid,
-//         children: ["A_A", "A_B"],
+//         direction: LAYOUT_DIRECTION.TAB,
+//         parentId: ROOTID,
+//         children: ["A_A"],
 //     },
 //     {
 //         id: "A_A",
 //         type: NODE_TYPE.PANEL,
-//         parentId: "A",
-//     },
-//     {
-//         id: "A_B",
-//         type: NODE_TYPE.PANEL,
-//         parentId: "A",
-//     },
-//     {
-//         id: "B",
-//         type: NODE_TYPE.LAYOUT_NODE,
-//         parentId: rootid,
-//         children: ["B_A", "B_B"],
-//         direction: DIRECTION.ROW,
-//     },
-//     {
-//         id: "B_A",
-//         type: NODE_TYPE.LAYOUT_NODE,
-//         direction: DIRECTION.TAB,
-//         parentId: "B",
-//         children: ["B_A_B", "B_A_A"],
-//     },
-//     {
-//         id: "B_B",
-//         type: NODE_TYPE.LAYOUT_NODE,
-//         direction: DIRECTION.TAB,
-//         parentId: "B",
-//         children: ["B_B_B", "B_B_A"],
-//     },
-//     {
-//         id: "B_B_B",
-//         type: NODE_TYPE.PANEL,
-//         parentId: "B_B",
-//     },
-//     {
-//         id: "B_B_A",
-//         type: NODE_TYPE.PANEL,
-//         parentId: "B_B",
-//     },
-//     {
-//         id: "B_A_B",
-//         type: NODE_TYPE.PANEL,
-//         parentId: "B_A",
 //         page: "test2",
-//     },
-//     {
-//         id: "B_A_A",
-//         type: NODE_TYPE.PANEL,
-//         parentId: "B_A",
-//         page: "test",
+//         parentId: "A",
 //     },
 // ];
 
-const nodes: INode[] = [
+const layouts: ILayoutNode[] = [
     {
         id: ROOTID,
-        type: NODE_TYPE.LAYOUT_NODE,
         parentId: "",
-        direction: DIRECTION.COLUMN,
-        children: ["A"],
+        children: ["A", "B"],
+        direction: LAYOUT_DIRECTION.COL,
+        offset: 0,
+        height: 0,
+        width: 0,
+        left: 0,
+        top: 0,
     },
     {
         id: "A",
-        type: NODE_TYPE.LAYOUT_NODE,
-        direction: DIRECTION.TAB,
         parentId: ROOTID,
         children: ["A_A"],
+        direction: LAYOUT_DIRECTION.TAB,
+        offset: 0,
+        height: 0,
+        width: 0,
+        left: 0,
+        top: 0,
     },
     {
+        id: "B",
+        parentId: ROOTID,
+        children: ["B_A", "B_B"],
+        direction: LAYOUT_DIRECTION.ROW,
+        offset: 0,
+        height: 0,
+        width: 0,
+        left: 0,
+        top: 0,
+    },
+    {
+        id: "B_A",
+        parentId: "B",
+        children: ["B_A_B", "B_A_A"],
+        direction: LAYOUT_DIRECTION.TAB,
+        offset: 0,
+        height: 0,
+        width: 0,
+        left: 0,
+        top: 0,
+    },
+    {
+        id: "B_B",
+        parentId: "B",
+        children: ["B_B_B", "B_B_A"],
+        direction: LAYOUT_DIRECTION.TAB,
+        offset: 0,
+        height: 0,
+        width: 0,
+        left: 0,
+        top: 0,
+    },
+];
+
+const panels: IPanelNode[] = [
+    {
         id: "A_A",
-        type: NODE_TYPE.PANEL,
-        page: "test2",
         parentId: "A",
+        page: "test",
+        selected: false,
+    },
+    {
+        id: "A_B",
+        parentId: "A",
+        page: "test",
+        selected: false,
+    },
+    {
+        id: "B_B_B",
+        parentId: "B_B",
+        page: "test",
+        selected: false,
+    },
+    {
+        id: "B_B_A",
+        parentId: "B_B",
+        page: "test",
+        selected: false,
+    },
+    {
+        id: "B_A_B",
+        parentId: "B_A",
+        page: "test2",
+        selected: false,
+    },
+    {
+        id: "B_A_A",
+        parentId: "B_A",
+        page: "test",
+        selected: false,
     },
 ];
 
@@ -153,7 +180,7 @@ const factory: CMPTFactory = (page: string) => {
                             Math.random()
                         );
                     } catch (error) {
-                        console.log(error);
+                        console.error(error);
                     }
                 }, [addNodeByRules]);
                 return (
@@ -174,8 +201,13 @@ const factory: CMPTFactory = (page: string) => {
 function App() {
     return (
         <div className="App" style={{ height: 500, width: 500 }}>
-            <Provider value={nodes} factory={factory} Tab={CustomTab}>
-                <Layout nodeId={ROOTID} />
+            <Provider
+                layouts={layouts}
+                panels={panels}
+                factory={factory}
+                Tab={CustomTab}
+            >
+                <Layout />
             </Provider>
         </div>
     );

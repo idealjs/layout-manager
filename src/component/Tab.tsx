@@ -1,9 +1,10 @@
 import { useDnd } from "@idealjs/drag-drop";
-import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
+import { Fragment, useCallback, useEffect, useRef } from "react";
 
 import useRemoveNode from "../hook/useRemoveNode";
-import { selectById, updateOne } from "../reducer/nodes";
-import { useNode, useTab } from "./Provider";
+import { updateOne } from "../reducer/panels";
+import { useTab } from "./Provider";
+import { usePanel, usePanels } from "./Provider/PanelsProvider";
 
 const Tab = (props: {
     nodeId: string;
@@ -13,14 +14,10 @@ const Tab = (props: {
     const { nodeId, selected, onSelect } = props;
     const ref = useRef(null);
 
-    const [nodes, dispatch] = useNode();
     const removeNode = useRemoveNode();
-    useEffect(() => {
-        console.debug("update nodes", nodeId, nodes);
-    }, [nodeId, nodes]);
+    const [, , dispatch] = usePanels();
+    const node = usePanel(nodeId);
     const dnd = useDnd();
-
-    const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
 
     const onClick = useCallback(() => {
         onSelect(nodeId);
@@ -51,7 +48,7 @@ const Tab = (props: {
         removeNode(nodeId);
     }, [nodeId, removeNode]);
     const Tab = useTab();
-    
+
     return (
         <Fragment>
             <Tab

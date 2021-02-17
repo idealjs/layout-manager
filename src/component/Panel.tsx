@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 
-import { selectById } from "../reducer/nodes";
-import { useFactory, useNode } from "./Provider";
+import { useFactory } from "./Provider";
+import { usePanel } from "./Provider/PanelsProvider";
 
 const Panel = (props: { nodeId: string; hidden: boolean }) => {
     const { nodeId, hidden } = props;
-    const [nodes] = useNode();
-    const node = useMemo(() => selectById(nodes, nodeId), [nodeId, nodes]);
+    const node = usePanel(nodeId);
     const factory = useFactory();
 
     const Page = useMemo(() => factory(node?.page!), [factory, node?.page]);

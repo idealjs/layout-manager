@@ -1,44 +1,50 @@
 import { EntityState } from "@reduxjs/toolkit";
 
-import { adapter, INode, selectById } from "../reducer/nodes";
+import { ILayoutNode, IPanelNode } from "../reducer/type";
 import immutableSplice from "./immutableSplice";
 
-const outwardMigration = (state: EntityState<INode>, nodeId: string) => {
+const outwardMigration = (
+    layoutNodes: EntityState<ILayoutNode>,
+    panelNodes: EntityState<IPanelNode>,
+    nodeId: string
+): [EntityState<ILayoutNode>, EntityState<IPanelNode>] => {
     console.debug("[Info] outwardMigration", nodeId);
-    let nextState = state;
+    let nextLayoutNodes = layoutNodes;
+    let nextPanelNodes = panelNodes;
 
-    let node = selectById(nextState, nodeId);
-    if (node == null || node.children == null) {
-        return nextState;
-    }
-    let parent = selectById(nextState, node.parentId);
-    if (parent == null || parent.children == null) {
-        return nextState;
-    }
-    const index = parent.children.findIndex((childId) => childId === nodeId);
+    return [nextLayoutNodes, nextPanelNodes];
 
-    const eachOffset =
-        node.offset != null ? node.offset / node.children.length : 0;
+    // let node = selectById(nextState, nodeId);
+    // if (node == null || node.children == null) {
+    //     return nextState;
+    // }
+    // let parent = selectById(nextState, node.parentId);
+    // if (parent == null || parent.children == null) {
+    //     return nextState;
+    // }
+    // const index = parent.children.findIndex((childId) => childId === nodeId);
 
-    for (const childId of node.children) {
-        const child = selectById(nextState, childId);
-        const childOffset = child?.offset != null ? child?.offset : 0;
-        nextState = adapter.updateOne(nextState, {
-            id: childId,
-            changes: {
-                parentId: node.parentId,
-                offset: childOffset + eachOffset,
-            },
-        });
-    }
+    // const eachOffset =
+    //     node.offset != null ? node.offset / node.children.length : 0;
 
-    nextState = adapter.updateOne(nextState, {
-        id: node.parentId,
-        changes: {
-            children: immutableSplice(parent.children, index, 1, node.children),
-        },
-    });
-    return nextState;
+    // for (const childId of node.children) {
+    //     const child = selectById(nextState, childId);
+    //     const childOffset = child?.offset != null ? child?.offset : 0;
+    //     nextState = adapter.updateOne(nextState, {
+    //         id: childId,
+    //         changes: {
+    //             parentId: node.parentId,
+    //             offset: childOffset + eachOffset,
+    //         },
+    //     });
+    // }
+
+    // nextState = adapter.updateOne(nextState, {
+    //     id: node.parentId,
+    //     changes: {
+    //         children: immutableSplice(parent.children, index, 1, node.children),
+    //     },
+    // });
 };
 
 export default outwardMigration;

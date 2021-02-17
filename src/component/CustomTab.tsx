@@ -1,6 +1,6 @@
 import { CSSProperties, forwardRef } from "react";
 
-import { TABCMPT } from "../reducer/nodes";
+import { TABCMPT } from "../reducer/type";
 import Close from "../svg/Close";
 
 const root: CSSProperties = {

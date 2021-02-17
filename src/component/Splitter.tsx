@@ -1,16 +1,20 @@
 import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
-import { DIRECTION, selectById, updateMany } from "../reducer/nodes";
-import { useNode } from "./Provider";
+import { selectById, updateMany } from "../reducer/layouts";
+import { LAYOUT_DIRECTION } from "../reducer/type";
+import { useLayouts } from "./Provider/LayoutsProvider";
+import { useWidget } from "./Provider/WidgetsProvider";
 
 const Splitter = (props: {
+    id: string;
     parentId: string;
     primaryId: string;
     secondaryId: string;
 }) => {
-    const { parentId, primaryId, secondaryId } = props;
-    const [nodes, dispatch] = useNode();
+    const { id, parentId, primaryId, secondaryId } = props;
+
+    const [, layoutNodes, dispatch] = useLayouts();
 
     const [movingOffset, setMovingOffset] = useState(0);
     const [dragging, setDragging] = useState(false);
@@ -20,20 +24,14 @@ const Splitter = (props: {
 
     const dnd = useDnd();
 
-    const parent = useMemo(() => selectById(nodes, parentId), [
-        nodes,
+    const parent = useMemo(() => selectById(layoutNodes, parentId), [
+        layoutNodes,
         parentId,
     ]);
 
-    const primary = useMemo(() => selectById(nodes, primaryId), [
-        nodes,
-        primaryId,
-    ]);
+    const primary = useWidget(primaryId);
 
-    const secondary = useMemo(() => selectById(nodes, secondaryId), [
-        nodes,
-        secondaryId,
-    ]);
+    const secondary = useWidget(secondaryId);
 
     const primaryOffsetRef = useRef(0);
 
@@ -52,21 +50,20 @@ const Splitter = (props: {
     }, [secondary?.offset]);
 
     const splitterStyle: CSSProperties = useMemo(() => {
-        const parentDirection = parent?.direction;
         const hoverBackgroundColor = "#00000085";
         return {
-            width: parentDirection === DIRECTION.ROW ? 10 : "100%",
-            height: parentDirection === DIRECTION.ROW ? "100%" : 10,
+            width: "100%",
+            height: "100%",
             backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
             userSelect: "none",
         };
-    }, [dragging, parent]);
+    }, [dragging]);
 
     const shadowStyle = useMemo(() => {
         const parentDirection = parent?.direction;
 
-        let x = parentDirection === DIRECTION.ROW ? movingOffset : 0;
-        let y = parentDirection === DIRECTION.ROW ? 0 : movingOffset;
+        let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
+        let y = parentDirection === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
         const transform = `translate(${x}px, ${y}px)`;
         return {
             display: dragging ? undefined : "none",
@@ -112,7 +109,7 @@ const Splitter = (props: {
             })
             .addListener(DND_EVENT.DRAG, (data) => {
                 offset =
-                    parent?.direction === DIRECTION.ROW
+                    parent?.direction === LAYOUT_DIRECTION.ROW
                         ? data.offset.x
                         : data.offset.y;
                 if (
@@ -126,7 +123,7 @@ const Splitter = (props: {
                     let velocity = 0;
                     let primaryValue = 0;
                     let secondaryValue = 0;
-                    if (parent?.direction === DIRECTION.ROW) {
+                    if (parent?.direction === LAYOUT_DIRECTION.ROW) {
                         primaryValue = primary.width;
                         secondaryValue = secondary.width;
                         velocity = data.vector.x;
