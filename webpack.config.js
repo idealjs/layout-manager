@@ -32,7 +32,7 @@ module.exports = {
         "react",
         "react-dom",
         "@reduxjs/toolkit",
-        "@idealjs/drag-drop",
+        "html2canvas",
         "lodash.uniqueid",
     ],
 };
