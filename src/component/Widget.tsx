@@ -1,12 +1,11 @@
-import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
 import useMoveNode from "../hook/useMoveNode";
+import { DND_EVENT, useDnd } from "../lib/dnd";
 import useStateContainer from "../lib/useStateContainer";
 import Panel from "./Panel";
 import { useLayout } from "./Provider/LayoutsProvider";
 import { usePanels } from "./Provider/PanelsProvider";
-import { useWidget } from "./Provider/WidgetsProvider";
 import Titlebar from "./Titlebar";
 export enum MASK_PART {
     TOP = "top",
@@ -119,80 +118,86 @@ const Widget = (props: { nodeId: string }) => {
     }, [maskPart]);
 
     useEffect(() => {
-        const listenable = dnd
-            .droppable(widgetRef.current!, true)
-            .addListener(DND_EVENT.DROP, (data) => {
-                if (data.item.type === "Tab") {
-                    if (maskPartContainer.current != null) {
-                        moveNode(
-                            nodeId,
-                            data.item.id,
-                            data.item.page,
-                            maskPartContainer.current
-                        );
+        try {
+            const listenable = dnd
+                .droppable(widgetRef.current!, true)
+                .addListener(DND_EVENT.DROP, (data) => {
+                    if (data.item.type === "Tab") {
+                        if (maskPartContainer.current != null) {
+                            moveNode(
+                                nodeId,
+                                data.item.id,
+                                data.item.page,
+                                maskPartContainer.current
+                            );
+                        }
+                        setMaskPart(null);
                     }
-                    setMaskPart(null);
-                }
-            })
-            .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
-                if (data.item.type === "Tab") {
-                    setMaskPart(null);
-                }
-            })
-            .addListener(DND_EVENT.DRAG_OVER, (data) => {
-                if (data.item.type === "Tab") {
-                    const rect = widgetRef.current?.getBoundingClientRect();
-                    if (rect) {
-                        if (
-                            data.clientPosition.x > rect.x + rect.width / 4 &&
-                            data.clientPosition.x <
-                                rect.x + (rect.width / 4) * 3 &&
-                            data.clientPosition.y > rect.y + rect.height / 4 &&
-                            data.clientPosition.y <
-                                rect.y + (rect.height / 4) * 3
-                        ) {
-                            setMaskPart(MASK_PART.CENTER);
-                            return;
-                        }
-                        if (
-                            data.clientPosition.x > rect.x &&
-                            data.clientPosition.x < rect.x + rect.width / 4
-                        ) {
-                            setMaskPart(MASK_PART.LEFT);
-                            return;
-                        }
+                })
+                .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
+                    if (data.item.type === "Tab") {
+                        setMaskPart(null);
+                    }
+                })
+                .addListener(DND_EVENT.DRAG_OVER, (data) => {
+                    if (data.item.type === "Tab") {
+                        const rect = widgetRef.current?.getBoundingClientRect();
+                        if (rect) {
+                            if (
+                                data.clientPosition.x >
+                                    rect.x + rect.width / 4 &&
+                                data.clientPosition.x <
+                                    rect.x + (rect.width / 4) * 3 &&
+                                data.clientPosition.y >
+                                    rect.y + rect.height / 4 &&
+                                data.clientPosition.y <
+                                    rect.y + (rect.height / 4) * 3
+                            ) {
+                                setMaskPart(MASK_PART.CENTER);
+                                return;
+                            }
+                            if (
+                                data.clientPosition.x > rect.x &&
+                                data.clientPosition.x < rect.x + rect.width / 4
+                            ) {
+                                setMaskPart(MASK_PART.LEFT);
+                                return;
+                            }
 
-                        if (
-                            data.clientPosition.x >
-                                rect.x + (rect.width / 4) * 3 &&
-                            data.clientPosition.x < rect.x + rect.width
-                        ) {
-                            setMaskPart(MASK_PART.RIGHT);
-                            return;
-                        }
+                            if (
+                                data.clientPosition.x >
+                                    rect.x + (rect.width / 4) * 3 &&
+                                data.clientPosition.x < rect.x + rect.width
+                            ) {
+                                setMaskPart(MASK_PART.RIGHT);
+                                return;
+                            }
 
-                        if (
-                            data.clientPosition.y > rect.y &&
-                            data.clientPosition.y < rect.y + rect.height / 4
-                        ) {
-                            setMaskPart(MASK_PART.TOP);
-                            return;
-                        }
+                            if (
+                                data.clientPosition.y > rect.y &&
+                                data.clientPosition.y < rect.y + rect.height / 4
+                            ) {
+                                setMaskPart(MASK_PART.TOP);
+                                return;
+                            }
 
-                        if (
-                            data.clientPosition.y >
-                                rect.y + (rect.height / 4) * 3 &&
-                            data.clientPosition.y < rect.y + rect.height
-                        ) {
-                            setMaskPart(MASK_PART.BOTTOM);
-                            return;
+                            if (
+                                data.clientPosition.y >
+                                    rect.y + (rect.height / 4) * 3 &&
+                                data.clientPosition.y < rect.y + rect.height
+                            ) {
+                                setMaskPart(MASK_PART.BOTTOM);
+                                return;
+                            }
                         }
                     }
-                }
-            });
-        return () => {
-            listenable.removeAllListeners();
-        };
+                });
+            return () => {
+                listenable.removeAllListeners();
+            };
+        } catch (error) {
+            console.error(error);
+        }
     }, [dnd, maskPartContainer, moveNode, nodeId, setMaskPart]);
 
     return (

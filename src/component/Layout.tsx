@@ -1,23 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import useParse from "../lib/useParse";
 import useRect from "../lib/useRect";
-import { setAll } from "../reducer/widgets";
-import { useSplitters } from "./Provider/SplittersProvider";
-import { useWidgets } from "./Provider/WidgetsProvider";
 import Splitter from "./Splitter";
-// import Splitter from "./Splitter";
 import Widget from "./Widget";
 
 const Layout = () => {
-    const [ref, rect] = useRect();
+    const ref = useRef<HTMLDivElement | null>(null);
+    const [rect] = useRect(ref);
     const [widgets, splitters] = useParse(rect);
-
     return (
         <div
             ref={ref}
             style={{ height: "100%", width: "100%", position: "relative" }}
         >
+            
             {widgets.map((n) => {
                 return (
                     <div
@@ -34,6 +31,7 @@ const Layout = () => {
                     </div>
                 );
             })}
+
             {splitters.map((n) => {
                 return (
                     <div
@@ -55,6 +53,7 @@ const Layout = () => {
                     </div>
                 );
             })}
+
         </div>
     );
 };

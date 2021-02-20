@@ -1,7 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import {
+    MutableRefObject,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from "react";
 
-const useRect = (): [
-    (el: HTMLElement | null) => void,
+const useRect = (
+    ref: MutableRefObject<HTMLDivElement | null>
+): [
     {
         height: number;
         width: number;
@@ -10,11 +18,21 @@ const useRect = (): [
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
 
-    const ref = useCallback((el: HTMLElement | null) => {
-        console.debug("[Info] set rect");
-        setHeight(el?.getBoundingClientRect().height || 0);
-        setWidth(el?.getBoundingClientRect().width || 0);
-    }, []);
+    const setRect = useCallback(() => {
+        requestAnimationFrame(() => {
+            if (
+                height !== ref.current?.getBoundingClientRect().height ||
+                width !== ref.current?.getBoundingClientRect().width
+            ) {
+                setHeight(ref.current?.getBoundingClientRect().height || 0);
+                setWidth(ref.current?.getBoundingClientRect().width || 0);
+            }
+        });
+    }, [height, ref, width]);
+
+    useLayoutEffect(() => {
+        requestAnimationFrame(setRect);
+    }, [ref, setRect]);
 
     const rect = useMemo(() => {
         return {
@@ -22,7 +40,8 @@ const useRect = (): [
             width: width,
         };
     }, [height, width]);
-    return [ref, rect];
+
+    return [rect];
 };
 
 export default useRect;

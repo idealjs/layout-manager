@@ -1,7 +1,7 @@
-import { useDnd } from "@idealjs/drag-drop";
 import { Fragment, useCallback, useEffect, useRef } from "react";
 
 import useRemoveNode from "../hook/useRemoveNode";
+import { useDnd } from "../lib/dnd";
 import { updateOne } from "../reducer/panels";
 import { useTab } from "./Provider";
 import { usePanel, usePanels } from "./Provider/PanelsProvider";
@@ -24,16 +24,20 @@ const Tab = (props: {
     }, [nodeId, onSelect]);
 
     useEffect(() => {
-        const listenable = dnd.draggable(ref.current!, true, {
-            item: {
-                id: nodeId,
-                page: node?.page,
-                type: "Tab",
-            },
-        });
-        return () => {
-            listenable.removeAllListeners();
-        };
+        try {
+            const listenable = dnd.draggable(ref.current!, true, {
+                item: {
+                    id: nodeId,
+                    page: node?.page,
+                    type: "Tab",
+                },
+            });
+            return () => {
+                listenable.removeAllListeners();
+            };
+        } catch (error) {
+            console.error(error);
+        }
     }, [dnd, node?.page, nodeId]);
 
     useEffect(() => {

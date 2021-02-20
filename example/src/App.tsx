@@ -12,6 +12,8 @@ import {
     LAYOUT_DIRECTION,
 } from "@idealjs/layout-manager";
 import CustomTab from "./component/CustomTab";
+import Popout, { PopoutContext } from "./component/Popout";
+import { Fragment } from "react";
 
 // const nodes: INode[] = [
 //     {
@@ -204,17 +206,28 @@ const factory: CMPTFactory = (page: string) => {
 };
 
 function App() {
+    const [portalState, setPortalState] = useState<string[]>([]);
+    const onClick = useCallback(() => {
+        setPortalState((s) => s.concat("b"));
+    }, []);
+
     return (
-        <div className="App" style={{ height: 500, width: 500 }}>
-            <Provider
-                layouts={layouts}
-                panels={panels}
-                factory={factory}
-                Tab={CustomTab}
-            >
-                <Layout />
-            </Provider>
-        </div>
+        <Fragment>
+            <div className="App" style={{ height: 500, width: 500 }}>
+                <button onClick={onClick}>open portal</button>
+                <Provider
+                    layouts={layouts}
+                    panels={panels}
+                    factory={factory}
+                    Tab={CustomTab}
+                >
+                    <Layout />
+                </Provider>
+            </div>
+            <PopoutContext.Provider value={portalState}>
+                <Popout />
+            </PopoutContext.Provider>
+        </Fragment>
     );
 }
 

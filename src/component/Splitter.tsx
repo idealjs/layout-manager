@@ -1,6 +1,6 @@
-import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
+import { DND_EVENT, useDnd } from "../lib/dnd";
 import { updateMany } from "../reducer/layouts";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
@@ -33,6 +33,12 @@ const Splitter = (props: {
     const offsetRef = useRef(0);
 
     useEffect(() => {
+        // shadowRef.current?.addEventListener("dragover", (e) => {
+        //     e.preventDefault();
+        // });
+    }, []);
+
+    useEffect(() => {
         if (primary?.secondaryOffset != null) {
             offsetRef.current = primary.secondaryOffset;
         }
@@ -45,6 +51,8 @@ const Splitter = (props: {
             height: "100%",
             backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
             userSelect: "none",
+            position: "relative",
+            zIndex: 1,
         };
     }, [dragging]);
 
@@ -57,7 +65,7 @@ const Splitter = (props: {
         return {
             display: dragging ? undefined : "none",
             position: "relative",
-            zIndex: 1,
+            zIndex: -1,
             transform,
             width: "100%",
             height: "100%",
@@ -68,9 +76,9 @@ const Splitter = (props: {
     useEffect(() => {
         let offset = 0;
         const listenable = dnd
-            .draggable(ref.current!, false, {
+            .draggable(ref.current!, true, {
                 item: {
-                    id: `${parentId}-${primaryId}-${secondaryId}`,
+                    id: id,
                 },
             })
             .addListener(DND_EVENT.DRAG_START, (data) => {
@@ -101,6 +109,7 @@ const Splitter = (props: {
                     parent?.direction === LAYOUT_DIRECTION.ROW
                         ? data.offset.x
                         : data.offset.y;
+                console.log(offset);
                 if (
                     ref.current != null &&
                     shadowRef.current != null &&
@@ -142,10 +151,12 @@ const Splitter = (props: {
             });
         return () => {
             listenable.removeAllListeners();
+            listenable.removeEleListeners();
         };
     }, [
         dispatch,
         dnd,
+        id,
         parent,
         parentId,
         primary,
