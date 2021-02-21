@@ -1,50 +1,72 @@
 import { EntityState } from "@reduxjs/toolkit";
 
-import { ILayoutNode, IPanelNode } from "../reducer/type";
+import { adapter, removeNode, selectById } from "../reducer/layouts";
+import { ILayoutNode } from "../reducer/type";
 import immutableSplice from "./immutableSplice";
 
-const outwardMigration = (
-    layoutNodes: EntityState<ILayoutNode>,
-    panelNodes: EntityState<IPanelNode>,
-    nodeId: string
-): [EntityState<ILayoutNode>, EntityState<IPanelNode>] => {
+const outwardMigration = (nodes: EntityState<ILayoutNode>, nodeId: string) => {
     console.debug("[Info] outwardMigration", nodeId);
-    let nextLayoutNodes = layoutNodes;
-    let nextPanelNodes = panelNodes;
+    let nextState = nodes;
 
-    return [nextLayoutNodes, nextPanelNodes];
+    const node = selectById(nextState, nodeId);
+    if (node == null) {
+        return nextState;
+    }
 
-    // let node = selectById(nextState, nodeId);
-    // if (node == null || node.children == null) {
-    //     return nextState;
-    // }
-    // let parent = selectById(nextState, node.parentId);
-    // if (parent == null || parent.children == null) {
-    //     return nextState;
-    // }
-    // const index = parent.children.findIndex((childId) => childId === nodeId);
+    const parent = selectById(nextState, node.parentId);
+    if (parent == null) {
+        return nextState;
+    }
+    const index = parent.children.findIndex((childId) => childId === nodeId);
+    if (index === -1) {
+        throw new Error("node has parent,but didn't find in parent's children");
+    }
 
-    // const eachOffset =
-    //     node.offset != null ? node.offset / node.children.length : 0;
+    node.children.forEach((childId, index, array) => {
+        const child = selectById(nextState, childId);
+        if (child === null) {
+            throw new Error(
+                "childId found in parent's children,but node not found"
+            );
+        }
 
-    // for (const childId of node.children) {
-    //     const child = selectById(nextState, childId);
-    //     const childOffset = child?.offset != null ? child?.offset : 0;
-    //     nextState = adapter.updateOne(nextState, {
-    //         id: childId,
-    //         changes: {
-    //             parentId: node.parentId,
-    //             offset: childOffset + eachOffset,
-    //         },
-    //     });
-    // }
+        nextState = adapter.updateOne(nextState, {
+            id: childId,
+            changes: {
+                parentId: node.parentId,
+            },
+        });
 
-    // nextState = adapter.updateOne(nextState, {
-    //     id: node.parentId,
-    //     changes: {
-    //         children: immutableSplice(parent.children, index, 1, node.children),
-    //     },
-    // });
+        if (index === 0) {
+            nextState = adapter.updateOne(nextState, {
+                id: childId,
+                changes: {
+                    parentId: node.parentId,
+                    primaryOffset: node.primaryOffset,
+                },
+            });
+        }
+
+        if (index === array.length - 1) {
+            nextState = adapter.updateOne(nextState, {
+                id: childId,
+                changes: {
+                    secondaryOffset: node.secondaryOffset,
+                },
+            });
+        }
+    });
+
+    nextState = adapter.updateOne(nextState, {
+        id: node.parentId,
+        changes: {
+            children: immutableSplice(parent.children, index, 1, node.children),
+        },
+    });
+
+    nextState = removeNode(nextState, nodeId);
+
+    return nextState;
 };
 
 export default outwardMigration;

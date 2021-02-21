@@ -4,7 +4,6 @@ import { MASK_PART } from "../component/Widget";
 import { ADD_RULE } from "../enum";
 import { ILayoutNode, IPanelNode } from "../reducer/type";
 import addNode from "./addNode";
-import removeNode from "./removeNode";
 
 const moveNode = (
     layoutNodes: EntityState<ILayoutNode>,

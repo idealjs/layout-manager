@@ -57,7 +57,7 @@ const Tab = (props: {
         <Fragment>
             <Tab
                 nodeId={nodeId}
-                nodeTitle={node?.id!}
+                nodeTitle={nodeId}
                 ref={ref}
                 onSelect={onClick}
                 onClose={closeTab}

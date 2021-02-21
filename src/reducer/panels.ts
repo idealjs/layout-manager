@@ -1,4 +1,8 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import {
+    createEntityAdapter,
+    createSlice,
+    EntityState,
+} from "@reduxjs/toolkit";
 
 import { IPanelNode } from "./type";
 
@@ -18,3 +22,11 @@ export const { selectById, selectAll } = adapter.getSelectors();
 export const { updateOne, setAll } = slice.actions;
 
 export default slice.reducer;
+
+export const removeNode = (nodes: EntityState<IPanelNode>, nodeId: string) => {
+    return adapter.removeOne(nodes, nodeId);
+};
+
+export const addNode = (nodes: EntityState<IPanelNode>, node: IPanelNode) => {
+    return adapter.addOne(nodes, node);
+};
