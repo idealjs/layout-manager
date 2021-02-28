@@ -84,11 +84,6 @@ export const removeChild = (
     if (index === -1) {
         throw new Error("didn't find node in target node");
     }
-    console.log(
-        targetNodeId,
-        nodeId,
-        immutableSplice(targetNode.children, index, 1, [])
-    );
     nextState = adapter.updateOne(nextState, {
         id: targetNodeId,
         changes: {
@@ -98,4 +93,38 @@ export const removeChild = (
     return nextState;
 };
 
-export const addNode = () => {};
+export const addNode = (
+    nodes: EntityState<ILayoutNode>,
+    targetNodeId: string,
+    node: ILayoutNode,
+    index: number = 0
+) => {
+    let nextState = nodes;
+    const targetNode = selectById(nextState, targetNodeId);
+    if (targetNode == null) {
+        throw new Error("targetNode not found");
+    }
+    nextState = adapter.addOne(nextState, node);
+    nextState = addChild(nextState, targetNodeId, node.id, index);
+    return nextState;
+};
+
+export const addChild = (
+    nodes: EntityState<ILayoutNode>,
+    targetNodeId: string,
+    nodeId: string,
+    index: number = 0
+) => {
+    let nextState = nodes;
+    const targetNode = selectById(nextState, targetNodeId);
+    if (targetNode == null) {
+        throw new Error("targetNode not found");
+    }
+    nextState = adapter.updateOne(nextState, {
+        id: targetNodeId,
+        changes: {
+            children: immutableSplice(targetNode.children, index, 0, nodeId),
+        },
+    });
+    return nextState;
+};

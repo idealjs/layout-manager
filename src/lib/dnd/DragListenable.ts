@@ -142,7 +142,6 @@ class DragListenable<
             screenX: event.screenX,
             screenY: event.screenY,
         };
-        console.log("test test on mouse move");
         this.offset = offsetFromEvent(event, this.source);
         this.emit(DRAG_LISTENABLE_EVENT.DRAG, {
             source: this.source,

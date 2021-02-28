@@ -109,7 +109,6 @@ const Splitter = (props: {
                     parent?.direction === LAYOUT_DIRECTION.ROW
                         ? data.offset.x
                         : data.offset.y;
-                console.log(offset);
                 if (
                     ref.current != null &&
                     shadowRef.current != null &&

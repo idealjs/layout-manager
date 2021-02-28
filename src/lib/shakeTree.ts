@@ -31,10 +31,8 @@ const shakeTree = (nodes: EntityState<ILayoutNode>, nodeId: string) => {
 
     // remove layout if there is no widget
     parent = selectById(nextState, node.parentId);
-    console.log(node.id, node.children.length);
     if (node.children.length === 0) {
         nextState = removeNode(nextState, nodeId);
-        console.log("test", nextState);
     }
 
     // move children outward if node direction is same as parent;
