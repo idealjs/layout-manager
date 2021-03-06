@@ -1,5 +1,8 @@
+import uniqueId from "lodash.uniqueid";
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
+import { ADD_RULE } from "../enum";
+import useAddNode from "../hook/useAddNode";
 import useMoveNode from "../hook/useMoveNode";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import useStateContainer from "../lib/useStateContainer";
@@ -69,6 +72,23 @@ const hide: CSSProperties = {
     display: "none",
 };
 
+const addRuleFromMaskPart = (maskPart: MASK_PART): ADD_RULE => {
+    switch (maskPart) {
+        case MASK_PART.CENTER:
+            return ADD_RULE.TAB;
+        case MASK_PART.LEFT:
+            return ADD_RULE.LEFT;
+        case MASK_PART.RIGHT:
+            return ADD_RULE.RIGHT;
+        case MASK_PART.TOP:
+            return ADD_RULE.TOP;
+        case MASK_PART.BOTTOM:
+            return ADD_RULE.BOTTOM;
+        default:
+            throw new Error("");
+    }
+};
+
 const Widget = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const widgetRef = useRef<HTMLDivElement>(null);
@@ -78,7 +98,7 @@ const Widget = (props: { nodeId: string }) => {
         setMaskPart,
     ] = useStateContainer<MASK_PART | null>(null);
     const moveNode = useMoveNode();
-
+    const addNode = useAddNode();
     const dnd = useDnd();
 
     const widgetNode = useLayout(nodeId);
@@ -124,11 +144,21 @@ const Widget = (props: { nodeId: string }) => {
                 .addListener(DND_EVENT.DROP, (data) => {
                     if (data.item.type === "Tab") {
                         if (maskPartContainer.current != null) {
-                            moveNode(
+                            // moveNode(
+                            //     nodeId,
+                            //     data.item.id,
+                            //     data.item.page,
+                            //     maskPartContainer.current
+                            // );
+                            console.log("test test widget drop", nodeId, data);
+                            const { type, ...node } = data.item;
+                            addNode(
                                 nodeId,
-                                data.item.id,
-                                data.item.page,
-                                maskPartContainer.current
+                                {
+                                    ...node,
+                                    id: uniqueId(),
+                                },
+                                addRuleFromMaskPart(maskPartContainer.current)
                             );
                         }
                         setMaskPart(null);
@@ -198,7 +228,7 @@ const Widget = (props: { nodeId: string }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, maskPartContainer, moveNode, nodeId, setMaskPart]);
+    }, [addNode, dnd, maskPartContainer, moveNode, nodeId, setMaskPart]);
 
     return (
         <div style={widgetStyle}>
@@ -210,13 +240,12 @@ const Widget = (props: { nodeId: string }) => {
                 style={{ position: "relative", height: "calc(100% - 25px)" }}
             >
                 <div style={maskPartStyle} />
-                {widgetNode?.children?.map((nodeId) => {
+                {widgetNode?.children?.map((nodeId, index, array) => {
+                    const hidden =
+                        selectedNode?.id !== nodeId &&
+                        !(index === 0 && selectedNode == null);
                     return (
-                        <Panel
-                            key={nodeId}
-                            nodeId={nodeId}
-                            hidden={selectedNode?.id !== nodeId}
-                        />
+                        <Panel key={nodeId} nodeId={nodeId} hidden={hidden} />
                     );
                 })}
             </div>

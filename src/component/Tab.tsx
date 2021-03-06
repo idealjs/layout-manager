@@ -27,8 +27,7 @@ const Tab = (props: {
         try {
             const listenable = dnd.draggable(ref.current!, true, {
                 item: {
-                    id: nodeId,
-                    page: node?.page,
+                    ...node!,
                     type: "Tab",
                 },
             });
@@ -38,7 +37,7 @@ const Tab = (props: {
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, node?.page, nodeId]);
+    }, [dnd, node, nodeId]);
 
     useEffect(() => {
         if (nodeId === selected) {

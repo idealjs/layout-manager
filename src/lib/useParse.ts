@@ -11,7 +11,7 @@ import {
     selectById as selectLayoutById,
 } from "../reducer/layouts";
 import { ILayoutNode, ISplitterNode, LAYOUT_DIRECTION } from "../reducer/type";
-import { setAll } from "../reducer/widgets";
+import { setAll as setAllWidgets } from "../reducer/widgets";
 
 const traverse = (
     state: EntityState<ILayoutNode>,
@@ -44,7 +44,7 @@ const useParse = (rect: {
     const [, layoutNodes] = useLayouts();
     const [, , dispatch] = useWidgets();
     const [, splitterNodes] = useSplitters();
-
+    console.debug("[Debug] useParse layoutNodes", layoutNodes);
     const [layouts, splitters] = useMemo((): [
         ILayoutNode[],
         ISplitterNode[]
@@ -183,12 +183,11 @@ const useParse = (rect: {
                 return nextState;
             }
         );
-
         return [selectAll(nextLayoutNodes), splitters];
     }, [layoutNodes, rect.height, rect.width]);
 
     useEffect(() => {
-        dispatch(setAll(layouts));
+        dispatch(setAllWidgets(layouts));
     }, [dispatch, layouts]);
 
     const widgets = useMemo(() => {
