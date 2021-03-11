@@ -1,13 +1,8 @@
-import uniqueId from "lodash.uniqueid";
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
 
-import { ADD_RULE } from "../enum";
-import useAddNode from "../hook/useAddNode";
-import useMoveNode from "../hook/useMoveNode";
+import useStateContainer from "../hook/useStateContainer";
 import { DND_EVENT, useDnd } from "../lib/dnd";
-import useStateContainer from "../lib/useStateContainer";
 import Panel from "./Panel";
-import { useLayout } from "./Provider/LayoutsProvider";
 import { usePanels } from "./Provider/PanelsProvider";
 import Titlebar from "./Titlebar";
 export enum MASK_PART {
@@ -72,23 +67,6 @@ const hide: CSSProperties = {
     display: "none",
 };
 
-const addRuleFromMaskPart = (maskPart: MASK_PART): ADD_RULE => {
-    switch (maskPart) {
-        case MASK_PART.CENTER:
-            return ADD_RULE.TAB;
-        case MASK_PART.LEFT:
-            return ADD_RULE.LEFT;
-        case MASK_PART.RIGHT:
-            return ADD_RULE.RIGHT;
-        case MASK_PART.TOP:
-            return ADD_RULE.TOP;
-        case MASK_PART.BOTTOM:
-            return ADD_RULE.BOTTOM;
-        default:
-            throw new Error("");
-    }
-};
-
 const Widget = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const widgetRef = useRef<HTMLDivElement>(null);
@@ -97,12 +75,13 @@ const Widget = (props: { nodeId: string }) => {
         maskPart,
         setMaskPart,
     ] = useStateContainer<MASK_PART | null>(null);
-    const moveNode = useMoveNode();
-    const addNode = useAddNode();
+
     const dnd = useDnd();
 
-    const widgetNode = useLayout(nodeId);
     const [panels] = usePanels();
+    const tabs = useMemo(() => {
+        return panels.filter((p) => p.parentId === nodeId);
+    }, [nodeId, panels]);
 
     const selectedNode = useMemo(() => {
         return panels
@@ -144,22 +123,7 @@ const Widget = (props: { nodeId: string }) => {
                 .addListener(DND_EVENT.DROP, (data) => {
                     if (data.item.type === "Tab") {
                         if (maskPartContainer.current != null) {
-                            // moveNode(
-                            //     nodeId,
-                            //     data.item.id,
-                            //     data.item.page,
-                            //     maskPartContainer.current
-                            // );
-                            console.log("test test widget drop", nodeId, data);
-                            const { type, ...node } = data.item;
-                            addNode(
-                                nodeId,
-                                {
-                                    ...node,
-                                    id: uniqueId(),
-                                },
-                                addRuleFromMaskPart(maskPartContainer.current)
-                            );
+                            // const { type, ...node } = data.item;
                         }
                         setMaskPart(null);
                     }
@@ -228,24 +192,22 @@ const Widget = (props: { nodeId: string }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [addNode, dnd, maskPartContainer, moveNode, nodeId, setMaskPart]);
+    }, [dnd, maskPartContainer, nodeId, setMaskPart]);
 
     return (
         <div style={widgetStyle}>
-            {widgetNode?.children ? (
-                <Titlebar nodeIds={widgetNode?.children} />
-            ) : null}
+            <Titlebar nodeIds={tabs.map((t) => t.id)} />
             <div
                 ref={widgetRef}
                 style={{ position: "relative", height: "calc(100% - 25px)" }}
             >
                 <div style={maskPartStyle} />
-                {widgetNode?.children?.map((nodeId, index, array) => {
+                {tabs.map((tab, index, array) => {
                     const hidden =
-                        selectedNode?.id !== nodeId &&
+                        selectedNode?.id !== tab.id &&
                         !(index === 0 && selectedNode == null);
                     return (
-                        <Panel key={nodeId} nodeId={nodeId} hidden={hidden} />
+                        <Panel key={tab.id} nodeId={tab.id} hidden={hidden} />
                     );
                 })}
             </div>

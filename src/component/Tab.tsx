@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useEffect, useRef } from "react";
 
-import useRemoveNode from "../hook/useRemoveNode";
 import { useDnd } from "../lib/dnd";
 import { updateOne } from "../reducer/panels";
 import { useTab } from "./Provider";
@@ -14,7 +13,6 @@ const Tab = (props: {
     const { nodeId, selected, onSelect } = props;
     const ref = useRef(null);
 
-    const removeNode = useRemoveNode();
     const [, , dispatch] = usePanels();
     const node = usePanel(nodeId);
     const dnd = useDnd();
@@ -47,9 +45,7 @@ const Tab = (props: {
         }
     }, [dispatch, nodeId, selected]);
 
-    const closeTab = useCallback(() => {
-        removeNode(nodeId);
-    }, [nodeId, removeNode]);
+    const closeTab = useCallback(() => {}, []);
     const Tab = useTab();
 
     return (

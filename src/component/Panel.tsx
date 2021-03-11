@@ -7,7 +7,6 @@ const Panel = (props: { nodeId: string; hidden: boolean }) => {
     const { nodeId, hidden } = props;
     const node = usePanel(nodeId);
     const factory = useFactory();
-
     const Page = useMemo(() => factory(node?.page!), [factory, node?.page]);
     return (
         <div

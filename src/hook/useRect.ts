@@ -1,7 +1,6 @@
 import {
     MutableRefObject,
     useCallback,
-    useEffect,
     useLayoutEffect,
     useMemo,
     useState,
@@ -20,6 +19,7 @@ const useRect = (
 
     const setRect = useCallback(() => {
         requestAnimationFrame(() => {
+            console.debug("[Info] set rect");
             if (
                 height !== ref.current?.getBoundingClientRect().height ||
                 width !== ref.current?.getBoundingClientRect().width

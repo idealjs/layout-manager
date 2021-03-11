@@ -10,7 +10,6 @@ export interface ISplitterNode {
     primaryId: string;
     secondaryId: string;
     parentId: string;
-    offset: number;
 }
 
 export interface IWidgetNode {
@@ -40,7 +39,7 @@ export interface ILayoutNode {
     secondaryOffset: number;
     parentId: string;
     children: string[];
-    direction: LAYOUT_DIRECTION;
+    direction: LAYOUT_DIRECTION | null;
 }
 
 export interface IPanelNode {

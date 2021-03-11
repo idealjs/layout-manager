@@ -1,10 +1,8 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 import { DND_EVENT, useDnd } from "../lib/dnd";
-import { updateMany } from "../reducer/layouts";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
-import { useWidget } from "./Provider/WidgetsProvider";
 
 const Splitter = (props: {
     id: string;
@@ -26,17 +24,11 @@ const Splitter = (props: {
 
     const parent = useLayout(parentId);
 
-    const primary = useWidget(primaryId);
+    const primary = useLayout(primaryId);
 
-    const secondary = useWidget(secondaryId);
+    const secondary = useLayout(secondaryId);
 
     const offsetRef = useRef(0);
-
-    useEffect(() => {
-        // shadowRef.current?.addEventListener("dragover", (e) => {
-        //     e.preventDefault();
-        // });
-    }, []);
 
     useEffect(() => {
         if (primary?.secondaryOffset != null) {
@@ -87,22 +79,6 @@ const Splitter = (props: {
             .addListener(DND_EVENT.DRAG_END, (data) => {
                 setDragging(false);
                 setMovingOffset(0);
-                dispatch(
-                    updateMany([
-                        {
-                            id: primaryId,
-                            changes: {
-                                secondaryOffset: offsetRef.current + offset,
-                            },
-                        },
-                        {
-                            id: secondaryId,
-                            changes: {
-                                primaryOffset: -(offsetRef.current + offset),
-                            },
-                        },
-                    ])
-                );
             })
             .addListener(DND_EVENT.DRAG, (data) => {
                 offset =

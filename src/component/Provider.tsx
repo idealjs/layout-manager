@@ -1,11 +1,10 @@
 import { createContext, FC, FunctionComponent, useContext } from "react";
 
-import { ILayoutNode, IPanelNode, TABCMPT } from "../reducer/type";
+import { IPanelNode, TABCMPT } from "../reducer/type";
 import CustomTab from "./CustomTab";
 import LayoutsProvider from "./Provider/LayoutsProvider";
 import PanelsProvider from "./Provider/PanelsProvider";
 import SplittersProvider from "./Provider/SplittersProvider";
-import WidgetsProvider from "./Provider/WidgetsProvider";
 
 export type CMPTFactory = (
     page: string
@@ -19,25 +18,22 @@ const CMPTContext = createContext<{
 const RIDContext = createContext("RID");
 
 const Provider: FC<{
-    layouts: ILayoutNode[];
     panels: IPanelNode[];
     factory: CMPTFactory;
     Tab?: TABCMPT;
     RID?: string;
 }> = (props) => {
-    const { layouts, panels, children, factory, Tab, RID } = props;
+    const { panels, children, factory, Tab, RID } = props;
 
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
-            <LayoutsProvider value={layouts}>
+            <LayoutsProvider>
                 <PanelsProvider value={panels}>
-                    <WidgetsProvider>
-                        <SplittersProvider>
-                            <RIDContext.Provider value={RID ? RID : "RID"}>
-                                {children}
-                            </RIDContext.Provider>
-                        </SplittersProvider>
-                    </WidgetsProvider>
+                    <SplittersProvider>
+                        <RIDContext.Provider value={RID ? RID : "RID"}>
+                            {children}
+                        </RIDContext.Provider>
+                    </SplittersProvider>
                 </PanelsProvider>
             </LayoutsProvider>
         </CMPTContext.Provider>
