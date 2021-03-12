@@ -4,6 +4,7 @@ import { IPanelNode, TABCMPT } from "../reducer/type";
 import CustomTab from "./CustomTab";
 import LayoutsProvider from "./Provider/LayoutsProvider";
 import PanelsProvider from "./Provider/PanelsProvider";
+import SnsProvider from "./Provider/SnsProvider";
 import SplittersProvider from "./Provider/SplittersProvider";
 
 export type CMPTFactory = (
@@ -31,7 +32,9 @@ const Provider: FC<{
                 <PanelsProvider value={panels}>
                     <SplittersProvider>
                         <RIDContext.Provider value={RID ? RID : "RID"}>
-                            {children}
+                            <LayoutsProvider>
+                                <SnsProvider>{children}</SnsProvider>
+                            </LayoutsProvider>
                         </RIDContext.Provider>
                     </SplittersProvider>
                 </PanelsProvider>

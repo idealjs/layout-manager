@@ -1,8 +1,9 @@
-import { Fragment, useCallback, useEffect, useRef } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useDnd } from "../lib/dnd";
 import { updateOne } from "../reducer/panels";
 import { useTab } from "./Provider";
+import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel, usePanels } from "./Provider/PanelsProvider";
 
 const Tab = (props: {
@@ -11,12 +12,13 @@ const Tab = (props: {
     onSelect: (nodeId: string) => void;
 }) => {
     const { nodeId, selected, onSelect } = props;
+    const symbol = useMemo(() => Symbol(nodeId), [nodeId]);
     const ref = useRef(null);
 
     const [, , dispatch] = usePanels();
     const node = usePanel(nodeId);
     const dnd = useDnd();
-
+    const layoutSymbol = useLayoutSymbol();
     const onClick = useCallback(() => {
         onSelect(nodeId);
     }, [nodeId, onSelect]);
@@ -25,6 +27,7 @@ const Tab = (props: {
         try {
             const listenable = dnd.draggable(ref.current!, true, {
                 item: {
+                    layoutSymbol,
                     ...node!,
                     type: "Tab",
                 },
@@ -35,7 +38,7 @@ const Tab = (props: {
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, node, nodeId]);
+    }, [dnd, layoutSymbol, node, nodeId, symbol]);
 
     useEffect(() => {
         if (nodeId === selected) {

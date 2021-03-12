@@ -1,9 +1,11 @@
-import { CSSProperties, useEffect, useMemo, useRef } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
 import useStateContainer from "../hook/useStateContainer";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import Panel from "./Panel";
+import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanels } from "./Provider/PanelsProvider";
+import { useSlot, useSns } from "./Provider/SnsProvider";
 import Titlebar from "./Titlebar";
 export enum MASK_PART {
     TOP = "top",
@@ -77,7 +79,10 @@ const Widget = (props: { nodeId: string }) => {
     ] = useStateContainer<MASK_PART | null>(null);
 
     const dnd = useDnd();
-
+    const sns = useSns();
+    const symbol = useMemo(() => Symbol(nodeId), [nodeId]);
+    const slot = useSlot(symbol);
+    const layoutSymbol = useLayoutSymbol();
     const [panels] = usePanels();
     const tabs = useMemo(() => {
         return panels.filter((p) => p.parentId === nodeId);
@@ -116,6 +121,10 @@ const Widget = (props: { nodeId: string }) => {
         }
     }, [maskPart]);
 
+    const onNodeRemoved = useCallback(() => {
+        slot.removeListener("nodeRemoved", onNodeRemoved);
+    }, [slot]);
+
     useEffect(() => {
         try {
             const listenable = dnd
@@ -124,6 +133,13 @@ const Widget = (props: { nodeId: string }) => {
                     if (data.item.type === "Tab") {
                         if (maskPartContainer.current != null) {
                             // const { type, ...node } = data.item;
+                            console.log(data, data.item.layoutSymbol);
+                            sns.send(
+                                data.item.layoutSymbol,
+                                "removeNode",
+                                data
+                            );
+                            slot.addListener("nodeRemoved", onNodeRemoved);
                         }
                         setMaskPart(null);
                     }
@@ -192,7 +208,7 @@ const Widget = (props: { nodeId: string }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, maskPartContainer, nodeId, setMaskPart]);
+    }, [dnd, layoutSymbol, maskPartContainer, nodeId, onNodeRemoved, setMaskPart, slot, sns]);
 
     return (
         <div style={widgetStyle}>
