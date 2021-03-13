@@ -1,5 +1,6 @@
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
+import { SLOT_EVENT } from "../enum";
 import useStateContainer from "../hook/useStateContainer";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import Panel from "./Panel";
@@ -130,8 +131,8 @@ const Widget = (props: { nodeId: string }) => {
 
     const onNodeRemoved = useCallback(
         (data) => {
-            console.log("nodeRemoved", data, nodeId);
-            // slot.removeListener("nodeRemoved", onNodeRemoved);
+            console.log(SLOT_EVENT.NODE_REMOVED, data, nodeId);
+            // slot.removeListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
         },
         [nodeId]
     );
@@ -142,8 +143,8 @@ const Widget = (props: { nodeId: string }) => {
                 if (maskPartContainer.current != null) {
                     // const { type, ...node } = data.item;
                     console.log(nodeId, data, data.item.layoutSymbol);
-                    slot.addListener("nodeRemoved", onNodeRemoved);
-                    sns.send(data.item.layoutSymbol, "removeNode", {
+                    slot.addListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
+                    sns.send(data.item.layoutSymbol, SLOT_EVENT.REMOVE_NODE, {
                         ...data,
                         item: { ...data.item, symbol: symbol },
                     });

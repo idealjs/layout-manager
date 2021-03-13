@@ -1,5 +1,6 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
+import { SLOT_EVENT } from "../enum";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
@@ -77,7 +78,7 @@ const Splitter = (props: {
             setDragging(true);
         };
         const onDragEnd = () => {
-            sns.send(layoutSymbol, "movesplitter", {
+            sns.send(layoutSymbol, SLOT_EVENT.MOVE_SPLITTER, {
                 primaryId,
                 secondaryId,
                 offset,

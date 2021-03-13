@@ -254,8 +254,25 @@ class LayoutNode {
         }, null);
     }
 
-    findPanelNode(predicate: (panelNode: PanelNode) => boolean) {
-        return false;
+    findPanelNode(
+        predicate: (panelNode: PanelNode) => boolean
+    ): PanelNode | null {
+        let result = this.panelNodes.reduce(
+            (p: PanelNode | null, c: PanelNode) => {
+                if (predicate(c)) {
+                    return c;
+                }
+                return p;
+            },
+            null
+        );
+        if (result != null) {
+            return result;
+        }
+
+        return this.children.reduce((p: PanelNode | null, c: LayoutNode) => {
+            return p != null ? p : c.findPanelNode(predicate);
+        }, null);
     }
 
     DLR(t: (layout: LayoutNode) => void) {

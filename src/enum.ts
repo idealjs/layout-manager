@@ -5,3 +5,11 @@ export enum ADD_RULE {
     RIGHT = "RIGHT",
     TAB = "TAB",
 }
+
+export enum SLOT_EVENT {
+    ADD_NODE = "ADD_NODE",
+    REMOVE_NODE = "REMOVE_NODE",
+    MOVE_SPLITTER = "MOVE_SPLITTER",
+    SELECT_TAB = "SELECT_TAB",
+    NODE_REMOVED = "NODE_REMOVED",
+}

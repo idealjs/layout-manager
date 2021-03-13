@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
+import { SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
 import LayoutNode from "../lib/LayoutNode";
 import { setAll as setAllLayouts } from "../reducer/layouts";
@@ -52,16 +53,18 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const addNode = useCallback(
         (data) => {
             update();
-            console.log("addNode", data);
+            console.log(SLOT_EVENT.ADD_NODE, data);
         },
         [update]
     );
 
     const removeNode = useCallback(
         (data) => {
-            console.log("removeNode", data);
+            console.log(SLOT_EVENT.REMOVE_NODE, data);
             update();
-            sns.send(data.item.symbol, "nodeRemoved", { test: "test" });
+            sns.send(data.item.symbol, SLOT_EVENT.NODE_REMOVED, {
+                test: "test",
+            });
         },
         [sns, update]
     );
@@ -83,17 +86,34 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
         [layoutNode, update]
     );
 
+    const selectTab = useCallback(
+        (data) => {
+            const panelNode = layoutNode.findPanelNode((p) => p.id === data.id);
+            if (panelNode != null && panelNode.parent != null) {
+                panelNode.parent.panelNodes.forEach(
+                    (p) => (p.selected = false)
+                );
+                panelNode.selected = true;
+                update();
+            }
+        },
+        [layoutNode, update]
+    );
+
     useEffect(() => {
         update();
-        slot.addListener("addNode", addNode);
-        slot.addListener("removeNode", removeNode);
-        slot.addListener("movesplitter", moveSplitter);
+        slot.addListener(SLOT_EVENT.ADD_NODE, addNode);
+        slot.addListener(SLOT_EVENT.REMOVE_NODE, removeNode);
+        slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+        slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
+
         return () => {
-            slot.removeListener("addNode", addNode);
-            slot.removeListener("removeNode", removeNode);
-            slot.removeListener("movesplitter", moveSplitter);
+            slot.removeListener(SLOT_EVENT.ADD_NODE, addNode);
+            slot.removeListener(SLOT_EVENT.REMOVE_NODE, removeNode);
+            slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+            slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
         };
-    }, [addNode, layoutNode, removeNode, slot, sns, update, moveSplitter]);
+    }, [addNode, layoutNode, removeNode, slot, sns, update, moveSplitter, selectTab]);
 
     return (
         <div
