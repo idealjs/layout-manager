@@ -13,7 +13,19 @@ class Sns {
     }
 
     send(target: Symbol, event: string | symbol, data: any) {
-        this.slots.find((slot) => slot.id === target)?.emit(event, data);
+        console.log("send", this.slots);
+        this.slots
+            .find((slot) => {
+                console.log(
+                    "test test",
+                    slot,
+                    slot.id,
+                    target,
+                    slot.id === target
+                );
+                return slot.id === target;
+            })
+            ?.emit(event, data);
     }
 }
 

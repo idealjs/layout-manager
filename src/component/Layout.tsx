@@ -3,10 +3,12 @@ import { useCallback, useEffect, useRef } from "react";
 import useRect from "../hook/useRect";
 import LayoutNode from "../lib/LayoutNode";
 import { setAll as setAllLayouts } from "../reducer/layouts";
+import { setAll as setAllPanels } from "../reducer/panels";
 import { setAll as setAllSplitters } from "../reducer/splitters";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayouts } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
+import { usePanels } from "./Provider/PanelsProvider";
 import { useSlot, useSns } from "./Provider/SnsProvider";
 import { useSplitters } from "./Provider/SplittersProvider";
 import Splitter from "./Splitter";
@@ -21,13 +23,17 @@ const useUpdate = (
 ) => {
     const [, , dispatchSplitters] = useSplitters();
     const [, , dispatchLayouts] = useLayouts();
+    const [, , dispatchPanels] = usePanels();
     return useCallback(() => {
         layoutNode.fill({ ...rect, left: 0, top: 0 });
+        layoutNode.shakeTree();
         const layouts = layoutNode.parseLayout();
         const splitters = layoutNode.parseSplitter();
+        const panels = layoutNode.parsePanel();
         dispatchLayouts(setAllLayouts(layouts));
         dispatchSplitters(setAllSplitters(splitters));
-    }, [dispatchLayouts, dispatchSplitters, layoutNode, rect]);
+        dispatchPanels(setAllPanels(panels));
+    }, [dispatchLayouts, dispatchPanels, dispatchSplitters, layoutNode, rect]);
 };
 
 const Layout = (props: { layoutNode: LayoutNode }) => {
@@ -53,21 +59,41 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const removeNode = useCallback(
         (data) => {
-            update();
             console.log("removeNode", data);
+            update();
+            sns.send(data.item.symbol, "nodeRemoved", { test: "test" });
         },
-        [update]
+        [sns, update]
+    );
+
+    const moveSplitter = useCallback(
+        (data) => {
+            const primaryNode = layoutNode.find((l) => l.id === data.primaryId);
+            const secondaryNode = layoutNode.find(
+                (l) => l.id === data.secondaryId
+            );
+            if (primaryNode != null && secondaryNode != null) {
+                primaryNode.secondaryOffset =
+                    primaryNode.secondaryOffset + data.offset;
+                secondaryNode.primaryOffset =
+                    secondaryNode.primaryOffset - data.offset;
+            }
+            update();
+        },
+        [layoutNode, update]
     );
 
     useEffect(() => {
         update();
         slot.addListener("addNode", addNode);
         slot.addListener("removeNode", removeNode);
+        slot.addListener("movesplitter", moveSplitter);
         return () => {
             slot.removeListener("addNode", addNode);
             slot.removeListener("removeNode", removeNode);
+            slot.removeListener("movesplitter", moveSplitter);
         };
-    }, [addNode, layoutNode, removeNode, slot, sns, update]);
+    }, [addNode, layoutNode, removeNode, slot, sns, update, moveSplitter]);
 
     return (
         <div

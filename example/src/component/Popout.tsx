@@ -3,9 +3,9 @@ import { createContext } from "react";
 import {
     Layout,
     Provider,
-    IPanelNode,
     LayoutNode,
     LAYOUT_DIRECTION,
+    PanelNode,
 } from "@idealjs/layout-manager";
 import Portal from "./Portal";
 export const PopoutContext = createContext<string[]>([]);
@@ -31,44 +31,15 @@ N_B_B.id = "N_B_B";
 N.append(N_A).append(N_B);
 N_B.append(N_B_A).append(N_B_B);
 
-const panels: IPanelNode[] = [
-    {
-        id: "A_A",
-        parentId: "N_A",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "A_B",
-        parentId: "N_A",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_B_B",
-        parentId: "N_B_B",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_B_A",
-        parentId: "N_B_B",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_A_B",
-        parentId: "N_B_A",
-        page: "test2",
-        selected: false,
-    },
-    {
-        id: "B_A_A",
-        parentId: "N_B_A",
-        page: "test",
-        selected: false,
-    },
-];
+const P_A_A = new PanelNode();
+const P_A_B = new PanelNode();
+N_A.appendPanelNode(P_A_A, P_A_B);
+const P_B_A_A = new PanelNode();
+const P_B_A_B = new PanelNode();
+N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
+const P_B_B_A = new PanelNode();
+const P_B_B_B = new PanelNode();
+N_B_B.appendPanelNode(P_B_B_A, P_B_B_B);
 
 const Popout = () => {
     const data = useContext(PopoutContext);
@@ -77,10 +48,7 @@ const Popout = () => {
             {data.map((d) => {
                 return (
                     <Portal key={d}>
-                        <Provider
-                            panels={panels}
-                            factory={() => () => <div>test</div>}
-                        >
+                        <Provider factory={() => () => <div>test</div>}>
                             <Layout layoutNode={N} />
                         </Provider>
                     </Portal>

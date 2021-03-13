@@ -9,12 +9,13 @@ const slice = createSlice({
     initialState: adapter.getInitialState(),
     reducers: {
         updateOne: adapter.updateOne,
+        removeOne: adapter.removeOne,
         setAll: adapter.setAll,
     },
 });
 
 export const { selectById, selectAll } = adapter.getSelectors();
 
-export const { updateOne, setAll } = slice.actions;
+export const { updateOne, removeOne, setAll } = slice.actions;
 
 export default slice.reducer;

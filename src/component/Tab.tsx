@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useDnd } from "../lib/dnd";
-import { updateOne } from "../reducer/panels";
+import { removeOne, updateOne } from "../reducer/panels";
 import { useTab } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel, usePanels } from "./Provider/PanelsProvider";
@@ -48,7 +48,9 @@ const Tab = (props: {
         }
     }, [dispatch, nodeId, selected]);
 
-    const closeTab = useCallback(() => {}, []);
+    const closeTab = useCallback(() => {
+        dispatch(removeOne(nodeId));
+    }, [dispatch, nodeId]);
     const Tab = useTab();
 
     return (

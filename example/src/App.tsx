@@ -4,9 +4,9 @@ import {
     Layout,
     Provider,
     CMPTFactory,
-    IPanelNode,
     LAYOUT_DIRECTION,
     LayoutNode,
+    PanelNode,
 } from "@idealjs/layout-manager";
 import CustomTab from "./component/CustomTab";
 import Popout, { PopoutContext } from "./component/Popout";
@@ -35,44 +35,35 @@ N_B.append(N_B_A).append(N_B_B);
 
 console.log(N);
 
-const panels: IPanelNode[] = [
-    {
-        id: "A_A",
-        parentId: "N_A",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "A_B",
-        parentId: "N_A",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_B_B",
-        parentId: "N_B_B",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_B_A",
-        parentId: "N_B_B",
-        page: "test",
-        selected: false,
-    },
-    {
-        id: "B_A_B",
-        parentId: "N_B_A",
-        page: "test2",
-        selected: false,
-    },
-    {
-        id: "B_A_A",
-        parentId: "N_B_A",
-        page: "test",
-        selected: false,
-    },
-];
+const P_A_A = new PanelNode();
+P_A_A.id = "P_A_A";
+P_A_A.page = "test";
+
+const P_A_B = new PanelNode();
+P_A_B.id = "P_A_B";
+P_A_B.page = "test";
+
+N_A.appendPanelNode(P_A_A, P_A_B);
+
+const P_B_A_A = new PanelNode();
+P_B_A_A.id = "P_B_A_A";
+P_B_A_A.page = "test";
+
+const P_B_A_B = new PanelNode();
+P_B_A_B.id = "P_B_A_B";
+P_B_A_B.page = "test";
+
+N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
+
+const P_B_B_A = new PanelNode();
+P_B_B_A.id = "P_B_B_A";
+P_B_B_A.page = "test";
+
+const P_B_B_B = new PanelNode();
+P_B_B_B.id = "P_B_B_B";
+P_B_B_B.page = "test";
+
+N_B_B.appendPanelNode(P_B_B_A, P_B_B_B);
 
 const factory: CMPTFactory = (page: string) => {
     switch (page) {
@@ -138,7 +129,7 @@ function App() {
         <Fragment>
             <div className="App" style={{ height: 500, width: 500 }}>
                 <button onClick={onClick}>open portal</button>
-                <Provider panels={panels} factory={factory} Tab={CustomTab}>
+                <Provider factory={factory} Tab={CustomTab}>
                     <Layout layoutNode={N} />
                 </Provider>
             </div>

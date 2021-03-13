@@ -1,6 +1,6 @@
 import { createContext, FC, FunctionComponent, useContext } from "react";
 
-import { IPanelNode, TABCMPT } from "../reducer/type";
+import { TABCMPT } from "../reducer/type";
 import CustomTab from "./CustomTab";
 import LayoutsProvider from "./Provider/LayoutsProvider";
 import PanelsProvider from "./Provider/PanelsProvider";
@@ -19,17 +19,16 @@ const CMPTContext = createContext<{
 const RIDContext = createContext("RID");
 
 const Provider: FC<{
-    panels: IPanelNode[];
     factory: CMPTFactory;
     Tab?: TABCMPT;
     RID?: string;
 }> = (props) => {
-    const { panels, children, factory, Tab, RID } = props;
+    const { children, factory, Tab, RID } = props;
 
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
             <LayoutsProvider>
-                <PanelsProvider value={panels}>
+                <PanelsProvider>
                     <SplittersProvider>
                         <RIDContext.Provider value={RID ? RID : "RID"}>
                             <LayoutsProvider>

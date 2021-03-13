@@ -3,6 +3,7 @@ import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 import useStateContainer from "../hook/useStateContainer";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import Panel from "./Panel";
+import { useLayout } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanels } from "./Provider/PanelsProvider";
 import { useSlot, useSns } from "./Provider/SnsProvider";
@@ -84,6 +85,8 @@ const Widget = (props: { nodeId: string }) => {
     const slot = useSlot(symbol);
     const layoutSymbol = useLayoutSymbol();
     const [panels] = usePanels();
+    const layout = useLayout(nodeId);
+
     const tabs = useMemo(() => {
         return panels.filter((p) => p.parentId === nodeId);
     }, [nodeId, panels]);
@@ -121,94 +124,134 @@ const Widget = (props: { nodeId: string }) => {
         }
     }, [maskPart]);
 
-    const onNodeRemoved = useCallback(() => {
-        slot.removeListener("nodeRemoved", onNodeRemoved);
+    useEffect(() => {
+        console.log("slot change", slot);
     }, [slot]);
+
+    const onNodeRemoved = useCallback(
+        (data) => {
+            console.log("nodeRemoved", data, nodeId);
+            // slot.removeListener("nodeRemoved", onNodeRemoved);
+        },
+        [nodeId]
+    );
+
+    const onDrop = useCallback(
+        (data) => {
+            if (data.item.type === "Tab") {
+                if (maskPartContainer.current != null) {
+                    // const { type, ...node } = data.item;
+                    console.log(nodeId, data, data.item.layoutSymbol);
+                    slot.addListener("nodeRemoved", onNodeRemoved);
+                    sns.send(data.item.layoutSymbol, "removeNode", {
+                        ...data,
+                        item: { ...data.item, symbol: symbol },
+                    });
+                }
+                setMaskPart(null);
+            }
+        },
+        [
+            maskPartContainer,
+            nodeId,
+            onNodeRemoved,
+            setMaskPart,
+            slot,
+            sns,
+            symbol,
+        ]
+    );
+
+    const onDragLeave = useCallback(
+        (data) => {
+            if (data.item.type === "Tab") {
+                setMaskPart(null);
+            }
+        },
+        [setMaskPart]
+    );
+
+    const onDragOver = useCallback(
+        (data) => {
+            if (data.item.type === "Tab") {
+                const rect = widgetRef.current?.getBoundingClientRect();
+                if (rect) {
+                    if (
+                        data.clientPosition.x > rect.x + rect.width / 4 &&
+                        data.clientPosition.x < rect.x + (rect.width / 4) * 3 &&
+                        data.clientPosition.y > rect.y + rect.height / 4 &&
+                        data.clientPosition.y < rect.y + (rect.height / 4) * 3
+                    ) {
+                        setMaskPart(MASK_PART.CENTER);
+                        return;
+                    }
+                    if (
+                        data.clientPosition.x > rect.x &&
+                        data.clientPosition.x < rect.x + rect.width / 4
+                    ) {
+                        setMaskPart(MASK_PART.LEFT);
+                        return;
+                    }
+
+                    if (
+                        data.clientPosition.x > rect.x + (rect.width / 4) * 3 &&
+                        data.clientPosition.x < rect.x + rect.width
+                    ) {
+                        setMaskPart(MASK_PART.RIGHT);
+                        return;
+                    }
+
+                    if (
+                        data.clientPosition.y > rect.y &&
+                        data.clientPosition.y < rect.y + rect.height / 4
+                    ) {
+                        setMaskPart(MASK_PART.TOP);
+                        return;
+                    }
+
+                    if (
+                        data.clientPosition.y >
+                            rect.y + (rect.height / 4) * 3 &&
+                        data.clientPosition.y < rect.y + rect.height
+                    ) {
+                        setMaskPart(MASK_PART.BOTTOM);
+                        return;
+                    }
+                }
+            }
+        },
+        [setMaskPart]
+    );
 
     useEffect(() => {
         try {
             const listenable = dnd
                 .droppable(widgetRef.current!, true)
-                .addListener(DND_EVENT.DROP, (data) => {
-                    if (data.item.type === "Tab") {
-                        if (maskPartContainer.current != null) {
-                            // const { type, ...node } = data.item;
-                            console.log(data, data.item.layoutSymbol);
-                            sns.send(
-                                data.item.layoutSymbol,
-                                "removeNode",
-                                data
-                            );
-                            slot.addListener("nodeRemoved", onNodeRemoved);
-                        }
-                        setMaskPart(null);
-                    }
-                })
-                .addListener(DND_EVENT.DRAG_LEAVE, (data) => {
-                    if (data.item.type === "Tab") {
-                        setMaskPart(null);
-                    }
-                })
-                .addListener(DND_EVENT.DRAG_OVER, (data) => {
-                    if (data.item.type === "Tab") {
-                        const rect = widgetRef.current?.getBoundingClientRect();
-                        if (rect) {
-                            if (
-                                data.clientPosition.x >
-                                    rect.x + rect.width / 4 &&
-                                data.clientPosition.x <
-                                    rect.x + (rect.width / 4) * 3 &&
-                                data.clientPosition.y >
-                                    rect.y + rect.height / 4 &&
-                                data.clientPosition.y <
-                                    rect.y + (rect.height / 4) * 3
-                            ) {
-                                setMaskPart(MASK_PART.CENTER);
-                                return;
-                            }
-                            if (
-                                data.clientPosition.x > rect.x &&
-                                data.clientPosition.x < rect.x + rect.width / 4
-                            ) {
-                                setMaskPart(MASK_PART.LEFT);
-                                return;
-                            }
-
-                            if (
-                                data.clientPosition.x >
-                                    rect.x + (rect.width / 4) * 3 &&
-                                data.clientPosition.x < rect.x + rect.width
-                            ) {
-                                setMaskPart(MASK_PART.RIGHT);
-                                return;
-                            }
-
-                            if (
-                                data.clientPosition.y > rect.y &&
-                                data.clientPosition.y < rect.y + rect.height / 4
-                            ) {
-                                setMaskPart(MASK_PART.TOP);
-                                return;
-                            }
-
-                            if (
-                                data.clientPosition.y >
-                                    rect.y + (rect.height / 4) * 3 &&
-                                data.clientPosition.y < rect.y + rect.height
-                            ) {
-                                setMaskPart(MASK_PART.BOTTOM);
-                                return;
-                            }
-                        }
-                    }
-                });
+                .addListener(DND_EVENT.DROP, onDrop)
+                .addListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
+                .addListener(DND_EVENT.DRAG_OVER, onDragOver);
             return () => {
-                listenable.removeAllListeners();
+                listenable
+                    .removeListener(DND_EVENT.DROP, onDrop)
+                    .removeListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
+                    .removeListener(DND_EVENT.DRAG_OVER, onDragOver);
             };
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, layoutSymbol, maskPartContainer, nodeId, onNodeRemoved, setMaskPart, slot, sns]);
+    }, [
+        dnd,
+        layoutSymbol,
+        maskPartContainer,
+        nodeId,
+        onDragLeave,
+        onDragOver,
+        onDrop,
+        onNodeRemoved,
+        setMaskPart,
+        slot,
+        sns,
+    ]);
 
     return (
         <div style={widgetStyle}>
@@ -218,12 +261,12 @@ const Widget = (props: { nodeId: string }) => {
                 style={{ position: "relative", height: "calc(100% - 25px)" }}
             >
                 <div style={maskPartStyle} />
-                {tabs.map((tab, index, array) => {
+                {layout?.children.map((childId, index, array) => {
                     const hidden =
-                        selectedNode?.id !== tab.id &&
+                        selectedNode?.id !== childId &&
                         !(index === 0 && selectedNode == null);
                     return (
-                        <Panel key={tab.id} nodeId={tab.id} hidden={hidden} />
+                        <Panel key={childId} nodeId={childId} hidden={hidden} />
                     );
                 })}
             </div>

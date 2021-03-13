@@ -1,7 +1,13 @@
 import { uniqueId } from "lodash";
 
 import { ROOTID } from "../constant";
-import { ILayoutNode, ISplitterNode, LAYOUT_DIRECTION } from "../reducer/type";
+import {
+    ILayoutNode,
+    IPanelNode,
+    ISplitterNode,
+    LAYOUT_DIRECTION,
+} from "../reducer/type";
+import PanelNode from "./PanelNode";
 const splitterBlock = 10;
 class LayoutNode {
     id: string = uniqueId();
@@ -12,12 +18,19 @@ class LayoutNode {
     primaryOffset: number = 0;
     secondaryOffset: number = 0;
     children: LayoutNode[] = [];
+    panelNodes: PanelNode[] = [];
 
     direction: LAYOUT_DIRECTION | null = null;
     parent: LayoutNode | null = null;
 
     append(...children: LayoutNode[]) {
         this.children = this.children.concat(children);
+        children.forEach((c) => (c.parent = this));
+        return this;
+    }
+
+    appendPanelNode(...children: PanelNode[]) {
+        this.panelNodes = this.panelNodes.concat(children);
         children.forEach((c) => (c.parent = this));
         return this;
     }
@@ -165,7 +178,10 @@ class LayoutNode {
             primaryOffset: this.primaryOffset,
             secondaryOffset: this.secondaryOffset,
             parentId: this.parent?.id ? this.parent.id : ROOTID,
-            children: this.children.map((child) => child.id),
+            children:
+                this.direction !== LAYOUT_DIRECTION.TAB
+                    ? this.children.map((child) => child.id)
+                    : this.panelNodes.map((child) => child.id),
             direction: this.direction,
         };
         return this.children
@@ -206,14 +222,15 @@ class LayoutNode {
         }
 
         const splitter: ISplitterNode = {
-            id: this.id,
+            id: `${this.parent.id}_${this.id}_${
+                this.parent.children[index + 1].id
+            }`,
             height: splitterHeight,
             width: splitterWidth,
             left: splitterLeft,
             top: splitterTop,
-
             primaryId: this.id,
-            secondaryId: this.parent.children[index].id,
+            secondaryId: this.parent.children[index + 1].id,
             parentId: this.parent.id,
         };
 
@@ -222,19 +239,23 @@ class LayoutNode {
             .concat(splitter);
     }
 
-    find(predicate: (layout: LayoutNode) => boolean) {
+    parsePanel(): IPanelNode[] {
+        return this.children
+            .flatMap((child) => child.parsePanel())
+            .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
+    }
+
+    find(predicate: (layout: LayoutNode) => boolean): LayoutNode | null {
         if (predicate(this)) {
             return this;
         }
         return this.children.reduce((p: LayoutNode | null, c: LayoutNode) => {
-            if (p != null) {
-                return p;
-            }
-            if (predicate(c)) {
-                return c;
-            }
-            return null;
+            return p != null ? p : c.find(predicate);
         }, null);
+    }
+
+    findPanelNode(predicate: (panelNode: PanelNode) => boolean) {
+        return false;
     }
 
     DLR(t: (layout: LayoutNode) => void) {
@@ -249,7 +270,10 @@ class LayoutNode {
 
     shakeTree() {
         this.LRD((l) => {
-            if (l.children.length === 0) {
+            if (
+                l.children.length === 0 &&
+                l.direction !== LAYOUT_DIRECTION.TAB
+            ) {
                 l.parent?.removeChild(l);
             }
             if (

@@ -3,6 +3,8 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
+import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
+import { useSns } from "./Provider/SnsProvider";
 
 const Splitter = (props: {
     id: string;
@@ -27,6 +29,10 @@ const Splitter = (props: {
     const primary = useLayout(primaryId);
 
     const secondary = useLayout(secondaryId);
+
+    const layoutSymbol = useLayoutSymbol();
+
+    const sns = useSns();
 
     const offsetRef = useRef(0);
 
@@ -67,77 +73,89 @@ const Splitter = (props: {
 
     useEffect(() => {
         let offset = 0;
+        const onDragStart = () => {
+            setDragging(true);
+        };
+        const onDragEnd = () => {
+            sns.send(layoutSymbol, "movesplitter", {
+                primaryId,
+                secondaryId,
+                offset,
+            });
+            setDragging(false);
+            setMovingOffset(0);
+        };
+        const onDrag = (data: any) => {
+            offset =
+                parent?.direction === LAYOUT_DIRECTION.ROW
+                    ? data.offset.x
+                    : data.offset.y;
+            if (
+                ref.current != null &&
+                shadowRef.current != null &&
+                primary?.width != null &&
+                primary.height != null &&
+                secondary?.width != null &&
+                secondary.height != null
+            ) {
+                let velocity = 0;
+                let primaryValue = 0;
+                let secondaryValue = 0;
+                if (parent?.direction === LAYOUT_DIRECTION.ROW) {
+                    primaryValue = primary.width;
+                    secondaryValue = secondary.width;
+                    velocity = data.vector.x;
+                } else {
+                    primaryValue = primary.height;
+                    secondaryValue = secondary.height;
+                    velocity = data.vector.y;
+                }
+
+                if (velocity >= 0 && secondaryValue - offset < 100) {
+                    offset = secondaryValue - 100;
+                }
+
+                if (velocity <= 0 && primaryValue + offset < 100) {
+                    offset = -(primaryValue - 100);
+                }
+
+                if (velocity >= 0 && primaryValue + offset < 100) {
+                    offset = -(primaryValue - 100);
+                }
+
+                if (velocity <= 0 && secondaryValue - offset < 100) {
+                    offset = secondaryValue - 100;
+                }
+                setMovingOffset(offset);
+            }
+        };
         const listenable = dnd
             .draggable(ref.current!, true, {
                 item: {
                     id: id,
                 },
             })
-            .addListener(DND_EVENT.DRAG_START, (data) => {
-                setDragging(true);
-            })
-            .addListener(DND_EVENT.DRAG_END, (data) => {
-                setDragging(false);
-                setMovingOffset(0);
-            })
-            .addListener(DND_EVENT.DRAG, (data) => {
-                offset =
-                    parent?.direction === LAYOUT_DIRECTION.ROW
-                        ? data.offset.x
-                        : data.offset.y;
-                if (
-                    ref.current != null &&
-                    shadowRef.current != null &&
-                    primary?.width != null &&
-                    primary.height != null &&
-                    secondary?.width != null &&
-                    secondary.height != null
-                ) {
-                    let velocity = 0;
-                    let primaryValue = 0;
-                    let secondaryValue = 0;
-                    if (parent?.direction === LAYOUT_DIRECTION.ROW) {
-                        primaryValue = primary.width;
-                        secondaryValue = secondary.width;
-                        velocity = data.vector.x;
-                    } else {
-                        primaryValue = primary.height;
-                        secondaryValue = secondary.height;
-                        velocity = data.vector.y;
-                    }
-
-                    if (velocity >= 0 && secondaryValue - offset < 100) {
-                        offset = secondaryValue - 100;
-                    }
-
-                    if (velocity <= 0 && primaryValue + offset < 100) {
-                        offset = -(primaryValue - 100);
-                    }
-
-                    if (velocity >= 0 && primaryValue + offset < 100) {
-                        offset = -(primaryValue - 100);
-                    }
-
-                    if (velocity <= 0 && secondaryValue - offset < 100) {
-                        offset = secondaryValue - 100;
-                    }
-                    setMovingOffset(offset);
-                }
-            });
+            .addListener(DND_EVENT.DRAG_START, onDragStart)
+            .addListener(DND_EVENT.DRAG_END, onDragEnd)
+            .addListener(DND_EVENT.DRAG, onDrag);
         return () => {
-            listenable.removeAllListeners();
-            listenable.removeEleListeners();
+            listenable
+                .removeListener(DND_EVENT.DRAG_START, onDragStart)
+                .removeListener(DND_EVENT.DRAG_END, onDragEnd)
+                .removeListener(DND_EVENT.DRAG, onDrag);
         };
     }, [
         dispatch,
         dnd,
         id,
+        layoutSymbol,
         parent,
         parentId,
         primary,
         primaryId,
         secondary,
         secondaryId,
+        sns,
     ]);
 
     return (
