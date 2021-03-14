@@ -1,10 +1,12 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 
+import { SLOT_EVENT } from "../enum";
 import { useDnd } from "../lib/dnd";
-import { removeOne, updateOne } from "../reducer/panels";
+import { updateOne } from "../reducer/panels";
 import { useTab } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel, usePanels } from "./Provider/PanelsProvider";
+import { useSns } from "./Provider/SnsProvider";
 
 const Tab = (props: {
     nodeId: string;
@@ -18,6 +20,7 @@ const Tab = (props: {
     const [, , dispatch] = usePanels();
     const node = usePanel(nodeId);
     const dnd = useDnd();
+    const sns = useSns();
     const layoutSymbol = useLayoutSymbol();
     const onClick = useCallback(() => {
         onSelect(nodeId);
@@ -49,8 +52,8 @@ const Tab = (props: {
     }, [dispatch, nodeId, selected]);
 
     const closeTab = useCallback(() => {
-        dispatch(removeOne(nodeId));
-    }, [dispatch, nodeId]);
+        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, { nodeId });
+    }, [layoutSymbol, nodeId, sns]);
     const Tab = useTab();
 
     return (

@@ -34,8 +34,6 @@ N_B_B.id = "N_B_B";
 N.append(N_A).append(N_B);
 N_B.append(N_B_A).append(N_B_B);
 
-console.log(N);
-
 const P_A_A = new PanelNode();
 P_A_A.id = "P_A_A";
 P_A_A.page = "test";

@@ -128,41 +128,29 @@ const Widget = (props: { nodeId: string }) => {
 
     const onNodeRemoved = useCallback(
         (data) => {
-            console.log(SLOT_EVENT.NODE_REMOVED, data, nodeId);
             slot.removeListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
+            sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
+                panelNode: data.panelNode,
+                part: maskPartContainer.current,
+            });
         },
-        [nodeId, slot]
+        [layoutSymbol, maskPartContainer, slot, sns]
     );
 
     const onDrop = useCallback(
         (data: IDropData) => {
             if (data.item.type === "Tab") {
                 if (maskPartContainer.current != null) {
-                    // const { type, ...node } = data.item;
-                    console.log(
-                        "send remove node",
-                        nodeId,
-                        data,
-                        data.item.layoutSymbol
-                    );
                     slot.addListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
-                    sns.send(data.item.layoutSymbol, SLOT_EVENT.REMOVE_NODE, {
-                        ...data,
-                        item: { ...data.item, symbol: symbol },
+                    sns.send(data.item.layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+                        symbol: symbol,
+                        nodeId: data.item.id,
                     });
                 }
                 setMaskPart(null);
             }
         },
-        [
-            maskPartContainer,
-            nodeId,
-            onNodeRemoved,
-            setMaskPart,
-            slot,
-            sns,
-            symbol,
-        ]
+        [maskPartContainer, onNodeRemoved, setMaskPart, slot, sns, symbol]
     );
 
     const onDragLeave = useCallback(
@@ -242,19 +230,7 @@ const Widget = (props: { nodeId: string }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [
-        dnd,
-        layoutSymbol,
-        maskPartContainer,
-        nodeId,
-        onDragLeave,
-        onDragOver,
-        onDrop,
-        onNodeRemoved,
-        setMaskPart,
-        slot,
-        sns,
-    ]);
+    }, [dnd, onDragLeave, onDragOver, onDrop]);
 
     return (
         <div style={widgetStyle}>

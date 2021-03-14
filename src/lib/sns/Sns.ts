@@ -12,7 +12,7 @@ class Sns {
         return slot;
     }
 
-    send(target: Symbol, event: string | symbol, data: any) {
+    send(target: Symbol, event: string | symbol, data?: any) {
         this.slots.find((slot) => slot.id === target)?.emit(event, data);
     }
 }

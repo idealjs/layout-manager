@@ -277,16 +277,24 @@ class LayoutNode {
 
     DLR(t: (layout: LayoutNode) => void) {
         t(this);
-        this.children.forEach((child) => t(child));
+        this.children.forEach((child) => child.DLR(t));
     }
 
     LRD(t: (layout: LayoutNode) => void) {
-        this.children.forEach((child) => t(child));
+        this.children.forEach((child) => child.LRD(t));
         t(this);
     }
 
     shakeTree() {
+        console.debug("[Debug] start shakeTree");
         this.LRD((l) => {
+            console.log("test test shaking tree", l);
+            if (
+                l.panelNodes.length === 0 &&
+                l.direction === LAYOUT_DIRECTION.TAB
+            ) {
+                l.parent?.removeChild(l);
+            }
             if (
                 l.children.length === 0 &&
                 l.direction !== LAYOUT_DIRECTION.TAB
@@ -318,6 +326,8 @@ class LayoutNode {
                 }
             }
         });
+        console.debug("[Debug] end shakeTree", this);
+        return this;
     }
 }
 

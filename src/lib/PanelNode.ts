@@ -19,6 +19,15 @@ class PanelNode {
             data: this.data,
         };
     }
+    remove() {
+        if (this.parent != null) {
+            this.parent.panelNodes = this.parent.panelNodes.filter(
+                (p) => p !== this
+            );
+            this.parent = null;
+        }
+        return this;
+    }
 }
 
 export default PanelNode;

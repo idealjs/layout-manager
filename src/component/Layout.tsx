@@ -26,8 +26,8 @@ const useUpdate = (
     const [, , dispatchLayouts] = useLayouts();
     const [, , dispatchPanels] = usePanels();
     return useCallback(() => {
-        layoutNode.fill({ ...rect, left: 0, top: 0 });
         layoutNode.shakeTree();
+        layoutNode.fill({ ...rect, left: 0, top: 0 });
         const layouts = layoutNode.parseLayout();
         const splitters = layoutNode.parseSplitter();
         const panels = layoutNode.parsePanel();
@@ -47,27 +47,29 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(layoutSymbol);
-    console.log(layoutSymbol);
 
     const update = useUpdate(layoutNode, rect);
 
-    const addNode = useCallback(
+    const addPanel = useCallback(
         (data) => {
             update();
-            console.log(SLOT_EVENT.ADD_NODE, data);
+            console.log(SLOT_EVENT.ADD_PANEL, data);
         },
         [update]
     );
 
-    const removeNode = useCallback(
+    const removePanel = useCallback(
         (data) => {
-            console.log(SLOT_EVENT.REMOVE_NODE, data, layoutSymbol);
+            const panelNode = layoutNode.findPanelNode(
+                (p) => p.id === data.nodeId
+            );
+            panelNode?.remove();
             update();
-            sns.send(data.item.symbol, SLOT_EVENT.NODE_REMOVED, {
-                test: "test",
-            });
+            if (data.symbol != null) {
+                sns.send(data.symbol, SLOT_EVENT.NODE_REMOVED, { panelNode });
+            }
         },
-        [layoutSymbol, sns, update]
+        [layoutNode, sns, update]
     );
 
     const moveSplitter = useCallback(
@@ -103,21 +105,21 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     useEffect(() => {
         update();
-        slot.addListener(SLOT_EVENT.ADD_NODE, addNode);
-        slot.addListener(SLOT_EVENT.REMOVE_NODE, removeNode);
+        slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
+        slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
         slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
         slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
 
         return () => {
-            slot.removeListener(SLOT_EVENT.ADD_NODE, addNode);
-            slot.removeListener(SLOT_EVENT.REMOVE_NODE, removeNode);
+            slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
+            slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
             slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
             slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
         };
     }, [
-        addNode,
+        addPanel,
         layoutNode,
-        removeNode,
+        removePanel,
         slot,
         sns,
         update,
