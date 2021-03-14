@@ -2,12 +2,21 @@ import EventEmitter from "events";
 
 import Dnd from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
+import { IDropData } from "./type";
 
 export enum DROP_LISTENABLE_EVENT {
     DRAG_ENTER = "DROP_LISTENER/DRAG_ENTER",
     DRAG_LEAVE = "DROP_LISTENER/DRAG_LEAVE",
     DRAG_OVER = "DROP_LISTENER/DRAG_OVER",
     DROP = "DROP_LISTENER/DROP",
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+declare interface DropListenable<E extends Element> {
+    addListener(
+        event: string | symbol,
+        listener: (data: IDropData) => void
+    ): this;
 }
 
 class DropListenable<E extends Element> extends EventEmitter {

@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import Dnd from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
 import offsetFromEvent from "./offsetFromEvent";
-import { VECTOR } from "./type";
+import { IDragData, VECTOR } from "./type";
 import vectorFromEvent from "./vectorFromEvent";
 
 export interface IDragItem {
@@ -15,6 +15,14 @@ export enum DRAG_LISTENABLE_EVENT {
     DRAG = "DRAG_LISTENER/DRAG",
     DRAG_END = "DRAG_LISTENER/DRAG_END",
     DRAG_START = "DRAG_LISTENER/DRAG_START",
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+declare interface DragListenable<E extends Element, I extends IDragItem> {
+    addListener(
+        event: string | symbol,
+        listener: (data: IDragData) => void
+    ): this;
 }
 
 class DragListenable<

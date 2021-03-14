@@ -1,7 +1,9 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 import { SLOT_EVENT } from "../enum";
-import { DND_EVENT, useDnd } from "../lib/dnd";
+import { useDnd } from "../lib/dnd";
+import { DRAG_LISTENABLE_EVENT } from "../lib/dnd/DragListenable";
+import { IDragData } from "../lib/dnd/type";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
@@ -86,7 +88,7 @@ const Splitter = (props: {
             setDragging(false);
             setMovingOffset(0);
         };
-        const onDrag = (data: any) => {
+        const onDrag = (data: IDragData) => {
             offset =
                 parent?.direction === LAYOUT_DIRECTION.ROW
                     ? data.offset.x
@@ -136,14 +138,14 @@ const Splitter = (props: {
                     id: id,
                 },
             })
-            .addListener(DND_EVENT.DRAG_START, onDragStart)
-            .addListener(DND_EVENT.DRAG_END, onDragEnd)
-            .addListener(DND_EVENT.DRAG, onDrag);
+            .addListener(DRAG_LISTENABLE_EVENT.DRAG_START, onDragStart)
+            .addListener(DRAG_LISTENABLE_EVENT.DRAG_END, onDragEnd)
+            .addListener(DRAG_LISTENABLE_EVENT.DRAG, onDrag);
         return () => {
             listenable
-                .removeListener(DND_EVENT.DRAG_START, onDragStart)
-                .removeListener(DND_EVENT.DRAG_END, onDragEnd)
-                .removeListener(DND_EVENT.DRAG, onDrag);
+                .removeListener(DRAG_LISTENABLE_EVENT.DRAG_START, onDragStart)
+                .removeListener(DRAG_LISTENABLE_EVENT.DRAG_END, onDragEnd)
+                .removeListener(DRAG_LISTENABLE_EVENT.DRAG, onDrag);
         };
     }, [
         dispatch,

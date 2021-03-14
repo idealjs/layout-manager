@@ -4,7 +4,7 @@ import DragListenable, {
     DRAG_LISTENABLE_EVENT,
     IDragItem,
 } from "./DragListenable";
-import DropListenable, { DROP_LISTENABLE_EVENT } from "./DropListenable";
+import DropListenable from "./DropListenable";
 
 export enum DND_EVENT {
     DRAG = "DND_EVENT/DRAG",
@@ -60,27 +60,6 @@ class Dnd extends EventEmitter {
 
     droppable<T extends Element>(ele: T, crossWindow: boolean = false) {
         const listenable = new DropListenable(this, ele, crossWindow);
-        listenable.on(DROP_LISTENABLE_EVENT.DROP, (data) => {
-            listenable.emit(DND_EVENT.DROP, {
-                item: this.draggingItem,
-                ...data,
-            });
-        });
-
-        listenable.on(DROP_LISTENABLE_EVENT.DRAG_OVER, (data) => {
-            listenable.emit(DND_EVENT.DRAG_OVER, {
-                item: this.draggingItem,
-                ...data,
-            });
-        });
-
-        listenable.on(DROP_LISTENABLE_EVENT.DRAG_LEAVE, (data) => {
-            listenable.emit(DND_EVENT.DRAG_LEAVE, {
-                item: this.draggingItem,
-                ...data,
-            });
-        });
-
         return listenable;
     }
 
