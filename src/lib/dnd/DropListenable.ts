@@ -1,15 +1,8 @@
 import EventEmitter from "events";
 
-import Dnd from "./Dnd";
+import Dnd, { DND_EVENT } from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
 import { IDropData } from "./type";
-
-export enum DROP_LISTENABLE_EVENT {
-    DRAG_ENTER = "DROP_LISTENER/DRAG_ENTER",
-    DRAG_LEAVE = "DROP_LISTENER/DRAG_LEAVE",
-    DRAG_OVER = "DROP_LISTENER/DRAG_OVER",
-    DROP = "DROP_LISTENER/DROP",
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface DropListenable<E extends Element> {
@@ -56,7 +49,7 @@ class DropListenable<E extends Element> extends EventEmitter {
                 x: event.clientX,
                 y: event.clientY,
             };
-            this.emit(DROP_LISTENABLE_EVENT.DROP, {
+            this.emit(DND_EVENT.DROP, {
                 clientPosition: this.clientPosition,
             });
             this.clientPosition = null;
@@ -70,7 +63,7 @@ class DropListenable<E extends Element> extends EventEmitter {
                 y: event.clientY,
             };
 
-            this.emit(DROP_LISTENABLE_EVENT.DRAG_OVER, {
+            this.emit(DND_EVENT.DRAG_OVER, {
                 clientPosition: this.clientPosition,
                 item: this.dnd.getDraggingItem(),
             });
@@ -84,7 +77,7 @@ class DropListenable<E extends Element> extends EventEmitter {
                 y: event.clientY,
             };
 
-            this.emit(DROP_LISTENABLE_EVENT.DRAG_LEAVE, {
+            this.emit(DND_EVENT.DRAG_LEAVE, {
                 crossWindow: true,
                 clientPosition: this.clientPosition,
                 item: this.dnd.getDraggingItem(),
@@ -99,7 +92,7 @@ class DropListenable<E extends Element> extends EventEmitter {
             y: event.clientY,
         };
 
-        this.emit(DROP_LISTENABLE_EVENT.DRAG_OVER, {
+        this.emit(DND_EVENT.DRAG_OVER, {
             clientPosition: this.clientPosition,
             item: this.dnd.getDraggingItem(),
         });
@@ -111,7 +104,7 @@ class DropListenable<E extends Element> extends EventEmitter {
             y: event.clientY,
         };
 
-        this.emit(DROP_LISTENABLE_EVENT.DRAG_LEAVE, {
+        this.emit(DND_EVENT.DRAG_LEAVE, {
             clientPosition: this.clientPosition,
             item: this.dnd.getDraggingItem(),
         });
@@ -123,7 +116,7 @@ class DropListenable<E extends Element> extends EventEmitter {
             y: event.clientY,
         };
 
-        this.emit(DROP_LISTENABLE_EVENT.DROP, {
+        this.emit(DND_EVENT.DROP, {
             clientPosition: this.clientPosition,
             item: this.dnd.getDraggingItem(),
         });

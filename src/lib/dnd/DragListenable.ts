@@ -1,7 +1,7 @@
 import EventEmitter from "events";
 import html2canvas from "html2canvas";
 
-import Dnd from "./Dnd";
+import Dnd, { DND_EVENT } from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
 import offsetFromEvent from "./offsetFromEvent";
 import { IDragData, VECTOR } from "./type";
@@ -9,12 +9,6 @@ import vectorFromEvent from "./vectorFromEvent";
 
 export interface IDragItem {
     id: string;
-}
-
-export enum DRAG_LISTENABLE_EVENT {
-    DRAG = "DRAG_LISTENER/DRAG",
-    DRAG_END = "DRAG_LISTENER/DRAG_END",
-    DRAG_START = "DRAG_LISTENER/DRAG_START",
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -109,7 +103,7 @@ class DragListenable<
     }
 
     private onMouseUp(event: MouseEvent) {
-        this.emit(DRAG_LISTENABLE_EVENT.DRAG_END, {
+        this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
@@ -125,7 +119,7 @@ class DragListenable<
 
     private onMouseMove(event: MouseEvent) {
         if (this.dragStartEmitted === false) {
-            this.emit(DRAG_LISTENABLE_EVENT.DRAG_START, {
+            this.emit(DND_EVENT.DRAG_START, {
                 source: this.source,
                 offset: this.offset,
                 vector: this.vector,
@@ -151,7 +145,7 @@ class DragListenable<
             screenY: event.screenY,
         };
         this.offset = offsetFromEvent(event, this.source);
-        this.emit(DRAG_LISTENABLE_EVENT.DRAG, {
+        this.emit(DND_EVENT.DRAG, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
@@ -195,7 +189,7 @@ class DragListenable<
                 event.offsetY
             );
         }
-        this.emit(DRAG_LISTENABLE_EVENT.DRAG_START, {
+        this.emit(DND_EVENT.DRAG_START, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
@@ -219,7 +213,7 @@ class DragListenable<
         if (event.screenX === 0 && event.screenY === 0) {
             return;
         }
-        this.emit(DRAG_LISTENABLE_EVENT.DRAG, {
+        this.emit(DND_EVENT.DRAG, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
@@ -227,7 +221,7 @@ class DragListenable<
     }
 
     private onDragEnd() {
-        this.emit(DRAG_LISTENABLE_EVENT.DRAG_END, {
+        this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,

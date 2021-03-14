@@ -1,8 +1,7 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 import { SLOT_EVENT } from "../enum";
-import { useDnd } from "../lib/dnd";
-import { DRAG_LISTENABLE_EVENT } from "../lib/dnd/DragListenable";
+import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDragData } from "../lib/dnd/type";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
@@ -138,14 +137,14 @@ const Splitter = (props: {
                     id: id,
                 },
             })
-            .addListener(DRAG_LISTENABLE_EVENT.DRAG_START, onDragStart)
-            .addListener(DRAG_LISTENABLE_EVENT.DRAG_END, onDragEnd)
-            .addListener(DRAG_LISTENABLE_EVENT.DRAG, onDrag);
+            .addListener(DND_EVENT.DRAG_START, onDragStart)
+            .addListener(DND_EVENT.DRAG_END, onDragEnd)
+            .addListener(DND_EVENT.DRAG, onDrag);
         return () => {
             listenable
-                .removeListener(DRAG_LISTENABLE_EVENT.DRAG_START, onDragStart)
-                .removeListener(DRAG_LISTENABLE_EVENT.DRAG_END, onDragEnd)
-                .removeListener(DRAG_LISTENABLE_EVENT.DRAG, onDrag);
+                .removeListener(DND_EVENT.DRAG_START, onDragStart)
+                .removeListener(DND_EVENT.DRAG_END, onDragEnd)
+                .removeListener(DND_EVENT.DRAG, onDrag);
         };
     }, [
         dispatch,

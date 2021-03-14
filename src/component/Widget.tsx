@@ -2,8 +2,7 @@ import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { SLOT_EVENT } from "../enum";
 import useStateContainer from "../hook/useStateContainer";
-import { useDnd } from "../lib/dnd";
-import { DROP_LISTENABLE_EVENT } from "../lib/dnd/DropListenable";
+import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDropData } from "../lib/dnd/type";
 import Panel from "./Panel";
 import { useLayout } from "./Provider/LayoutsProvider";
@@ -226,20 +225,14 @@ const Widget = (props: { nodeId: string }) => {
         try {
             const listenable = dnd
                 .droppable(widgetRef.current!, true)
-                .addListener(DROP_LISTENABLE_EVENT.DROP, onDrop)
-                .addListener(DROP_LISTENABLE_EVENT.DRAG_LEAVE, onDragLeave)
-                .addListener(DROP_LISTENABLE_EVENT.DRAG_OVER, onDragOver);
+                .addListener(DND_EVENT.DROP, onDrop)
+                .addListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
+                .addListener(DND_EVENT.DRAG_OVER, onDragOver);
             return () => {
                 listenable
-                    .removeListener(DROP_LISTENABLE_EVENT.DROP, onDrop)
-                    .removeListener(
-                        DROP_LISTENABLE_EVENT.DRAG_LEAVE,
-                        onDragLeave
-                    )
-                    .removeListener(
-                        DROP_LISTENABLE_EVENT.DRAG_OVER,
-                        onDragOver
-                    );
+                    .removeListener(DND_EVENT.DROP, onDrop)
+                    .removeListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
+                    .removeListener(DND_EVENT.DRAG_OVER, onDragOver);
             };
         } catch (error) {
             console.error(error);
