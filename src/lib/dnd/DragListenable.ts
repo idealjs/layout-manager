@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import Dnd, { DND_EVENT } from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
 import offsetFromEvent from "./offsetFromEvent";
-import { IDragData, VECTOR } from "./type";
+import { IDragData, IPoint, VECTOR } from "./type";
 import vectorFromEvent from "./vectorFromEvent";
 
 export interface IDragItem {
@@ -29,14 +29,8 @@ class DragListenable<
     private previewEle: HTMLElement | null = null;
     private previewCanvas: HTMLCanvasElement | null = null;
     private item: I | null = null;
-    private source: {
-        screenX: number;
-        screenY: number;
-    } | null = null;
-    private prevPoint: {
-        screenX: number;
-        screenY: number;
-    } | null = null;
+    private source: IPoint | null = null;
+    private prevPoint: IPoint | null = null;
     private offset: {
         x: number;
         y: number;
@@ -83,12 +77,12 @@ class DragListenable<
         this.dnd.setDragging(false);
         this.dnd.setDraggingItem(this.item);
         this.source = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.prevPoint = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.offset = {
             x: 0,
@@ -141,8 +135,8 @@ class DragListenable<
         }
         this.vector = vectorFromEvent(event, this.prevPoint);
         this.prevPoint = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.offset = offsetFromEvent(event, this.source);
         this.emit(DND_EVENT.DRAG, {
@@ -157,12 +151,12 @@ class DragListenable<
         this.dnd.setDragging(false);
         this.dnd.setDraggingItem(this.item);
         this.source = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.prevPoint = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.offset = {
             x: 0,
@@ -206,8 +200,8 @@ class DragListenable<
     private onDrag(event: DragEvent) {
         this.vector = vectorFromEvent(event, this.prevPoint);
         this.prevPoint = {
-            screenX: event.screenX,
-            screenY: event.screenY,
+            x: event.screenX,
+            y: event.screenY,
         };
         this.offset = offsetFromEvent(event, this.source);
         if (event.screenX === 0 && event.screenY === 0) {

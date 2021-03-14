@@ -13,6 +13,7 @@ import Popout, { PopoutContext } from "./component/Popout";
 import { Fragment } from "react";
 
 const N = new LayoutNode();
+N.id = "mainN";
 N.direction = LAYOUT_DIRECTION.COL;
 
 const N_A = new LayoutNode();

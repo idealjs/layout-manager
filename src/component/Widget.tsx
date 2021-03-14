@@ -139,7 +139,12 @@ const Widget = (props: { nodeId: string }) => {
             if (data.item.type === "Tab") {
                 if (maskPartContainer.current != null) {
                     // const { type, ...node } = data.item;
-                    console.log(nodeId, data, data.item.layoutSymbol);
+                    console.log(
+                        "send remove node",
+                        nodeId,
+                        data,
+                        data.item.layoutSymbol
+                    );
                     slot.addListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
                     sns.send(data.item.layoutSymbol, SLOT_EVENT.REMOVE_NODE, {
                         ...data,

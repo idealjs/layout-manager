@@ -1,15 +1,12 @@
-import { VECTOR } from "./type";
+import { IPoint, VECTOR } from "./type";
 
-function vectorFromEvent(
-    event: MouseEvent,
-    prevPoint: { screenX: number; screenY: number } | null
-) {
+function vectorFromEvent(event: MouseEvent, prevPoint: IPoint | null) {
     return {
-        x: (prevPoint?.screenX != null
-            ? Math.sign(prevPoint?.screenX - event.screenX)
+        x: (prevPoint?.x != null
+            ? Math.sign(prevPoint?.x - event.screenX)
             : 0) as VECTOR,
-        y: (prevPoint?.screenY != null
-            ? Math.sign(prevPoint?.screenY - event.screenY)
+        y: (prevPoint?.y != null
+            ? Math.sign(prevPoint?.y - event.screenY)
             : 0) as VECTOR,
     };
 }

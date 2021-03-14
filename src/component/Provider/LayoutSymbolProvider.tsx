@@ -1,7 +1,7 @@
 import { uniqueId } from "lodash";
 import { createContext, FC, useContext, useMemo } from "react";
 
-const context = createContext<symbol>(Symbol(uniqueId()));
+const context = createContext<symbol | null>(null);
 
 const Provider: FC = (props) => {
     const { children } = props;
@@ -14,5 +14,9 @@ const Provider: FC = (props) => {
 export default Provider;
 
 export const useLayoutSymbol = () => {
-    return useContext(context);
+    const symbol = useContext(context);
+    if (symbol == null) {
+        throw new Error("");
+    }
+    return symbol;
 };

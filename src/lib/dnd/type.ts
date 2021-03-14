@@ -1,11 +1,17 @@
 export type VECTOR = 1 | -1 | 0;
 
 export interface IDragData {
-    offset: any;
-    vector: any;
+    source: IPoint;
+    offset: IPoint;
+    vector: IPoint;
 }
 
 export interface IDropData {
     item: any;
-    clientPosition: any;
+    clientPosition: IPoint;
+}
+
+export interface IPoint {
+    x: number;
+    y: number;
 }

@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import Dnd, { DND_EVENT } from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
-import { IDropData } from "./type";
+import { IDropData, IPoint } from "./type";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface DropListenable<E extends Element> {
@@ -14,10 +14,7 @@ declare interface DropListenable<E extends Element> {
 
 class DropListenable<E extends Element> extends EventEmitter {
     private dnd: Dnd;
-    private clientPosition: {
-        x: number;
-        y: number;
-    } | null = null;
+    private clientPosition: IPoint | null = null;
     constructor(dnd: Dnd, el: E, crossWindow: boolean) {
         super();
         this.dnd = dnd;

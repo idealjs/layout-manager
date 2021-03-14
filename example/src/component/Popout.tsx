@@ -11,6 +11,7 @@ import Portal from "./Portal";
 export const PopoutContext = createContext<string[]>([]);
 
 const N = new LayoutNode();
+N.id = "popoutN";
 N.direction = LAYOUT_DIRECTION.COL;
 
 const N_A = new LayoutNode();

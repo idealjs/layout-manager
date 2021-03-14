@@ -47,6 +47,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(layoutSymbol);
+    console.log(layoutSymbol);
 
     const update = useUpdate(layoutNode, rect);
 
@@ -60,13 +61,13 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const removeNode = useCallback(
         (data) => {
-            console.log(SLOT_EVENT.REMOVE_NODE, data);
+            console.log(SLOT_EVENT.REMOVE_NODE, data, layoutSymbol);
             update();
             sns.send(data.item.symbol, SLOT_EVENT.NODE_REMOVED, {
                 test: "test",
             });
         },
-        [sns, update]
+        [layoutSymbol, sns, update]
     );
 
     const moveSplitter = useCallback(
@@ -113,7 +114,16 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
             slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
         };
-    }, [addNode, layoutNode, removeNode, slot, sns, update, moveSplitter, selectTab]);
+    }, [
+        addNode,
+        layoutNode,
+        removeNode,
+        slot,
+        sns,
+        update,
+        moveSplitter,
+        selectTab,
+    ]);
 
     return (
         <div
