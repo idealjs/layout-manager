@@ -161,7 +161,7 @@ const Splitter = (props: {
     ]);
 
     return (
-        <div ref={ref} style={splitterStyle}>
+        <div id={id} ref={ref} style={splitterStyle}>
             <div ref={shadowRef} style={shadowStyle}></div>
         </div>
     );

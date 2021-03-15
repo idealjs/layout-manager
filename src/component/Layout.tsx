@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
+import directionFromMask from "../lib/directionFromMask";
 import LayoutNode from "../lib/LayoutNode";
 import { setAll as setAllLayouts } from "../reducer/layouts";
 import { setAll as setAllPanels } from "../reducer/panels";
@@ -13,7 +14,7 @@ import { usePanels } from "./Provider/PanelsProvider";
 import { useSlot, useSns } from "./Provider/SnsProvider";
 import { useSplitters } from "./Provider/SplittersProvider";
 import Splitter from "./Splitter";
-import Widget from "./Widget";
+import Widget, { MASK_PART } from "./Widget";
 
 const useUpdate = (
     layoutNode: LayoutNode,
@@ -26,7 +27,12 @@ const useUpdate = (
     const [, , dispatchLayouts] = useLayouts();
     const [, , dispatchPanels] = usePanels();
     return useCallback(() => {
+        console.debug("[Debug] update");
+        layoutNode.DLR((l) => console.log(l.id));
         layoutNode.shakeTree();
+        console.debug("[Debug] update after shakeTree");
+        layoutNode.DLR((l) => console.log(l.id));
+
         layoutNode.fill({ ...rect, left: 0, top: 0 });
         const layouts = layoutNode.parseLayout();
         const splitters = layoutNode.parseSplitter();
@@ -52,10 +58,45 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const addPanel = useCallback(
         (data) => {
-            update();
             console.log(SLOT_EVENT.ADD_PANEL, data);
+
+            const direction = directionFromMask(data.mask);
+            if (data.mask === MASK_PART.CENTER) {
+                layoutNode
+                    .find((l) => l.id === data.widgetId)
+                    ?.appendPanelNode(data.panelNode);
+            } else {
+                const tabLayout = new LayoutNode();
+                tabLayout.direction = LAYOUT_DIRECTION.TAB;
+                tabLayout.appendPanelNode(data.panelNode);
+                const layout = new LayoutNode();
+                layout.direction = direction;
+
+                const oldLayout = layoutNode.find(
+                    (l) => l.id === data.widgetId
+                );
+                if (oldLayout == null) {
+                    throw new Error("");
+                }
+                oldLayout.parent?.replaceChild(layout, oldLayout);
+                oldLayout.primaryOffset = 0;
+                oldLayout.secondaryOffset = 0;
+                if (
+                    data.mask === MASK_PART.LEFT ||
+                    data.mask === MASK_PART.TOP
+                ) {
+                    layout.append(tabLayout, oldLayout);
+                }
+                if (
+                    data.mask === MASK_PART.RIGHT ||
+                    data.mask === MASK_PART.BOTTOM
+                ) {
+                    layout.append(oldLayout, tabLayout);
+                }
+            }
+            update();
         },
-        [update]
+        [layoutNode, update]
     );
 
     const removePanel = useCallback(

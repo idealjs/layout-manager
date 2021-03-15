@@ -131,10 +131,11 @@ const Widget = (props: { nodeId: string }) => {
             slot.removeListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
             sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: data.panelNode,
-                part: maskPartContainer.current,
+                mask: maskPartContainer.current,
+                widgetId: nodeId,
             });
         },
-        [layoutSymbol, maskPartContainer, slot, sns]
+        [layoutSymbol, maskPartContainer, nodeId, slot, sns]
     );
 
     const onDrop = useCallback(

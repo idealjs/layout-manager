@@ -288,7 +288,6 @@ class LayoutNode {
     shakeTree() {
         console.debug("[Debug] start shakeTree");
         this.LRD((l) => {
-            console.log("test test shaking tree", l);
             if (
                 l.panelNodes.length === 0 &&
                 l.direction === LAYOUT_DIRECTION.TAB
@@ -324,6 +323,9 @@ class LayoutNode {
                     l.children[l.children.length - 1].secondaryOffset =
                         secondaryNode.primaryOffset;
                 }
+                l.children.forEach((c) => (c.parent = l.parent));
+                l.parent = null;
+                l.children = [];
             }
         });
         console.debug("[Debug] end shakeTree", this);
