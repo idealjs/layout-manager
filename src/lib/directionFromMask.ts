@@ -1,4 +1,4 @@
-import { MASK_PART } from "../component/Widget";
+import { MASK_PART } from "../enum";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 
 const directionFromMask = (mask: MASK_PART): LAYOUT_DIRECTION => {
