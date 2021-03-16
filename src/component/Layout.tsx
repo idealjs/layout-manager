@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-import { SLOT_EVENT } from "../enum";
+import { MASK_PART, SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
 import directionFromMask from "../lib/directionFromMask";
 import LayoutNode from "../lib/LayoutNode";
@@ -8,13 +8,14 @@ import { setAll as setAllLayouts } from "../reducer/layouts";
 import { setAll as setAllPanels } from "../reducer/panels";
 import { setAll as setAllSplitters } from "../reducer/splitters";
 import { LAYOUT_DIRECTION } from "../reducer/type";
+import Panel from "./Panel";
 import { useLayouts } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanels } from "./Provider/PanelsProvider";
 import { useSlot, useSns } from "./Provider/SnsProvider";
 import { useSplitters } from "./Provider/SplittersProvider";
 import Splitter from "./Splitter";
-import Widget, { MASK_PART } from "./Widget";
+import Titlebar from "./Titlebar";
 
 const useUpdate = (
     layoutNode: LayoutNode,
@@ -27,12 +28,7 @@ const useUpdate = (
     const [, , dispatchLayouts] = useLayouts();
     const [, , dispatchPanels] = usePanels();
     return useCallback(() => {
-        console.debug("[Debug] update");
-        layoutNode.DLR((l) => console.log(l.id));
         layoutNode.shakeTree();
-        console.debug("[Debug] update after shakeTree");
-        layoutNode.DLR((l) => console.log(l.id));
-
         layoutNode.fill({ ...rect, left: 0, top: 0 });
         const layouts = layoutNode.parseLayout();
         const splitters = layoutNode.parseSplitter();
@@ -50,6 +46,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const [splitters] = useSplitters();
     const [layouts] = useLayouts();
+    const [panels] = usePanels();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(layoutSymbol);
@@ -63,18 +60,18 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             const direction = directionFromMask(data.mask);
             if (data.mask === MASK_PART.CENTER) {
                 layoutNode
-                    .find((l) => l.id === data.widgetId)
-                    ?.appendPanelNode(data.panelNode);
+                    .findPanelNode((p) => p.id === data.panelId)
+                    ?.parent?.appendPanelNode(data.panelNode);
             } else {
                 const tabLayout = new LayoutNode();
                 tabLayout.direction = LAYOUT_DIRECTION.TAB;
                 tabLayout.appendPanelNode(data.panelNode);
                 const layout = new LayoutNode();
                 layout.direction = direction;
+                const oldLayout = layoutNode.findPanelNode(
+                    (p) => p.id === data.panelId
+                )?.parent;
 
-                const oldLayout = layoutNode.find(
-                    (l) => l.id === data.widgetId
-                );
                 if (oldLayout == null) {
                     throw new Error("");
                 }
@@ -173,21 +170,25 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             ref={ref}
             style={{ height: "100%", width: "100%", position: "relative" }}
         >
+            {panels.map((p) => {
+                return <Panel key={p.id} nodeId={p.id} />;
+            })}
             {layouts
                 .filter((l) => l.direction === LAYOUT_DIRECTION.TAB)
                 .map((n) => {
                     return (
                         <div
+                            id={n.id}
                             key={n.id}
                             style={{
                                 position: "absolute",
-                                height: n.height,
+                                height: "25px",
                                 width: n.width,
                                 left: n.left,
                                 top: n.top,
                             }}
                         >
-                            <Widget nodeId={n.id} />
+                            <Titlebar nodeIds={n.children} />
                         </div>
                     );
                 })}
@@ -195,6 +196,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             {splitters.map((n) => {
                 return (
                     <div
+                        id={n.id}
                         key={n.id}
                         style={{
                             position: "absolute",

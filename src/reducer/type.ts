@@ -44,6 +44,10 @@ export interface ILayoutNode {
 
 export interface IPanelNode {
     id: string;
+    height: number;
+    width: number;
+    left: number;
+    top: number;
     parentId: string;
     page: string;
     selected: boolean;

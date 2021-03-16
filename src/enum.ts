@@ -15,3 +15,11 @@ export enum SLOT_EVENT {
     SELECT_TAB = "SELECT_TAB",
     NODE_REMOVED = "NODE_REMOVED",
 }
+
+export enum MASK_PART {
+    TOP = "top",
+    LEFT = "left",
+    BOTTOM = "bottom",
+    RIGHT = "right",
+    CENTER = "center",
+}

@@ -31,7 +31,12 @@ class LayoutNode {
 
     appendPanelNode(...children: PanelNode[]) {
         this.panelNodes = this.panelNodes.concat(children);
-        children.forEach((c) => (c.parent = this));
+        children.forEach((c) => {
+            c.parent = this;
+        });
+        if (!this.panelNodes.map((c) => c.selected).includes(true)) {
+            this.panelNodes[0].selected = true;
+        }
         return this;
     }
 
