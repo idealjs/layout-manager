@@ -316,12 +316,14 @@ class LayoutNode {
                 const primaryNode = l.parent.children[index - 1];
                 const secondaryNode = l.parent.children[index + 1];
                 l.parent.children.splice(index, 1, ...l.children);
+                console.log("test test", primaryNode, secondaryNode);
                 if (primaryNode != null) {
-                    l.children[0].primaryOffset = primaryNode.secondaryOffset;
+                    l.children[0].primaryOffset = -primaryNode.secondaryOffset;
                 }
                 if (secondaryNode != null) {
-                    l.children[l.children.length - 1].secondaryOffset =
-                        secondaryNode.primaryOffset;
+                    l.children[
+                        l.children.length - 1
+                    ].secondaryOffset = -secondaryNode.primaryOffset;
                 }
                 l.children.forEach((c) => (c.parent = l.parent));
                 l.parent = null;
