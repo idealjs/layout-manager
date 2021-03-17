@@ -60,7 +60,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             const direction = directionFromMask(data.mask);
             if (data.mask === MASK_PART.CENTER) {
                 layoutNode
-                    .findPanelNode((p) => p.id === data.panelId)
+                    .findPanelNode((p) => p.id === data.targetId)
                     ?.parent?.appendPanelNode(data.panelNode);
             } else {
                 const tabLayout = new LayoutNode();
@@ -69,7 +69,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
                 const layout = new LayoutNode();
                 layout.direction = direction;
                 const oldLayout = layoutNode.findPanelNode(
-                    (p) => p.id === data.panelId
+                    (p) => p.id === data.targetId
                 )?.parent;
 
                 if (oldLayout == null) {
@@ -99,7 +99,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const removePanel = useCallback(
         (data) => {
             const panelNode = layoutNode.findPanelNode(
-                (p) => p.id === data.nodeId
+                (p) => p.id === data.searchId
             );
             panelNode?.remove();
             update();
@@ -108,6 +108,64 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             }
         },
         [layoutNode, sns, update]
+    );
+
+    const movePanel = useCallback(
+        (data) => {
+            if (
+                data.searchId === data.targetId &&
+                data.mask === MASK_PART.CENTER
+            ) {
+                update();
+                return;
+            }
+
+            const panelNode = layoutNode.findPanelNode(
+                (p) => p.id === data.searchId
+            );
+            if (panelNode == null) {
+                throw new Error("");
+            }
+
+            panelNode.remove();
+
+            const direction = directionFromMask(data.mask);
+            if (data.mask === MASK_PART.CENTER) {
+                layoutNode
+                    .findPanelNode((p) => p.id === data.targetId)
+                    ?.parent?.appendPanelNode(panelNode);
+            } else {
+                const tabLayout = new LayoutNode();
+                tabLayout.direction = LAYOUT_DIRECTION.TAB;
+                tabLayout.appendPanelNode(panelNode);
+                const layout = new LayoutNode();
+                layout.direction = direction;
+                const oldLayout = layoutNode.findPanelNode(
+                    (p) => p.id === data.targetId
+                )?.parent;
+
+                if (oldLayout == null) {
+                    throw new Error("");
+                }
+                oldLayout.parent?.replaceChild(layout, oldLayout);
+                oldLayout.primaryOffset = 0;
+                oldLayout.secondaryOffset = 0;
+                if (
+                    data.mask === MASK_PART.LEFT ||
+                    data.mask === MASK_PART.TOP
+                ) {
+                    layout.append(tabLayout, oldLayout);
+                }
+                if (
+                    data.mask === MASK_PART.RIGHT ||
+                    data.mask === MASK_PART.BOTTOM
+                ) {
+                    layout.append(oldLayout, tabLayout);
+                }
+            }
+            update();
+        },
+        [layoutNode, update]
     );
 
     const moveSplitter = useCallback(
@@ -145,12 +203,14 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
         update();
         slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
         slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+        slot.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
         slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
         slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
 
         return () => {
             slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
             slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+            slot.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
             slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
             slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
         };
@@ -163,6 +223,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
         update,
         moveSplitter,
         selectTab,
+        movePanel,
     ]);
 
     return (

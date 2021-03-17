@@ -101,7 +101,7 @@ const Panel = (props: { nodeId: string }) => {
             sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: data.panelNode,
                 mask: maskPartContainer.current,
-                panelId: nodeId,
+                targetId: nodeId,
             });
         },
         [layoutSymbol, maskPartContainer, nodeId, slot, sns]
@@ -112,19 +112,33 @@ const Panel = (props: { nodeId: string }) => {
             if (data.item.type === "Tab") {
                 if (maskPartContainer.current != null) {
                     console.log("test test", data.item.id, nodeId);
-                    if (data.item.id === nodeId) {
-                        return;
+                    if (data.item.layoutSymbol === layoutSymbol) {
+                        sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
+                            symbol: symbol,
+                            searchId: data.item.id,
+                            targetId: nodeId,
+                            mask: maskPartContainer.current,
+                        });
+                    } else {
+                        slot.addListener(
+                            SLOT_EVENT.NODE_REMOVED,
+                            onNodeRemoved
+                        );
+                        sns.send(
+                            data.item.layoutSymbol,
+                            SLOT_EVENT.REMOVE_PANEL,
+                            {
+                                symbol: symbol,
+                                searchId: data.item.id,
+                            }
+                        );
                     }
-                    slot.addListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
-                    sns.send(data.item.layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
-                        symbol: symbol,
-                        nodeId: data.item.id,
-                    });
                 }
                 setMaskPart(null);
             }
         },
         [
+            layoutSymbol,
             maskPartContainer,
             nodeId,
             onNodeRemoved,
