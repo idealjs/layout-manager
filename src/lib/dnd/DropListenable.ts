@@ -46,7 +46,6 @@ class DropListenable<E extends Element> extends EventEmitter {
     }
 
     private onMouseUp(event: MouseEvent) {
-        console.log("test test onMouseUp", this.dnd.isDragging());
         if (this.dnd.isDragging()) {
             this.clientPosition = {
                 x: event.clientX,

@@ -321,7 +321,6 @@ class LayoutNode {
                 const primaryNode = l.parent.children[index - 1];
                 const secondaryNode = l.parent.children[index + 1];
                 l.parent.children.splice(index, 1, ...l.children);
-                console.log("test test", primaryNode, secondaryNode);
                 if (primaryNode != null) {
                     l.children[0].primaryOffset = -primaryNode.secondaryOffset;
                 }

@@ -31,6 +31,7 @@ class Dnd extends EventEmitter {
             this.previewCanvas = ele;
         }
     }
+    
     draggable<T extends Element, I extends IDragItem>(
         ele: T,
         crossWindow: boolean = false,
