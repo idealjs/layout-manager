@@ -109,9 +109,9 @@ const Panel = (props: { nodeId: string }) => {
 
     const onDrop = useCallback(
         (data: IDropData) => {
+            console.debug("[Debug] onDrop", data);
             if (data.item.type === "Tab") {
                 if (maskPartContainer.current != null) {
-                    console.log("test test", data.item.id, nodeId);
                     if (data.item.layoutSymbol === layoutSymbol) {
                         sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
                             symbol: symbol,

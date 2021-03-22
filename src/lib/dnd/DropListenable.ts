@@ -25,10 +25,6 @@ class DropListenable<E extends Element> extends EventEmitter {
         this.onDragleave = this.onDragleave.bind(this);
         this.onDrop = this.onDrop.bind(this);
 
-        el.addEventListener("mouseup", this.onMouseUp as EventListener);
-        el.addEventListener("mousemove", this.onMouseMove as EventListener);
-        el.addEventListener("mouseleave", this.onMouseLeave as EventListener);
-
         if (crossWindow) {
             if (isHTMLElement(el)) {
                 el.addEventListener("dragover", this.onDragover);
@@ -37,10 +33,18 @@ class DropListenable<E extends Element> extends EventEmitter {
             } else {
                 throw new Error(`Can't add drop listener to ${el}`);
             }
+        } else {
+            el.addEventListener("mouseup", this.onMouseUp as EventListener);
+            el.addEventListener("mousemove", this.onMouseMove as EventListener);
+            el.addEventListener(
+                "mouseleave",
+                this.onMouseLeave as EventListener
+            );
         }
     }
 
     private onMouseUp(event: MouseEvent) {
+        console.log("test test onMouseUp", this.dnd.isDragging());
         if (this.dnd.isDragging()) {
             this.clientPosition = {
                 x: event.clientX,
@@ -48,6 +52,7 @@ class DropListenable<E extends Element> extends EventEmitter {
             };
             this.emit(DND_EVENT.DROP, {
                 clientPosition: this.clientPosition,
+                item: this.dnd.getDraggingItem(),
             });
             this.clientPosition = null;
         }
@@ -108,6 +113,7 @@ class DropListenable<E extends Element> extends EventEmitter {
     }
 
     private onDrop(event: DragEvent) {
+        console.debug("[Debug] dnd onDrop", this.dnd.getDraggingItem());
         this.clientPosition = {
             x: event.clientX,
             y: event.clientY,

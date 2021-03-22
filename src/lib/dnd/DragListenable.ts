@@ -240,6 +240,7 @@ class DragListenable<
     }
 
     private clean() {
+        console.debug("[Debug] dnd clean");
         this.dnd.setDragging(false);
         this.dnd.setDraggingItem(null);
         this.dnd.setPreviewCanvas(null);
