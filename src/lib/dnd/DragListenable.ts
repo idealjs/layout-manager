@@ -97,6 +97,7 @@ class DragListenable<
     }
 
     private onMouseUp(event: MouseEvent) {
+        console.debug("[Debug] drag onMouseUp");
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
@@ -215,6 +216,8 @@ class DragListenable<
     }
 
     private onDragEnd() {
+        console.debug("[Debug] drag onDragEnd", this.dnd.getDraggingItem());
+
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
@@ -260,6 +263,7 @@ class DragListenable<
             this.onMouseDown,
             true
         );
+        return this;
     }
 }
 

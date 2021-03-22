@@ -221,7 +221,8 @@ const Panel = (props: { nodeId: string }) => {
                 listenable
                     .removeListener(DND_EVENT.DROP, onDrop)
                     .removeListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
-                    .removeListener(DND_EVENT.DRAG_OVER, onDragOver);
+                    .removeListener(DND_EVENT.DRAG_OVER, onDragOver)
+                    .removeEleListeners();
             };
         } catch (error) {
             console.error(error);

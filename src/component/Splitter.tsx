@@ -144,7 +144,8 @@ const Splitter = (props: {
             listenable
                 .removeListener(DND_EVENT.DRAG_START, onDragStart)
                 .removeListener(DND_EVENT.DRAG_END, onDragEnd)
-                .removeListener(DND_EVENT.DRAG, onDrag);
+                .removeListener(DND_EVENT.DRAG, onDrag)
+                .removeEleListeners();
         };
     }, [
         dispatch,

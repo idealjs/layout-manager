@@ -15,9 +15,11 @@ declare interface DropListenable<E extends Element> {
 class DropListenable<E extends Element> extends EventEmitter {
     private dnd: Dnd;
     private clientPosition: IPoint | null = null;
+    private el: E;
     constructor(dnd: Dnd, el: E, crossWindow: boolean) {
         super();
         this.dnd = dnd;
+        this.el = el;
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);
@@ -125,6 +127,34 @@ class DropListenable<E extends Element> extends EventEmitter {
         });
 
         this.clientPosition = null;
+    }
+
+    public removeEleListeners() {
+        ((this.el as any) as HTMLElement).removeEventListener(
+            "dragover",
+            this.onDragover
+        );
+        ((this.el as any) as HTMLElement).removeEventListener(
+            "dragleave",
+            this.onDragleave
+        );
+        ((this.el as any) as HTMLElement).removeEventListener(
+            "drop",
+            this.onDrop
+        );
+        ((this.el as any) as HTMLElement).addEventListener(
+            "mouseup",
+            this.onMouseUp as EventListener
+        );
+        ((this.el as any) as HTMLElement).addEventListener(
+            "mousemove",
+            this.onMouseMove as EventListener
+        );
+        ((this.el as any) as HTMLElement).addEventListener(
+            "mouseleave",
+            this.onMouseLeave as EventListener
+        );
+        return this;
     }
 }
 

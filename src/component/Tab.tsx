@@ -36,7 +36,7 @@ const Tab = (props: {
                 },
             });
             return () => {
-                listenable.removeAllListeners();
+                listenable.removeAllListeners().removeEleListeners();
             };
         } catch (error) {
             console.error(error);
