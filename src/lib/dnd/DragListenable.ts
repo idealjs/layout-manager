@@ -73,6 +73,7 @@ class DragListenable<
     }
 
     private onMouseDown(event: MouseEvent) {
+        this.clean();
         this.dragStartEmitted = false;
         this.dnd.setDragging(false);
         this.dnd.setDraggingItem(this.item);
@@ -105,8 +106,6 @@ class DragListenable<
         });
 
         this.dragStartEmitted = false;
-
-        this.clean();
 
         window.removeEventListener("mousemove", this.onMouseMove);
         window.removeEventListener("mouseup", this.onMouseUp);
@@ -148,6 +147,7 @@ class DragListenable<
     }
 
     private onDragStart(event: DragEvent) {
+        this.clean();
         this.dragStartEmitted = false;
         this.dnd.setDragging(false);
         this.dnd.setDraggingItem(this.item);
@@ -224,18 +224,12 @@ class DragListenable<
             vector: this.vector,
         });
 
-        this.clean();
-
         if (isHTMLElement(this.el)) {
             this.el.removeEventListener("drag", this.onDrag);
             this.el.removeEventListener("dragend", this.onDragEnd);
         } else {
             throw new Error(`Can't add drag to ${this.el}`);
         }
-    }
-
-    private onDragOver(e: DragEvent) {
-        e.preventDefault();
     }
 
     public setPreviewEle(el: HTMLElement) {
