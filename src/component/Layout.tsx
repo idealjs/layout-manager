@@ -188,7 +188,11 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const selectTab = useCallback(
         (data) => {
             const panelNode = layoutNode.findPanelNode((p) => p.id === data.id);
-            if (panelNode != null && panelNode.parent != null) {
+            if (
+                panelNode != null &&
+                panelNode.parent != null &&
+                panelNode.selected === false
+            ) {
                 panelNode.parent.panelNodes.forEach(
                     (p) => (p.selected = false)
                 );
@@ -237,21 +241,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             {layouts
                 .filter((l) => l.direction === LAYOUT_DIRECTION.TAB)
                 .map((n) => {
-                    return (
-                        <div
-                            id={n.id}
-                            key={n.id}
-                            style={{
-                                position: "absolute",
-                                height: "25px",
-                                width: n.width,
-                                left: n.left,
-                                top: n.top,
-                            }}
-                        >
-                            <Titlebar nodeIds={n.children} />
-                        </div>
-                    );
+                    return <Titlebar key={n.id} nodeId={n.id} />;
                 })}
 
             {splitters.map((n) => {

@@ -1,30 +1,25 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { SLOT_EVENT } from "../enum";
 import { useDnd } from "../lib/dnd";
-import { updateOne } from "../reducer/panels";
-import { useTab } from "./Provider";
+import { useCustomTab } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
-import { usePanel, usePanels } from "./Provider/PanelsProvider";
+import { usePanel } from "./Provider/PanelsProvider";
 import { useSns } from "./Provider/SnsProvider";
 
-const Tab = (props: {
-    nodeId: string;
-    selected: string;
-    onSelect: (nodeId: string) => void;
-}) => {
-    const { nodeId, selected, onSelect } = props;
-    const symbol = useMemo(() => Symbol(nodeId), [nodeId]);
+const Tab = (props: { nodeId: string }) => {
+    const { nodeId } = props;
+
     const ref = useRef(null);
 
-    const [, , dispatch] = usePanels();
     const node = usePanel(nodeId);
     const dnd = useDnd();
     const sns = useSns();
     const layoutSymbol = useLayoutSymbol();
-    const onClick = useCallback(() => {
-        onSelect(nodeId);
-    }, [nodeId, onSelect]);
+
+    const onSelect = useCallback(() => {
+        sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, { id: nodeId });
+    }, [layoutSymbol, nodeId, sns]);
 
     useEffect(() => {
         try {
@@ -41,31 +36,22 @@ const Tab = (props: {
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, layoutSymbol, node, nodeId, symbol]);
-
-    useEffect(() => {
-        if (nodeId === selected) {
-            dispatch(updateOne({ id: nodeId, changes: { selected: true } }));
-        } else {
-            dispatch(updateOne({ id: nodeId, changes: { selected: false } }));
-        }
-    }, [dispatch, nodeId, selected]);
+    }, [dnd, layoutSymbol, node, nodeId]);
 
     const closeTab = useCallback(() => {
         sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, { nodeId });
     }, [layoutSymbol, nodeId, sns]);
-    const Tab = useTab();
+
+    const CustomTab = useCustomTab();
 
     return (
-        <Fragment>
-            <Tab
-                nodeId={nodeId}
-                nodeTitle={nodeId}
-                ref={ref}
-                onSelect={onClick}
-                onClose={closeTab}
-            />
-        </Fragment>
+        <CustomTab
+            nodeId={nodeId}
+            nodeTitle={nodeId}
+            ref={ref}
+            onSelect={onSelect}
+            onClose={closeTab}
+        />
     );
 };
 

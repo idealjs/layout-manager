@@ -53,7 +53,7 @@ export const useFactory = (): CMPTFactory => {
     return content.factory;
 };
 
-export const useTab = (): TABCMPT => {
+export const useCustomTab = (): TABCMPT => {
     const content = useContext(CMPTContext);
     if (content == null) {
         throw new Error("Tab CMPT not Provide");
