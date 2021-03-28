@@ -6,8 +6,10 @@ export interface IDragData {
     vector: IPoint;
 }
 
-export interface IDropData {
-    item: any;
+interface IItem {}
+
+export interface IDropData<I extends IItem> {
+    item: I | null;
     clientPosition: IPoint;
 }
 

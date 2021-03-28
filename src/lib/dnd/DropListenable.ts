@@ -6,9 +6,9 @@ import { IDropData, IPoint } from "./type";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface DropListenable<E extends Element> {
-    addListener(
+    addListener<I extends {}>(
         event: string | symbol,
-        listener: (data: IDropData) => void
+        listener: (data: IDropData<I>) => void
     ): this;
 }
 

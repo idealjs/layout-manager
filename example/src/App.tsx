@@ -128,7 +128,7 @@ function App() {
         <Fragment>
             <div className="App" style={{ height: 500, width: 500 }}>
                 <button onClick={onClick}>open portal</button>
-                <Provider factory={factory} Tab={CustomTab}>
+                <Provider factory={factory}>
                     <Layout layoutNode={N} />
                 </Provider>
             </div>

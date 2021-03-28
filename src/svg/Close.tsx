@@ -7,6 +7,7 @@ const Close = () => {
             className="Close"
             alt="close"
             style={{ width: "100%", height: "100%" }}
+            draggable={false}
         />
     );
 };

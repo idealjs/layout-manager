@@ -108,9 +108,11 @@ const Panel = (props: { nodeId: string }) => {
     );
 
     const onDrop = useCallback(
-        (data: IDropData) => {
+        (
+            data: IDropData<{ id: string; type: string; layoutSymbol: Symbol }>
+        ) => {
             console.debug("[Debug] onDrop", data);
-            if (data.item.type === "Tab") {
+            if (data.item?.type === "Tab") {
                 if (maskPartContainer.current != null) {
                     if (data.item.layoutSymbol === layoutSymbol) {
                         sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
@@ -150,8 +152,8 @@ const Panel = (props: { nodeId: string }) => {
     );
 
     const onDragLeave = useCallback(
-        (data: IDropData) => {
-            if (data.item.type === "Tab") {
+        (data: IDropData<{ type: string }>) => {
+            if (data.item?.type === "Tab") {
                 setMaskPart(null);
             }
         },
@@ -159,8 +161,8 @@ const Panel = (props: { nodeId: string }) => {
     );
 
     const onDragOver = useCallback(
-        (data: IDropData) => {
-            if (data.item.type === "Tab") {
+        (data: IDropData<{ type: string }>) => {
+            if (data.item?.type === "Tab") {
                 const rect = ref.current?.getBoundingClientRect();
                 if (rect) {
                     if (

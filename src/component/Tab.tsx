@@ -39,7 +39,7 @@ const Tab = (props: { nodeId: string }) => {
     }, [dnd, layoutSymbol, node, nodeId]);
 
     const closeTab = useCallback(() => {
-        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, { nodeId });
+        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, { searchId: nodeId });
     }, [layoutSymbol, nodeId, sns]);
 
     const CustomTab = useCustomTab();

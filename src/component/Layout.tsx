@@ -123,6 +123,15 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             const panelNode = layoutNode.findPanelNode(
                 (p) => p.id === data.searchId
             );
+            
+            if (
+                panelNode?.parent?.panelNodes.length === 1 &&
+                data.searchId === data.targetId
+            ) {
+                update();
+                return;
+            }
+
             if (panelNode == null) {
                 throw new Error("");
             }
