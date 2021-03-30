@@ -195,14 +195,12 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
         };
     }, [
         addPanel,
-        layoutNode,
-        removePanel,
-        slot,
-        sns,
-        update,
-        moveSplitter,
-        selectTab,
         movePanel,
+        moveSplitter,
+        removePanel,
+        selectTab,
+        slot,
+        update,
     ]);
 
     return (
