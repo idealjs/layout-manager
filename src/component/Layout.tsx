@@ -4,6 +4,7 @@ import { MASK_PART, SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
 import directionFromMask from "../lib/directionFromMask";
 import LayoutNode from "../lib/LayoutNode";
+import PanelNode from "../lib/PanelNode";
 import { setAll as setAllLayouts } from "../reducer/layouts";
 import { setAll as setAllPanels } from "../reducer/panels";
 import { setAll as setAllSplitters } from "../reducer/splitters";
@@ -39,6 +40,63 @@ const useUpdate = (
     }, [dispatchLayouts, dispatchPanels, dispatchSplitters, layoutNode, rect]);
 };
 
+const addPanelNode = (
+    layoutNode: LayoutNode,
+    data: { panelNode: PanelNode; mask: MASK_PART; targetId: string }
+) => {
+    console.log(SLOT_EVENT.ADD_PANEL, data);
+
+    const direction = directionFromMask(data.mask);
+    if (data.mask === MASK_PART.CENTER) {
+        layoutNode
+            .findPanelNode((p) => p.id === data.targetId)
+            ?.parent?.appendPanelNode(data.panelNode);
+    } else {
+        const tabLayout = new LayoutNode();
+        tabLayout.direction = LAYOUT_DIRECTION.TAB;
+        tabLayout.appendPanelNode(data.panelNode);
+        const layout = new LayoutNode();
+        layout.direction = direction;
+        const oldLayout = layoutNode.findPanelNode(
+            (p) => p.id === data.targetId
+        )?.parent;
+
+        if (oldLayout == null) {
+            throw new Error("");
+        }
+        oldLayout.parent?.replaceChild(layout, oldLayout);
+        oldLayout.primaryOffset = 0;
+        oldLayout.secondaryOffset = 0;
+        if (data.mask === MASK_PART.LEFT || data.mask === MASK_PART.TOP) {
+            layout.append(tabLayout, oldLayout);
+        }
+        if (data.mask === MASK_PART.RIGHT || data.mask === MASK_PART.BOTTOM) {
+            layout.append(oldLayout, tabLayout);
+        }
+    }
+};
+
+const removePanelNode = (layoutNode: LayoutNode, data: any) => {
+    const panelNode = layoutNode.findPanelNode((p) => p.id === data.searchId);
+
+    if (panelNode == null) {
+        throw new Error("");
+    }
+    if (data.searchId === data.targetId && data.mask === MASK_PART.CENTER) {
+        return;
+    }
+
+    if (
+        panelNode?.parent?.panelNodes.length === 1 &&
+        data.searchId === data.targetId
+    ) {
+        return;
+    }
+    panelNode.remove();
+
+    return panelNode;
+};
+
 const Layout = (props: { layoutNode: LayoutNode }) => {
     const { layoutNode } = props;
     const ref = useRef<HTMLDivElement | null>(null);
@@ -55,42 +113,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const addPanel = useCallback(
         (data) => {
-            console.log(SLOT_EVENT.ADD_PANEL, data);
-
-            const direction = directionFromMask(data.mask);
-            if (data.mask === MASK_PART.CENTER) {
-                layoutNode
-                    .findPanelNode((p) => p.id === data.targetId)
-                    ?.parent?.appendPanelNode(data.panelNode);
-            } else {
-                const tabLayout = new LayoutNode();
-                tabLayout.direction = LAYOUT_DIRECTION.TAB;
-                tabLayout.appendPanelNode(data.panelNode);
-                const layout = new LayoutNode();
-                layout.direction = direction;
-                const oldLayout = layoutNode.findPanelNode(
-                    (p) => p.id === data.targetId
-                )?.parent;
-
-                if (oldLayout == null) {
-                    throw new Error("");
-                }
-                oldLayout.parent?.replaceChild(layout, oldLayout);
-                oldLayout.primaryOffset = 0;
-                oldLayout.secondaryOffset = 0;
-                if (
-                    data.mask === MASK_PART.LEFT ||
-                    data.mask === MASK_PART.TOP
-                ) {
-                    layout.append(tabLayout, oldLayout);
-                }
-                if (
-                    data.mask === MASK_PART.RIGHT ||
-                    data.mask === MASK_PART.BOTTOM
-                ) {
-                    layout.append(oldLayout, tabLayout);
-                }
-            }
+            addPanelNode(layoutNode, data);
             update();
         },
         [layoutNode, update]
@@ -98,13 +121,12 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const removePanel = useCallback(
         (data) => {
-            const panelNode = layoutNode.findPanelNode(
-                (p) => p.id === data.searchId
-            );
-            panelNode?.remove();
+            const removed = removePanelNode(layoutNode, data);
             update();
             if (data.symbol != null) {
-                sns.send(data.symbol, SLOT_EVENT.NODE_REMOVED, { panelNode });
+                sns.send(data.symbol, SLOT_EVENT.NODE_REMOVED, {
+                    panelNode: removed,
+                });
             }
         },
         [layoutNode, sns, update]
@@ -112,65 +134,9 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const movePanel = useCallback(
         (data) => {
-            if (
-                data.searchId === data.targetId &&
-                data.mask === MASK_PART.CENTER
-            ) {
-                update();
-                return;
-            }
-
-            const panelNode = layoutNode.findPanelNode(
-                (p) => p.id === data.searchId
-            );
-            
-            if (
-                panelNode?.parent?.panelNodes.length === 1 &&
-                data.searchId === data.targetId
-            ) {
-                update();
-                return;
-            }
-
-            if (panelNode == null) {
-                throw new Error("");
-            }
-
-            panelNode.remove();
-
-            const direction = directionFromMask(data.mask);
-            if (data.mask === MASK_PART.CENTER) {
-                layoutNode
-                    .findPanelNode((p) => p.id === data.targetId)
-                    ?.parent?.appendPanelNode(panelNode);
-            } else {
-                const tabLayout = new LayoutNode();
-                tabLayout.direction = LAYOUT_DIRECTION.TAB;
-                tabLayout.appendPanelNode(panelNode);
-                const layout = new LayoutNode();
-                layout.direction = direction;
-                const oldLayout = layoutNode.findPanelNode(
-                    (p) => p.id === data.targetId
-                )?.parent;
-
-                if (oldLayout == null) {
-                    throw new Error("");
-                }
-                oldLayout.parent?.replaceChild(layout, oldLayout);
-                oldLayout.primaryOffset = 0;
-                oldLayout.secondaryOffset = 0;
-                if (
-                    data.mask === MASK_PART.LEFT ||
-                    data.mask === MASK_PART.TOP
-                ) {
-                    layout.append(tabLayout, oldLayout);
-                }
-                if (
-                    data.mask === MASK_PART.RIGHT ||
-                    data.mask === MASK_PART.BOTTOM
-                ) {
-                    layout.append(oldLayout, tabLayout);
-                }
+            const removed = removePanelNode(layoutNode, data);
+            if (removed != null) {
+                addPanelNode(layoutNode, { ...data, panelNode: removed });
             }
             update();
         },
