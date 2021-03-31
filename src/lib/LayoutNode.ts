@@ -174,6 +174,14 @@ class LayoutNode {
     }
 
     parseLayout(): ILayoutNode[] {
+        if (this.direction === LAYOUT_DIRECTION.TAB) {
+            if (
+                !this.panelNodes.map((c) => c.selected).includes(true) &&
+                this.panelNodes.length > 0
+            ) {
+                this.panelNodes[0].selected = true;
+            }
+        }
         const layout: ILayoutNode = {
             id: this.id,
             height: this.height,

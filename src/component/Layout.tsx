@@ -74,6 +74,8 @@ const addPanelNode = (
             layout.append(oldLayout, tabLayout);
         }
     }
+    data.panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
+    data.panelNode.selected = true;
 };
 
 const removePanelNode = (layoutNode: LayoutNode, data: any) => {
