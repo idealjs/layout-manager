@@ -24,8 +24,7 @@
         "lint": "eslint src/**/*.{tsx,ts} --fix",
         "build:react-scripts": "react-scripts build",
         "build:webpack": "webpack",
-        "prepublish": "rm -rf dist&yarn build:webpack",
-        "publish": "npm publish --access public"
+        "prepublish": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [
