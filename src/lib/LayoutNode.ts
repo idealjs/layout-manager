@@ -1,12 +1,14 @@
 import { uniqueId } from "lodash";
 
 import { ROOTID } from "../constant";
+import { MASK_PART } from "../enum";
 import {
     ILayoutNode,
     IPanelNode,
     ISplitterNode,
     LAYOUT_DIRECTION,
 } from "../reducer/type";
+import directionFromMask from "./directionFromMask";
 import PanelNode from "./PanelNode";
 const splitterBlock = 10;
 class LayoutNode {
@@ -23,13 +25,13 @@ class LayoutNode {
     direction: LAYOUT_DIRECTION | null = null;
     parent: LayoutNode | null = null;
 
-    append(...children: LayoutNode[]) {
+    public append(...children: LayoutNode[]) {
         this.children = this.children.concat(children);
         children.forEach((c) => (c.parent = this));
         return this;
     }
 
-    appendPanelNode(...children: PanelNode[]) {
+    public appendPanelNode(...children: PanelNode[]) {
         this.panelNodes = this.panelNodes.concat(children);
         children.forEach((c) => {
             c.parent = this;
@@ -56,7 +58,7 @@ class LayoutNode {
         return this;
     }
 
-    removeChild(oldChild: LayoutNode) {
+    private removeChild(oldChild: LayoutNode) {
         const index = this.children.findIndex((c) => c === oldChild);
         if (index !== -1) {
             const primaryNode = this.children[index - 1];
@@ -75,7 +77,7 @@ class LayoutNode {
         return this;
     }
 
-    replaceChild(newChild: LayoutNode, oldChild: LayoutNode) {
+    private replaceChild(newChild: LayoutNode, oldChild: LayoutNode) {
         const index = this.children.findIndex((c) => c === oldChild);
         if (index !== -1) {
             const primaryNode = this.children[index - 1];
@@ -93,11 +95,11 @@ class LayoutNode {
         return this;
     }
 
-    getLayoutById(id: string) {
+    private getLayoutById(id: string) {
         return this.find((l) => l.id === id);
     }
 
-    isValid(): boolean {
+    private isValid(): boolean {
         const includes = this.parent?.children.includes(this);
         const childrenValidation = this.children.reduce((p, c) => {
             return c.isValid();
@@ -105,7 +107,12 @@ class LayoutNode {
         return childrenValidation || (includes ? includes : false);
     }
 
-    fill(rect: { height: number; width: number; left: number; top: number }) {
+    public fill(rect: {
+        height: number;
+        width: number;
+        left: number;
+        top: number;
+    }) {
         this.height = rect.height;
         this.width = rect.width;
         this.left = rect.left;
@@ -173,7 +180,7 @@ class LayoutNode {
         }
     }
 
-    parseLayout(): ILayoutNode[] {
+    public parseLayout(): ILayoutNode[] {
         if (this.direction === LAYOUT_DIRECTION.TAB) {
             if (
                 !this.panelNodes.map((c) => c.selected).includes(true) &&
@@ -202,7 +209,7 @@ class LayoutNode {
             .concat(layout);
     }
 
-    parseSplitter(): ISplitterNode[] {
+    public parseSplitter(): ISplitterNode[] {
         const index = this.parent?.children.findIndex(
             (child) => child === this
         );
@@ -252,13 +259,13 @@ class LayoutNode {
             .concat(splitter);
     }
 
-    parsePanel(): IPanelNode[] {
+    public parsePanel(): IPanelNode[] {
         return this.children
             .flatMap((child) => child.parsePanel())
             .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
     }
 
-    find(predicate: (layout: LayoutNode) => boolean): LayoutNode | null {
+    public find(predicate: (layout: LayoutNode) => boolean): LayoutNode | null {
         if (predicate(this)) {
             return this;
         }
@@ -267,7 +274,7 @@ class LayoutNode {
         }, null);
     }
 
-    findPanelNode(
+    public findPanelNode(
         predicate: (panelNode: PanelNode) => boolean
     ): PanelNode | null {
         let result = this.panelNodes.reduce(
@@ -288,17 +295,17 @@ class LayoutNode {
         }, null);
     }
 
-    DLR(t: (layout: LayoutNode) => void) {
+    private DLR(t: (layout: LayoutNode) => void) {
         t(this);
         this.children.forEach((child) => child.DLR(t));
     }
 
-    LRD(t: (layout: LayoutNode) => void) {
+    private LRD(t: (layout: LayoutNode) => void) {
         this.children.forEach((child) => child.LRD(t));
         t(this);
     }
 
-    shakeTree() {
+    public shakeTree() {
         console.debug("[Debug] start shakeTree");
         this.LRD((l) => {
             if (
@@ -344,6 +351,70 @@ class LayoutNode {
         });
         console.debug("[Debug] end shakeTree", this);
         return this;
+    }
+
+    public addPanelNode(data: {
+        panelNode: PanelNode;
+        mask: MASK_PART;
+        targetId: string;
+    }) {
+        const direction = directionFromMask(data.mask);
+        if (data.mask === MASK_PART.CENTER) {
+            this.findPanelNode(
+                (p) => p.id === data.targetId
+            )?.parent?.appendPanelNode(data.panelNode);
+        } else {
+            const tabLayout = new LayoutNode();
+            tabLayout.direction = LAYOUT_DIRECTION.TAB;
+            tabLayout.appendPanelNode(data.panelNode);
+            const layout = new LayoutNode();
+            layout.direction = direction;
+            const oldLayout = this.findPanelNode((p) => p.id === data.targetId)
+                ?.parent;
+
+            if (oldLayout == null) {
+                throw new Error("");
+            }
+            oldLayout.parent?.replaceChild(layout, oldLayout);
+            oldLayout.primaryOffset = 0;
+            oldLayout.secondaryOffset = 0;
+            if (data.mask === MASK_PART.LEFT || data.mask === MASK_PART.TOP) {
+                layout.append(tabLayout, oldLayout);
+            }
+            if (
+                data.mask === MASK_PART.RIGHT ||
+                data.mask === MASK_PART.BOTTOM
+            ) {
+                layout.append(oldLayout, tabLayout);
+            }
+        }
+        data.panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
+        data.panelNode.selected = true;
+    }
+
+    public removePanelNode(data: {
+        searchId: string;
+        targetId?: string;
+        mask?: MASK_PART;
+    }) {
+        const panelNode = this.findPanelNode((p) => p.id === data.searchId);
+
+        if (panelNode == null) {
+            throw new Error("");
+        }
+        if (data.searchId === data.targetId && data.mask === MASK_PART.CENTER) {
+            return;
+        }
+
+        if (
+            panelNode?.parent?.panelNodes.length === 1 &&
+            data.searchId === data.targetId
+        ) {
+            return;
+        }
+        panelNode.remove();
+
+        return panelNode;
     }
 }
 
