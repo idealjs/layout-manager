@@ -7,10 +7,15 @@ import {
     LAYOUT_DIRECTION,
     LayoutNode,
     PanelNode,
+    MASK_PART,
+    ROOTID,
 } from "@idealjs/layout-manager";
-import CustomTab from "./component/CustomTab";
 import Popout, { PopoutContext } from "./component/Popout";
 import { Fragment } from "react";
+
+const ROOT = new LayoutNode();
+ROOT.id = ROOTID;
+ROOT.direction = LAYOUT_DIRECTION.ROOT;
 
 const N = new LayoutNode();
 N.id = "mainN";
@@ -30,6 +35,8 @@ N_B_A.id = "N_B_A";
 const N_B_B = new LayoutNode();
 N_B_B.direction = LAYOUT_DIRECTION.TAB;
 N_B_B.id = "N_B_B";
+
+ROOT.append(N);
 
 N.append(N_A).append(N_B);
 N_B.append(N_B_A).append(N_B_B);
@@ -124,12 +131,26 @@ function App() {
         setPortalState((s) => s.concat("b"));
     }, []);
 
+    const onShow = useCallback(() => {
+        console.log(ROOT);
+    }, []);
+
+    const addAdd = useCallback(() => {
+        const test = new PanelNode();
+        test.id = "test";
+        test.page = "test";
+        N.addPanelNode(test, MASK_PART.LEFT, N);
+    }, []);
+
     return (
         <Fragment>
             <div className="App" style={{ height: 500, width: 500 }}>
                 <button onClick={onClick}>open portal</button>
+                <button onClick={onShow}>show layout obj</button>
+                <button onClick={addAdd}>add</button>
+
                 <Provider factory={factory}>
-                    <Layout layoutNode={N} />
+                    <Layout layoutNode={ROOT} />
                 </Provider>
             </div>
             <PopoutContext.Provider value={portalState}>

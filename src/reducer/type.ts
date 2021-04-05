@@ -24,6 +24,7 @@ export interface IWidgetNode {
 }
 
 export enum LAYOUT_DIRECTION {
+    ROOT = "ROOT",
     COL = "COL",
     ROW = "ROW",
     TAB = "TAB",

@@ -32,10 +32,14 @@ class LayoutNode {
     }
 
     public appendPanelNode(...children: PanelNode[]) {
-        this.panelNodes = this.panelNodes.concat(children);
-        children.forEach((c) => {
-            c.parent = this;
-        });
+        if (this.direction === LAYOUT_DIRECTION.TAB) {
+            this.panelNodes = this.panelNodes.concat(children);
+            children.forEach((c) => {
+                c.parent = this;
+            });
+        } else {
+            throw new Error("Can't appendPanelNode to none tab layout");
+        }
         if (!this.panelNodes.map((c) => c.selected).includes(true)) {
             this.panelNodes[0].selected = true;
         }
@@ -131,6 +135,12 @@ class LayoutNode {
             let avgWidth = 0;
 
             this.children.forEach((child, currentIndex) => {
+                if (this.direction === LAYOUT_DIRECTION.ROOT) {
+                    childHeight = this.height;
+                    childWidth = this.width;
+                    childLeft = this.left;
+                    childTop = this.top;
+                }
                 if (this.direction === LAYOUT_DIRECTION.COL) {
                     avgHeight =
                         (rect.height -
@@ -353,24 +363,30 @@ class LayoutNode {
         return this;
     }
 
-    public addPanelNode(data: {
-        panelNode: PanelNode;
-        mask: MASK_PART;
-        targetId: string;
-    }) {
-        const direction = directionFromMask(data.mask);
-        if (data.mask === MASK_PART.CENTER) {
-            this.findPanelNode(
-                (p) => p.id === data.targetId
-            )?.parent?.appendPanelNode(data.panelNode);
+    public addPanelNode(
+        panelNode: PanelNode,
+        mask: MASK_PART,
+        target: string | LayoutNode //panelNodeId or layout
+    ) {
+        const direction = directionFromMask(mask);
+        if (mask === MASK_PART.CENTER) {
+            if (target instanceof LayoutNode) {
+                target.appendPanelNode(panelNode);
+            } else {
+                this.findPanelNode(
+                    (p) => p.id === target
+                )?.parent?.appendPanelNode(panelNode);
+            }
         } else {
             const tabLayout = new LayoutNode();
             tabLayout.direction = LAYOUT_DIRECTION.TAB;
-            tabLayout.appendPanelNode(data.panelNode);
+            tabLayout.appendPanelNode(panelNode);
             const layout = new LayoutNode();
             layout.direction = direction;
-            const oldLayout = this.findPanelNode((p) => p.id === data.targetId)
-                ?.parent;
+            const oldLayout =
+                target instanceof LayoutNode
+                    ? target
+                    : this.findPanelNode((p) => p.id === target)?.parent;
 
             if (oldLayout == null) {
                 throw new Error("");
@@ -378,23 +394,20 @@ class LayoutNode {
             oldLayout.parent?.replaceChild(layout, oldLayout);
             oldLayout.primaryOffset = 0;
             oldLayout.secondaryOffset = 0;
-            if (data.mask === MASK_PART.LEFT || data.mask === MASK_PART.TOP) {
+            if (mask === MASK_PART.LEFT || mask === MASK_PART.TOP) {
                 layout.append(tabLayout, oldLayout);
             }
-            if (
-                data.mask === MASK_PART.RIGHT ||
-                data.mask === MASK_PART.BOTTOM
-            ) {
+            if (mask === MASK_PART.RIGHT || mask === MASK_PART.BOTTOM) {
                 layout.append(oldLayout, tabLayout);
             }
         }
-        data.panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
-        data.panelNode.selected = true;
+        panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
+        panelNode.selected = true;
     }
 
     public removePanelNode(data: {
-        searchId: string;
-        targetId?: string;
+        searchId: string; //panelNodeId
+        targetId?: string; //panelNodeId
         mask?: MASK_PART;
     }) {
         const panelNode = this.findPanelNode((p) => p.id === data.searchId);
@@ -415,6 +428,15 @@ class LayoutNode {
         panelNode.remove();
 
         return panelNode;
+    }
+
+    public addPanelNodeByRule(data: {
+        rule: {
+            direction: string;
+            max: number;
+        }[];
+    }) {
+        // const targetPanelNode = findNodeByRule(rule);
     }
 }
 
