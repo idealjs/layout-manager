@@ -9,7 +9,8 @@ import SnsProvider from "./Provider/SnsProvider";
 import SplittersProvider from "./Provider/SplittersProvider";
 
 export type CMPTFactory = (
-    page: string
+    page: string,
+    data?: any
 ) => FunctionComponent<{ nodeData: any }>;
 
 const CMPTContext = createContext<{

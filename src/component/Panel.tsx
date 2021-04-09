@@ -233,7 +233,7 @@ const Panel = (props: { nodeId: string }) => {
 
     const node = usePanel(nodeId);
     const factory = useFactory();
-    const Page = useMemo(() => factory(node?.page!), [factory, node?.page]);
+    const Page = useMemo(() => factory(node?.page!, node?.data), [factory, node?.data, node?.page]);
     return (
         <div
             ref={ref}

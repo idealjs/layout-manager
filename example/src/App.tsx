@@ -9,9 +9,11 @@ import {
     PanelNode,
     MASK_PART,
     ROOTID,
+    useUpdate,
 } from "@idealjs/layout-manager";
 import Popout, { PopoutContext } from "./component/Popout";
 import { Fragment } from "react";
+import { uniqueId } from "lodash";
 
 const ROOT = new LayoutNode();
 ROOT.id = ROOTID;
@@ -43,7 +45,7 @@ N_B.append(N_B_A).append(N_B_B);
 
 const P_A_A = new PanelNode();
 P_A_A.id = "P_A_A";
-P_A_A.page = "test";
+P_A_A.page = "test2";
 
 const P_A_B = new PanelNode();
 P_A_B.id = "P_A_B";
@@ -96,6 +98,7 @@ const factory: CMPTFactory = (page: string) => {
             return (props) => {
                 const { nodeData } = props;
                 const [counter, setCounter] = useState(0);
+                const update = useUpdate(ROOT);
                 useEffect(() => {
                     const handler = setInterval(() => {
                         setCounter((c) => c + 1);
@@ -104,12 +107,23 @@ const factory: CMPTFactory = (page: string) => {
                         clearInterval(handler);
                     };
                 }, []);
+
+                const addAdd = useCallback(() => {
+                    const test = new PanelNode();
+                    test.id = uniqueId();
+                    test.page = "test";
+                    N.addPanelNode(test, MASK_PART.LEFT, N);
+                    update();
+                }, [update]);
+
                 const onClick = useCallback(async () => {
                     try {
+                        addAdd();
                     } catch (error) {
                         console.error(error);
                     }
-                }, []);
+                }, [addAdd]);
+                
                 return (
                     <div>
                         <button onClick={onClick}>test</button>
@@ -135,19 +149,11 @@ function App() {
         console.log(ROOT);
     }, []);
 
-    const addAdd = useCallback(() => {
-        const test = new PanelNode();
-        test.id = "test";
-        test.page = "test";
-        N.addPanelNode(test, MASK_PART.LEFT, N);
-    }, []);
-
     return (
         <Fragment>
             <div className="App" style={{ height: 500, width: 500 }}>
                 <button onClick={onClick}>open portal</button>
                 <button onClick={onShow}>show layout obj</button>
-                <button onClick={addAdd}>add</button>
 
                 <Provider factory={factory}>
                     <Layout layoutNode={ROOT} />

@@ -10,7 +10,7 @@ import { setAll as setAllSplitters } from "../reducer/splitters";
 
 const useUpdate = (
     layoutNode: LayoutNode,
-    rect: {
+    rect?: {
         height: number;
         width: number;
     }
@@ -20,7 +20,16 @@ const useUpdate = (
     const [, , dispatchPanels] = usePanels();
     return useCallback(() => {
         layoutNode.shakeTree();
-        layoutNode.fill({ ...rect, left: 0, top: 0 });
+        if (rect != null) {
+            layoutNode.fill({ ...rect, left: 0, top: 0 });
+        } else {
+            layoutNode.fill({
+                height: layoutNode.height,
+                width: layoutNode.width,
+                left: layoutNode.left,
+                top: layoutNode.top,
+            });
+        }
         const layouts = layoutNode.parseLayout();
         const splitters = layoutNode.parseSplitter();
         const panels = layoutNode.parsePanel();
