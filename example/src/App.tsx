@@ -118,12 +118,21 @@ const factory: CMPTFactory = (page: string) => {
 
                 const onClick = useCallback(async () => {
                     try {
-                        addAdd();
+                        // addAdd();
+                        // const target = ROOT.findLayoutNode((l, level) => {
+                        //     console.log("level", level);
+                        //     return l.id === ROOTID;
+                        // });
+                        const target = ROOT.findNodeByRule([
+                            { direction: LAYOUT_DIRECTION.COL, max: 3 },
+                            { direction: LAYOUT_DIRECTION.TAB, max: 2 },
+                        ]);
+                        console.log(target);
                     } catch (error) {
                         console.error(error);
                     }
-                }, [addAdd]);
-                
+                }, []);
+
                 return (
                     <div>
                         <button onClick={onClick}>test</button>

@@ -10,6 +10,7 @@ import {
 } from "../reducer/type";
 import directionFromMask from "./directionFromMask";
 import PanelNode from "./PanelNode";
+import { IRule } from "./type";
 const splitterBlock = 10;
 class LayoutNode {
     id: string = uniqueId();
@@ -305,6 +306,31 @@ class LayoutNode {
         }, null);
     }
 
+    public findLayoutNode(
+        predicate: (layoutNode: LayoutNode, level: number) => boolean,
+        level = 0
+    ): LayoutNode | null {
+        let result = this.children.reduce(
+            (p: LayoutNode | null, c: LayoutNode) => {
+                if (p != null) {
+                    return p;
+                }
+                if (predicate(c, level)) {
+                    return c;
+                }
+                return null;
+            },
+            null
+        );
+        if (result != null) {
+            return result;
+        }
+
+        return this.children.reduce((p: LayoutNode | null, c: LayoutNode) => {
+            return p != null ? p : c.findLayoutNode(predicate, level + 1);
+        }, null);
+    }
+
     private DLR(t: (layout: LayoutNode) => void) {
         t(this);
         this.children.forEach((child) => child.DLR(t));
@@ -430,13 +456,37 @@ class LayoutNode {
         return panelNode;
     }
 
-    public addPanelNodeByRule(data: {
-        rule: {
-            direction: string;
-            max: number;
-        }[];
-    }) {
-        // const targetPanelNode = findNodeByRule(rule);
+    public findNodeByRule(rules: IRule[]) {
+        return rules.reduce((p: LayoutNode | null, c: IRule, index) => {
+            if (p != null) {
+                return p;
+            }
+            return this.findLayoutNode((l, level) => {
+                if (c.direction === LAYOUT_DIRECTION.TAB) {
+                    if (
+                        l.direction === c.direction &&
+                        l.panelNodes.length < c.max
+                    ) {
+                        console.log("test 1", l);
+                        return true;
+                    }
+                } else {
+                    if (
+                        l.direction === c.direction &&
+                        l.children.length < c.max &&
+                        level <= index
+                    ) {
+                        console.log("test 2", l);
+                        return true;
+                    }
+                    if (l.direction !== c.direction && level <= index) {
+                        console.log("test 3", l);
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }, null);
     }
 }
 
