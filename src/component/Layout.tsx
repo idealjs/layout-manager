@@ -2,10 +2,8 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
+import useUpdate from "../hook/useUpdate";
 import LayoutNode from "../lib/LayoutNode";
-import { setAll as setAllLayouts } from "../reducer/layouts";
-import { setAll as setAllPanels } from "../reducer/panels";
-import { setAll as setAllSplitters } from "../reducer/splitters";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import Panel from "./Panel";
 import { useLayouts } from "./Provider/LayoutsProvider";
@@ -15,28 +13,6 @@ import { useSlot, useSns } from "./Provider/SnsProvider";
 import { useSplitters } from "./Provider/SplittersProvider";
 import Splitter from "./Splitter";
 import Titlebar from "./Titlebar";
-
-const useUpdate = (
-    layoutNode: LayoutNode,
-    rect: {
-        height: number;
-        width: number;
-    }
-) => {
-    const [, , dispatchSplitters] = useSplitters();
-    const [, , dispatchLayouts] = useLayouts();
-    const [, , dispatchPanels] = usePanels();
-    return useCallback(() => {
-        layoutNode.shakeTree();
-        layoutNode.fill({ ...rect, left: 0, top: 0 });
-        const layouts = layoutNode.parseLayout();
-        const splitters = layoutNode.parseSplitter();
-        const panels = layoutNode.parsePanel();
-        dispatchLayouts(setAllLayouts(layouts));
-        dispatchSplitters(setAllSplitters(splitters));
-        dispatchPanels(setAllPanels(panels));
-    }, [dispatchLayouts, dispatchPanels, dispatchSplitters, layoutNode, rect]);
-};
 
 const Layout = (props: { layoutNode: LayoutNode }) => {
     const { layoutNode } = props;
