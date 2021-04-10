@@ -108,21 +108,8 @@ const factory: CMPTFactory = (page: string) => {
                     };
                 }, []);
 
-                const addAdd = useCallback(() => {
-                    const test = new PanelNode();
-                    test.id = uniqueId();
-                    test.page = "test";
-                    N.addPanelNode(test, MASK_PART.LEFT, N);
-                    update();
-                }, [update]);
-
                 const onClick = useCallback(async () => {
                     try {
-                        // addAdd();
-                        // const target = ROOT.findLayoutNode((l, level) => {
-                        //     console.log("level", level);
-                        //     return l.id === ROOTID;
-                        // });
                         const target = ROOT.findNodeByRules([
                             { part: MASK_PART.BOTTOM, max: 2 },
                             { part: MASK_PART.RIGHT, max: 2 },
@@ -140,7 +127,6 @@ const factory: CMPTFactory = (page: string) => {
                             );
                             update();
                         }
-                        console.log(target);
                     } catch (error) {
                         console.error(error);
                     }
