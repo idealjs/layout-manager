@@ -16,9 +16,9 @@ export enum SLOT_EVENT {
 }
 
 export enum MASK_PART {
-    TOP = "top",
-    LEFT = "left",
-    BOTTOM = "bottom",
-    RIGHT = "right",
-    CENTER = "center",
+    TOP = "TOP",
+    LEFT = "LEFT",
+    BOTTOM = "BOTTOM",
+    RIGHT = "RIGHT",
+    CENTER = "CENTER",
 }

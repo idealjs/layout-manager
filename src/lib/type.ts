@@ -1,6 +1,7 @@
-import { LAYOUT_DIRECTION } from "../reducer/type";
+import { MASK_PART } from "../enum";
 
 export interface IRule {
-    direction: Omit<LAYOUT_DIRECTION, LAYOUT_DIRECTION.ROOT>;
+    part: MASK_PART;
     max: number;
+    limitLevel?: number;
 }

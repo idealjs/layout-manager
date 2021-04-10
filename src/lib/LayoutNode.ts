@@ -456,37 +456,77 @@ class LayoutNode {
         return panelNode;
     }
 
-    public findNodeByRule(rules: IRule[]) {
-        return rules.reduce((p: LayoutNode | null, c: IRule, index) => {
-            if (p != null) {
-                return p;
-            }
-            return this.findLayoutNode((l, level) => {
-                if (c.direction === LAYOUT_DIRECTION.TAB) {
+    public findNodeByRules(
+        rules: IRule[]
+    ): {
+        layoutNode: LayoutNode;
+        rule: IRule;
+    } | null {
+        return rules.reduce(
+            (
+                p: {
+                    layoutNode: LayoutNode;
+                    rule: IRule;
+                } | null,
+                c: IRule,
+                index
+            ) => {
+                const direction = directionFromMask(c.part);
+                if (p != null) {
+                    return p;
+                }
+                const layoutNode = this.findLayoutNode((l, level) => {
                     if (
-                        l.direction === c.direction &&
+                        direction === LAYOUT_DIRECTION.TAB &&
+                        direction === l.direction &&
                         l.panelNodes.length < c.max
                     ) {
-                        console.log("test 1", l);
-                        return true;
+                        if (c.limitLevel != null) {
+                            if (c.limitLevel >= level) {
+                                return true;
+                            }
+                        } else {
+                            return true;
+                        }
                     }
-                } else {
-                    if (
-                        l.direction === c.direction &&
-                        l.children.length < c.max &&
-                        level <= index
-                    ) {
-                        console.log("test 2", l);
-                        return true;
+
+                    if (direction !== LAYOUT_DIRECTION.TAB) {
+                        if (
+                            l.direction === direction &&
+                            l.children.length < c.max &&
+                            level <= index
+                        ) {
+                            if (c.limitLevel != null) {
+                                if (c.limitLevel >= level) {
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
+                        if (l.direction !== direction && level === index) {
+                            if (c.limitLevel != null) {
+                                if (c.limitLevel >= level) {
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
                     }
-                    if (l.direction !== c.direction && level <= index) {
-                        console.log("test 3", l);
-                        return true;
-                    }
+
+                    return false;
+                });
+                if (layoutNode == null) {
+                    return null;
                 }
-                return false;
-            });
-        }, null);
+                return {
+                    layoutNode,
+                    rule: c,
+                };
+            },
+            null
+        );
     }
 }
 

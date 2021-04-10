@@ -123,15 +123,28 @@ const factory: CMPTFactory = (page: string) => {
                         //     console.log("level", level);
                         //     return l.id === ROOTID;
                         // });
-                        const target = ROOT.findNodeByRule([
-                            { direction: LAYOUT_DIRECTION.COL, max: 3 },
-                            { direction: LAYOUT_DIRECTION.TAB, max: 2 },
+                        const target = ROOT.findNodeByRules([
+                            { part: MASK_PART.BOTTOM, max: 2 },
+                            { part: MASK_PART.RIGHT, max: 2 },
+                            { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
+                            { part: MASK_PART.CENTER, max: 2 },
                         ]);
+                        if (target) {
+                            const test = new PanelNode();
+                            test.id = uniqueId();
+                            test.page = "test";
+                            ROOT.addPanelNode(
+                                test,
+                                target.rule.part,
+                                target.layoutNode
+                            );
+                            update();
+                        }
                         console.log(target);
                     } catch (error) {
                         console.error(error);
                     }
-                }, []);
+                }, [update]);
 
                 return (
                     <div>
