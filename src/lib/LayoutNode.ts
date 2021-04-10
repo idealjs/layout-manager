@@ -47,7 +47,7 @@ class LayoutNode {
         return this;
     }
 
-    insertBefore(newChild: LayoutNode, refChild: LayoutNode) {
+    public insertBefore(newChild: LayoutNode, refChild: LayoutNode) {
         const index = this.children.findIndex((c) => c === refChild);
         if (index !== -1) {
             const primaryNode = this.children[index - 1];
@@ -101,7 +101,11 @@ class LayoutNode {
     }
 
     private getLayoutById(id: string) {
-        return this.find((l) => l.id === id);
+        return this.findLayoutNode((n) => n.id === id);
+    }
+
+    private getPanelById(id: string) {
+        return this.findPanelNode((n) => n.id === id);
     }
 
     private isValid(): boolean {
@@ -276,7 +280,9 @@ class LayoutNode {
             .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
     }
 
-    public find(predicate: (layout: LayoutNode) => boolean): LayoutNode | null {
+    private find(
+        predicate: (layout: LayoutNode) => boolean
+    ): LayoutNode | null {
         if (predicate(this)) {
             return this;
         }

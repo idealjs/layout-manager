@@ -59,8 +59,8 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const moveSplitter = useCallback(
         (data) => {
-            const primaryNode = layoutNode.find((l) => l.id === data.primaryId);
-            const secondaryNode = layoutNode.find(
+            const primaryNode = layoutNode.findLayoutNode((l) => l.id === data.primaryId);
+            const secondaryNode = layoutNode.findLayoutNode(
                 (l) => l.id === data.secondaryId
             );
             if (primaryNode != null && secondaryNode != null) {
