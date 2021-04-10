@@ -395,24 +395,22 @@ class LayoutNode {
         target: string | LayoutNode //panelNodeId or layout
     ) {
         const direction = directionFromMask(mask);
+        const oldLayout =
+            target instanceof LayoutNode
+                ? target
+                : this.findPanelNode((p) => p.id === target)?.parent;
+
+        if (oldLayout == null) {
+            throw new Error("");
+        }
         if (mask === MASK_PART.CENTER) {
-            if (target instanceof LayoutNode) {
-                target.appendPanelNode(panelNode);
-            } else {
-                this.findPanelNode(
-                    (p) => p.id === target
-                )?.parent?.appendPanelNode(panelNode);
-            }
+            oldLayout.appendPanelNode(panelNode);
         } else {
             const tabLayout = new LayoutNode();
             tabLayout.direction = LAYOUT_DIRECTION.TAB;
             tabLayout.appendPanelNode(panelNode);
             const layout = new LayoutNode();
             layout.direction = direction;
-            const oldLayout =
-                target instanceof LayoutNode
-                    ? target
-                    : this.findPanelNode((p) => p.id === target)?.parent;
 
             if (oldLayout == null) {
                 throw new Error("");
@@ -454,6 +452,52 @@ class LayoutNode {
         panelNode.remove();
 
         return panelNode;
+    }
+
+    public movePanelNode(
+        search: string,
+        mask: MASK_PART,
+        target: string | LayoutNode //panelNodeId or layout
+    ) {
+        const panelNode = this.findPanelNode((p) => p.id === search);
+        const oldLayout =
+            target instanceof LayoutNode
+                ? target
+                : this.findPanelNode((p) => p.id === target)?.parent;
+
+        if (panelNode == null || oldLayout == null) {
+            throw new Error("");
+        }
+
+        if (!(target instanceof LayoutNode)) {
+            panelNode.remove();
+        }
+
+        const direction = directionFromMask(mask);
+        if (mask === MASK_PART.CENTER) {
+            oldLayout.appendPanelNode(panelNode);
+        } else {
+            const tabLayout = new LayoutNode();
+            tabLayout.direction = LAYOUT_DIRECTION.TAB;
+            tabLayout.appendPanelNode(panelNode);
+            const layout = new LayoutNode();
+            layout.direction = direction;
+
+            if (oldLayout == null) {
+                throw new Error("");
+            }
+            oldLayout.parent?.replaceChild(layout, oldLayout);
+            oldLayout.primaryOffset = 0;
+            oldLayout.secondaryOffset = 0;
+            if (mask === MASK_PART.LEFT || mask === MASK_PART.TOP) {
+                layout.append(tabLayout, oldLayout);
+            }
+            if (mask === MASK_PART.RIGHT || mask === MASK_PART.BOTTOM) {
+                layout.append(oldLayout, tabLayout);
+            }
+        }
+        panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
+        panelNode.selected = true;
     }
 
     public findNodeByRules(

@@ -51,10 +51,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const movePanel = useCallback(
         (data) => {
-            const removed = layoutNode.removePanelNode(data);
-            if (removed != null) {
-                layoutNode.addPanelNode(removed, data.mask, data.targetId);
-            }
+            layoutNode.movePanelNode(data.searchId, data.mask, data.targetId);
             update();
         },
         [layoutNode, update]
