@@ -2,6 +2,7 @@ import { uniqueId } from "lodash";
 
 import { IPanelNode } from "../reducer/type";
 import LayoutNode from "./LayoutNode";
+import { IPanelJSON } from "./type";
 
 class PanelNode {
     id: string = uniqueId();
@@ -35,6 +36,13 @@ class PanelNode {
             this.parent = null;
         }
         return this;
+    }
+    public toJSON(): IPanelJSON {
+        return {
+            id: this.id,
+            page: this.page,
+            data: this.data,
+        };
     }
 }
 

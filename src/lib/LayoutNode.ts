@@ -10,7 +10,7 @@ import {
 } from "../reducer/type";
 import directionFromMask from "./directionFromMask";
 import PanelNode from "./PanelNode";
-import { IRule } from "./type";
+import { ILayoutJSON, IRule } from "./type";
 const splitterBlock = 10;
 class LayoutNode {
     id: string = uniqueId();
@@ -23,8 +23,12 @@ class LayoutNode {
     children: LayoutNode[] = [];
     panelNodes: PanelNode[] = [];
 
-    direction: LAYOUT_DIRECTION | null = null;
+    direction: LAYOUT_DIRECTION;
     parent: LayoutNode | null = null;
+
+    constructor(options: { direction: LAYOUT_DIRECTION }) {
+        this.direction = options.direction;
+    }
 
     public append(...children: LayoutNode[]) {
         this.children = this.children.concat(children);
@@ -280,6 +284,17 @@ class LayoutNode {
             .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
     }
 
+    public toJSON(): ILayoutJSON {
+        return {
+            id: this.id,
+            direction: this.direction,
+            primaryOffset: this.primaryOffset,
+            secondaryOffset: this.secondaryOffset,
+            layouts: this.children.map((c) => c.toJSON()),
+            panels: this.panelNodes.map((c) => c.toJSON()),
+        };
+    }
+
     private find(
         predicate: (layout: LayoutNode) => boolean
     ): LayoutNode | null {
@@ -412,11 +427,13 @@ class LayoutNode {
         if (mask === MASK_PART.CENTER) {
             oldLayout.appendPanelNode(panelNode);
         } else {
-            const tabLayout = new LayoutNode();
-            tabLayout.direction = LAYOUT_DIRECTION.TAB;
+            const tabLayout = new LayoutNode({
+                direction: LAYOUT_DIRECTION.TAB,
+            });
             tabLayout.appendPanelNode(panelNode);
-            const layout = new LayoutNode();
-            layout.direction = direction;
+            const layout = new LayoutNode({
+                direction: direction,
+            });
 
             if (oldLayout == null) {
                 throw new Error("");
@@ -483,11 +500,13 @@ class LayoutNode {
         if (mask === MASK_PART.CENTER) {
             oldLayout.appendPanelNode(panelNode);
         } else {
-            const tabLayout = new LayoutNode();
-            tabLayout.direction = LAYOUT_DIRECTION.TAB;
+            const tabLayout = new LayoutNode({
+                direction: LAYOUT_DIRECTION.TAB,
+            });
             tabLayout.appendPanelNode(panelNode);
-            const layout = new LayoutNode();
-            layout.direction = direction;
+            const layout = new LayoutNode({
+                direction: direction,
+            });
 
             if (oldLayout == null) {
                 throw new Error("");

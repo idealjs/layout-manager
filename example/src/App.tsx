@@ -15,27 +15,28 @@ import Popout, { PopoutContext } from "./component/Popout";
 import { Fragment } from "react";
 import { uniqueId } from "lodash";
 
-const ROOT = new LayoutNode();
+const ROOT = new LayoutNode({
+    direction: LAYOUT_DIRECTION.ROOT,
+});
 ROOT.id = ROOTID;
-ROOT.direction = LAYOUT_DIRECTION.ROOT;
 
-const N = new LayoutNode();
+const N = new LayoutNode({
+    direction: LAYOUT_DIRECTION.COL,
+});
 N.id = "mainN";
-N.direction = LAYOUT_DIRECTION.COL;
 
-const N_A = new LayoutNode();
-N_A.direction = LAYOUT_DIRECTION.TAB;
+const N_A = new LayoutNode({ direction: LAYOUT_DIRECTION.TAB });
 N_A.id = "N_A";
 
-const N_B = new LayoutNode();
-N_B.direction = LAYOUT_DIRECTION.ROW;
+const N_B = new LayoutNode({ direction: LAYOUT_DIRECTION.ROW });
+N_B.id = "N_B";
 
-const N_B_A = new LayoutNode();
-N_B_A.direction = LAYOUT_DIRECTION.TAB;
+const N_B_A = new LayoutNode({ direction: LAYOUT_DIRECTION.TAB });
 N_B_A.id = "N_B_A";
 
-const N_B_B = new LayoutNode();
-N_B_B.direction = LAYOUT_DIRECTION.TAB;
+const N_B_B = new LayoutNode({
+    direction: LAYOUT_DIRECTION.TAB,
+});
 N_B_B.id = "N_B_B";
 
 ROOT.append(N);
@@ -60,7 +61,7 @@ P_B_A_A.page = "test";
 const P_B_A_B = new PanelNode();
 P_B_A_B.id = "P_B_A_B";
 P_B_A_B.page = "test";
-P_B_A_B.data = "abc"
+P_B_A_B.data = "abc";
 
 N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
 
