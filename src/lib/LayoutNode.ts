@@ -100,11 +100,11 @@ class LayoutNode {
         return this;
     }
 
-    private getLayoutById(id: string) {
+    public getLayoutById(id: string) {
         return this.findLayoutNode((n) => n.id === id);
     }
 
-    private getPanelById(id: string) {
+    public getPanelById(id: string) {
         return this.findPanelNode((n) => n.id === id);
     }
 

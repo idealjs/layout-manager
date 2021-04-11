@@ -59,10 +59,9 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const moveSplitter = useCallback(
         (data) => {
-            const primaryNode = layoutNode.findLayoutNode((l) => l.id === data.primaryId);
-            const secondaryNode = layoutNode.findLayoutNode(
-                (l) => l.id === data.secondaryId
-            );
+            const primaryNode = layoutNode.getLayoutById(data.primaryId);
+            const secondaryNode = layoutNode.getLayoutById(data.secondaryId);
+
             if (primaryNode != null && secondaryNode != null) {
                 primaryNode.secondaryOffset =
                     primaryNode.secondaryOffset + data.offset;
@@ -76,7 +75,8 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const selectTab = useCallback(
         (data) => {
-            const panelNode = layoutNode.findPanelNode((p) => p.id === data.id);
+            const panelNode = layoutNode.getPanelById(data.id);
+
             if (
                 panelNode != null &&
                 panelNode.parent != null &&
