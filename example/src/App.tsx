@@ -60,6 +60,7 @@ P_B_A_A.page = "test";
 const P_B_A_B = new PanelNode();
 P_B_A_B.id = "P_B_A_B";
 P_B_A_B.page = "test";
+P_B_A_B.data = "abc"
 
 N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
 
