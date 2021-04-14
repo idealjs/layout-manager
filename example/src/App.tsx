@@ -186,7 +186,7 @@ function App() {
     }, []);
 
     const onShow = useCallback(() => {
-        console.log(ROOT.toJSON());
+        console.log(JSON.stringify(ROOT.toJSON(), null, 2));
     }, []);
 
     return (
