@@ -16,62 +16,88 @@ import { Fragment } from "react";
 import { uniqueId } from "lodash";
 
 const ROOT = new LayoutNode({
-    direction: LAYOUT_DIRECTION.ROOT,
+    layoutJSON: {
+        direction: LAYOUT_DIRECTION.ROOT,
+    },
 });
 ROOT.id = ROOTID;
 
 const N = new LayoutNode({
-    direction: LAYOUT_DIRECTION.COL,
+    layoutJSON: {
+        direction: LAYOUT_DIRECTION.COL,
+    },
 });
 N.id = "mainN";
 
-const N_A = new LayoutNode({ direction: LAYOUT_DIRECTION.TAB });
+const N_A = new LayoutNode({ layoutJSON: { direction: LAYOUT_DIRECTION.TAB } });
 N_A.id = "N_A";
 
-const N_B = new LayoutNode({ direction: LAYOUT_DIRECTION.ROW });
+const N_B = new LayoutNode({ layoutJSON: { direction: LAYOUT_DIRECTION.ROW } });
 N_B.id = "N_B";
 
-const N_B_A = new LayoutNode({ direction: LAYOUT_DIRECTION.TAB });
+const N_B_A = new LayoutNode({
+    layoutJSON: { direction: LAYOUT_DIRECTION.TAB },
+});
 N_B_A.id = "N_B_A";
 
 const N_B_B = new LayoutNode({
-    direction: LAYOUT_DIRECTION.TAB,
+    layoutJSON: {
+        direction: LAYOUT_DIRECTION.TAB,
+    },
 });
 N_B_B.id = "N_B_B";
 
-ROOT.append(N);
+ROOT.appendLayoutNode(N);
 
-N.append(N_A).append(N_B);
-N_B.append(N_B_A).append(N_B_B);
+N.appendLayoutNode(N_A).appendLayoutNode(N_B);
+N_B.appendLayoutNode(N_B_A).appendLayoutNode(N_B_B);
 
-const P_A_A = new PanelNode();
-P_A_A.id = "P_A_A";
-P_A_A.page = "test2";
+const P_A_A = new PanelNode({
+    panelJSON: {
+        id: "P_A_A",
+        page: "test2",
+    },
+});
 
-const P_A_B = new PanelNode();
-P_A_B.id = "P_A_B";
-P_A_B.page = "test";
+const P_A_B = new PanelNode({
+    panelJSON: {
+        id: "P_A_B",
+        page: "test",
+    },
+});
 
 N_A.appendPanelNode(P_A_A, P_A_B);
 
-const P_B_A_A = new PanelNode();
-P_B_A_A.id = "P_B_A_A";
-P_B_A_A.page = "test";
+const P_B_A_A = new PanelNode({
+    panelJSON: {
+        id: "P_B_A_A",
+        page: "test",
+    },
+});
 
-const P_B_A_B = new PanelNode();
-P_B_A_B.id = "P_B_A_B";
-P_B_A_B.page = "test";
-P_B_A_B.data = "abc";
+const P_B_A_B = new PanelNode({
+    panelJSON: {
+        id: "P_B_A_B",
+        page: "test",
+        data: "abc",
+    },
+});
 
 N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
 
-const P_B_B_A = new PanelNode();
-P_B_B_A.id = "P_B_B_A";
-P_B_B_A.page = "test";
+const P_B_B_A = new PanelNode({
+    panelJSON: {
+        id: "P_B_B_A",
+        page: "test",
+    },
+});
 
-const P_B_B_B = new PanelNode();
-P_B_B_B.id = "P_B_B_B";
-P_B_B_B.page = "test";
+const P_B_B_B = new PanelNode({
+    panelJSON: {
+        id: "P_B_B_B",
+        page: "test",
+    },
+});
 
 N_B_B.appendPanelNode(P_B_B_A, P_B_B_B);
 
@@ -119,9 +145,13 @@ const factory: CMPTFactory = (page: string) => {
                             { part: MASK_PART.CENTER, max: 2 },
                         ]);
                         if (target) {
-                            const test = new PanelNode();
-                            test.id = uniqueId();
-                            test.page = "test";
+                            const test = new PanelNode({
+                                panelJSON: {
+                                    id: uniqueId(),
+                                    page: "test",
+                                },
+                            });
+
                             ROOT.addPanelNode(
                                 test,
                                 target.rule.part,
@@ -156,7 +186,7 @@ function App() {
     }, []);
 
     const onShow = useCallback(() => {
-        console.log(ROOT);
+        console.log(ROOT.toJSON());
     }, []);
 
     return (
@@ -164,7 +194,6 @@ function App() {
             <div className="App" style={{ height: 500, width: 500 }}>
                 <button onClick={onClick}>open portal</button>
                 <button onClick={onShow}>show layout obj</button>
-
                 <Provider factory={factory}>
                     <Layout layoutNode={ROOT} />
                 </Provider>

@@ -15,7 +15,19 @@ class PanelNode {
     selected: boolean = false;
     data?: any;
 
-    parsePanel(): IPanelNode {
+    constructor(options: { panelJSON: Partial<IPanelJSON> }) {
+        if (options.panelJSON.id != null) {
+            this.id = options.panelJSON.id;
+        }
+        if (options.panelJSON.data != null) {
+            this.id = options.panelJSON.data;
+        }
+        if (options.panelJSON.page != null) {
+            this.page = options.panelJSON.page;
+        }
+    }
+
+    public parsePanel(): IPanelNode {
         return {
             id: this.id,
             height: (this.parent?.height || 0) - 25,
@@ -28,7 +40,7 @@ class PanelNode {
             data: this.data,
         };
     }
-    remove() {
+    public remove() {
         if (this.parent != null) {
             this.parent.panelNodes = this.parent.panelNodes.filter(
                 (p) => p !== this

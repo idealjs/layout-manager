@@ -20,18 +20,45 @@ class LayoutNode {
     top: number = 0;
     primaryOffset: number = 0;
     secondaryOffset: number = 0;
-    children: LayoutNode[] = [];
+    layoutNodes: LayoutNode[] = [];
     panelNodes: PanelNode[] = [];
 
     direction: LAYOUT_DIRECTION;
     parent: LayoutNode | null = null;
 
-    constructor(options: { direction: LAYOUT_DIRECTION }) {
-        this.direction = options.direction;
+    constructor(options: {
+        layoutJSON: Partial<Exclude<ILayoutJSON, "direction">> & {
+            direction: LAYOUT_DIRECTION;
+        };
+    }) {
+        this.direction = options.layoutJSON.direction;
+        if (options.layoutJSON.id != null) {
+            this.id = options.layoutJSON.id;
+        }
+        if (options.layoutJSON.primaryOffset != null) {
+            this.primaryOffset = options.layoutJSON.primaryOffset;
+        }
+        if (options.layoutJSON.secondaryOffset != null) {
+            this.secondaryOffset = options.layoutJSON.secondaryOffset;
+        }
+        if (options.layoutJSON.layouts != null) {
+            this.appendLayoutNode(
+                ...options.layoutJSON.layouts.map(
+                    (l) => new LayoutNode({ layoutJSON: l })
+                )
+            );
+        }
+        if (options.layoutJSON.panels != null) {
+            this.appendPanelNode(
+                ...options.layoutJSON.panels.map(
+                    (p) => new PanelNode({ panelJSON: p })
+                )
+            );
+        }
     }
 
-    public append(...children: LayoutNode[]) {
-        this.children = this.children.concat(children);
+    public appendLayoutNode(...children: LayoutNode[]) {
+        this.layoutNodes = this.layoutNodes.concat(children);
         children.forEach((c) => (c.parent = this));
         return this;
     }
@@ -52,26 +79,26 @@ class LayoutNode {
     }
 
     public insertBefore(newChild: LayoutNode, refChild: LayoutNode) {
-        const index = this.children.findIndex((c) => c === refChild);
+        const index = this.layoutNodes.findIndex((c) => c === refChild);
         if (index !== -1) {
-            const primaryNode = this.children[index - 1];
+            const primaryNode = this.layoutNodes[index - 1];
             if (primaryNode) {
                 newChild.primaryOffset = primaryNode.secondaryOffset;
             }
             if (refChild) {
                 newChild.secondaryOffset = refChild.primaryOffset;
             }
-            this.children.splice(index, 0, newChild);
+            this.layoutNodes.splice(index, 0, newChild);
             newChild.parent = refChild.parent;
         }
         return this;
     }
 
     private removeChild(oldChild: LayoutNode) {
-        const index = this.children.findIndex((c) => c === oldChild);
+        const index = this.layoutNodes.findIndex((c) => c === oldChild);
         if (index !== -1) {
-            const primaryNode = this.children[index - 1];
-            const secondaryNode = this.children[index + 1];
+            const primaryNode = this.layoutNodes[index - 1];
+            const secondaryNode = this.layoutNodes[index + 1];
             if (primaryNode) {
                 primaryNode.secondaryOffset =
                     primaryNode.secondaryOffset + oldChild.primaryOffset;
@@ -80,24 +107,24 @@ class LayoutNode {
                 secondaryNode.primaryOffset =
                     secondaryNode.primaryOffset + oldChild.secondaryOffset;
             }
-            this.children.splice(index, 1);
+            this.layoutNodes.splice(index, 1);
             oldChild.parent = null;
         }
         return this;
     }
 
     private replaceChild(newChild: LayoutNode, oldChild: LayoutNode) {
-        const index = this.children.findIndex((c) => c === oldChild);
+        const index = this.layoutNodes.findIndex((c) => c === oldChild);
         if (index !== -1) {
-            const primaryNode = this.children[index - 1];
-            const secondaryNode = this.children[index + 1];
+            const primaryNode = this.layoutNodes[index - 1];
+            const secondaryNode = this.layoutNodes[index + 1];
             if (primaryNode) {
                 newChild.primaryOffset = oldChild.primaryOffset;
             }
             if (secondaryNode) {
                 newChild.secondaryOffset = oldChild.secondaryOffset;
             }
-            this.children[index] = newChild;
+            this.layoutNodes[index] = newChild;
             newChild.parent = oldChild.parent;
             oldChild.parent = null;
         }
@@ -113,8 +140,8 @@ class LayoutNode {
     }
 
     private isValid(): boolean {
-        const includes = this.parent?.children.includes(this);
-        const childrenValidation = this.children.reduce((p, c) => {
+        const includes = this.parent?.layoutNodes.includes(this);
+        const childrenValidation = this.layoutNodes.reduce((p, c) => {
             return c.isValid();
         }, true);
         return childrenValidation || (includes ? includes : false);
@@ -133,7 +160,7 @@ class LayoutNode {
 
         if (
             this.direction !== LAYOUT_DIRECTION.TAB &&
-            this.children.length !== 0
+            this.layoutNodes.length !== 0
         ) {
             let childHeight = 0;
             let childWidth = 0;
@@ -143,7 +170,7 @@ class LayoutNode {
             let avgHeight = 0;
             let avgWidth = 0;
 
-            this.children.forEach((child, currentIndex) => {
+            this.layoutNodes.forEach((node, currentIndex) => {
                 if (this.direction === LAYOUT_DIRECTION.ROOT) {
                     childHeight = this.height;
                     childWidth = this.width;
@@ -153,13 +180,12 @@ class LayoutNode {
                 if (this.direction === LAYOUT_DIRECTION.COL) {
                     avgHeight =
                         (rect.height -
-                            (this.children.length - 1) * splitterBlock) /
-                        this.children.length;
+                            (this.layoutNodes.length - 1) * splitterBlock) /
+                        this.layoutNodes.length;
                     avgWidth = rect.width;
 
                     childHeight =
-                        avgHeight +
-                        (child.primaryOffset + child.secondaryOffset);
+                        avgHeight + (node.primaryOffset + node.secondaryOffset);
 
                     childWidth = avgWidth;
                     childLeft = rect.left;
@@ -167,29 +193,28 @@ class LayoutNode {
                         currentIndex * avgHeight +
                         rect.top +
                         currentIndex * splitterBlock -
-                        child.primaryOffset;
+                        node.primaryOffset;
                 }
 
                 if (this.direction === LAYOUT_DIRECTION.ROW) {
                     avgHeight = rect.height;
                     avgWidth =
                         (rect.width -
-                            (this.children.length - 1) * splitterBlock) /
-                        this.children.length;
+                            (this.layoutNodes.length - 1) * splitterBlock) /
+                        this.layoutNodes.length;
 
                     childHeight = avgHeight;
                     childWidth =
-                        avgWidth +
-                        (child.primaryOffset + child.secondaryOffset);
+                        avgWidth + (node.primaryOffset + node.secondaryOffset);
                     childLeft =
                         currentIndex * avgWidth +
                         rect.left +
                         currentIndex * splitterBlock -
-                        child.primaryOffset;
+                        node.primaryOffset;
                     childTop = rect.top;
                 }
 
-                child.fill({
+                node.fill({
                     height: childHeight,
                     width: childWidth,
                     left: childLeft,
@@ -219,26 +244,26 @@ class LayoutNode {
             parentId: this.parent?.id ? this.parent.id : ROOTID,
             children:
                 this.direction !== LAYOUT_DIRECTION.TAB
-                    ? this.children.map((child) => child.id)
-                    : this.panelNodes.map((child) => child.id),
+                    ? this.layoutNodes.map((node) => node.id)
+                    : this.panelNodes.map((node) => node.id),
             direction: this.direction,
         };
-        return this.children
-            .flatMap((child) => child.parseLayout())
+        return this.layoutNodes
+            .flatMap((node) => node.parseLayout())
             .concat(layout);
     }
 
     public parseSplitter(): ISplitterNode[] {
-        const index = this.parent?.children.findIndex(
-            (child) => child === this
+        const index = this.parent?.layoutNodes.findIndex(
+            (node) => node === this
         );
         if (
             this.parent == null ||
             index == null ||
             index === -1 ||
-            index === this.parent.children.length - 1
+            index === this.parent.layoutNodes.length - 1
         ) {
-            return this.children.flatMap((child) => child.parseSplitter());
+            return this.layoutNodes.flatMap((node) => node.parseSplitter());
         }
 
         let splitterHeight = 0;
@@ -262,25 +287,25 @@ class LayoutNode {
 
         const splitter: ISplitterNode = {
             id: `${this.parent.id}_${this.id}_${
-                this.parent.children[index + 1].id
+                this.parent.layoutNodes[index + 1].id
             }`,
             height: splitterHeight,
             width: splitterWidth,
             left: splitterLeft,
             top: splitterTop,
             primaryId: this.id,
-            secondaryId: this.parent.children[index + 1].id,
+            secondaryId: this.parent.layoutNodes[index + 1].id,
             parentId: this.parent.id,
         };
 
-        return this.children
-            .flatMap((child) => child.parseSplitter())
+        return this.layoutNodes
+            .flatMap((node) => node.parseSplitter())
             .concat(splitter);
     }
 
     public parsePanel(): IPanelNode[] {
-        return this.children
-            .flatMap((child) => child.parsePanel())
+        return this.layoutNodes
+            .flatMap((node) => node.parsePanel())
             .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
     }
 
@@ -290,8 +315,8 @@ class LayoutNode {
             direction: this.direction,
             primaryOffset: this.primaryOffset,
             secondaryOffset: this.secondaryOffset,
-            layouts: this.children.map((c) => c.toJSON()),
-            panels: this.panelNodes.map((c) => c.toJSON()),
+            layouts: this.layoutNodes.map((n) => n.toJSON()),
+            panels: this.panelNodes.map((n) => n.toJSON()),
         };
     }
 
@@ -301,9 +326,12 @@ class LayoutNode {
         if (predicate(this)) {
             return this;
         }
-        return this.children.reduce((p: LayoutNode | null, c: LayoutNode) => {
-            return p != null ? p : c.find(predicate);
-        }, null);
+        return this.layoutNodes.reduce(
+            (p: LayoutNode | null, c: LayoutNode) => {
+                return p != null ? p : c.find(predicate);
+            },
+            null
+        );
     }
 
     public findPanelNode(
@@ -322,7 +350,7 @@ class LayoutNode {
             return result;
         }
 
-        return this.children.reduce((p: PanelNode | null, c: LayoutNode) => {
+        return this.layoutNodes.reduce((p: PanelNode | null, c: LayoutNode) => {
             return p != null ? p : c.findPanelNode(predicate);
         }, null);
     }
@@ -331,7 +359,7 @@ class LayoutNode {
         predicate: (layoutNode: LayoutNode, level: number) => boolean,
         level = 0
     ): LayoutNode | null {
-        let result = this.children.reduce(
+        let result = this.layoutNodes.reduce(
             (p: LayoutNode | null, c: LayoutNode) => {
                 if (p != null) {
                     return p;
@@ -347,18 +375,21 @@ class LayoutNode {
             return result;
         }
 
-        return this.children.reduce((p: LayoutNode | null, c: LayoutNode) => {
-            return p != null ? p : c.findLayoutNode(predicate, level + 1);
-        }, null);
+        return this.layoutNodes.reduce(
+            (p: LayoutNode | null, c: LayoutNode) => {
+                return p != null ? p : c.findLayoutNode(predicate, level + 1);
+            },
+            null
+        );
     }
 
     private DLR(t: (layout: LayoutNode) => void) {
         t(this);
-        this.children.forEach((child) => child.DLR(t));
+        this.layoutNodes.forEach((node) => node.DLR(t));
     }
 
     private LRD(t: (layout: LayoutNode) => void) {
-        this.children.forEach((child) => child.LRD(t));
+        this.layoutNodes.forEach((node) => node.LRD(t));
         t(this);
     }
 
@@ -372,38 +403,38 @@ class LayoutNode {
                 l.parent?.removeChild(l);
             }
             if (
-                l.children.length === 0 &&
+                l.layoutNodes.length === 0 &&
                 l.direction !== LAYOUT_DIRECTION.TAB
             ) {
                 l.parent?.removeChild(l);
             }
             if (
-                l.children.length === 1 &&
-                l.children[0].direction === l.direction
+                l.layoutNodes.length === 1 &&
+                l.layoutNodes[0].direction === l.direction
             ) {
-                l.parent?.replaceChild(l.children[0], l);
+                l.parent?.replaceChild(l.layoutNodes[0], l);
             }
             if (l.direction === l.parent?.direction) {
-                const index = l.parent.children.findIndex((c) => c === l);
+                const index = l.parent.layoutNodes.findIndex((c) => c === l);
                 if (index === -1) {
                     throw new Error(
                         "node has parent,but didn't find in parent's children"
                     );
                 }
-                const primaryNode = l.parent.children[index - 1];
-                const secondaryNode = l.parent.children[index + 1];
-                l.parent.children.splice(index, 1, ...l.children);
+                const primaryNode = l.parent.layoutNodes[index - 1];
+                const secondaryNode = l.parent.layoutNodes[index + 1];
+                l.parent.layoutNodes.splice(index, 1, ...l.layoutNodes);
                 if (primaryNode != null) {
-                    l.children[0].primaryOffset = -primaryNode.secondaryOffset;
+                    l.layoutNodes[0].primaryOffset = -primaryNode.secondaryOffset;
                 }
                 if (secondaryNode != null) {
-                    l.children[
-                        l.children.length - 1
+                    l.layoutNodes[
+                        l.layoutNodes.length - 1
                     ].secondaryOffset = -secondaryNode.primaryOffset;
                 }
-                l.children.forEach((c) => (c.parent = l.parent));
+                l.layoutNodes.forEach((c) => (c.parent = l.parent));
                 l.parent = null;
-                l.children = [];
+                l.layoutNodes = [];
             }
         });
         console.debug("[Debug] end shakeTree", this);
@@ -428,11 +459,11 @@ class LayoutNode {
             oldLayout.appendPanelNode(panelNode);
         } else {
             const tabLayout = new LayoutNode({
-                direction: LAYOUT_DIRECTION.TAB,
+                layoutJSON: { direction: LAYOUT_DIRECTION.TAB },
             });
             tabLayout.appendPanelNode(panelNode);
             const layout = new LayoutNode({
-                direction: direction,
+                layoutJSON: { direction: direction },
             });
 
             if (oldLayout == null) {
@@ -442,10 +473,10 @@ class LayoutNode {
             oldLayout.primaryOffset = 0;
             oldLayout.secondaryOffset = 0;
             if (mask === MASK_PART.LEFT || mask === MASK_PART.TOP) {
-                layout.append(tabLayout, oldLayout);
+                layout.appendLayoutNode(tabLayout, oldLayout);
             }
             if (mask === MASK_PART.RIGHT || mask === MASK_PART.BOTTOM) {
-                layout.append(oldLayout, tabLayout);
+                layout.appendLayoutNode(oldLayout, tabLayout);
             }
         }
         panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
@@ -501,11 +532,11 @@ class LayoutNode {
             oldLayout.appendPanelNode(panelNode);
         } else {
             const tabLayout = new LayoutNode({
-                direction: LAYOUT_DIRECTION.TAB,
+                layoutJSON: { direction: LAYOUT_DIRECTION.TAB },
             });
             tabLayout.appendPanelNode(panelNode);
             const layout = new LayoutNode({
-                direction: direction,
+                layoutJSON: { direction: direction },
             });
 
             if (oldLayout == null) {
@@ -515,10 +546,10 @@ class LayoutNode {
             oldLayout.primaryOffset = 0;
             oldLayout.secondaryOffset = 0;
             if (mask === MASK_PART.LEFT || mask === MASK_PART.TOP) {
-                layout.append(tabLayout, oldLayout);
+                layout.appendLayoutNode(tabLayout, oldLayout);
             }
             if (mask === MASK_PART.RIGHT || mask === MASK_PART.BOTTOM) {
-                layout.append(oldLayout, tabLayout);
+                layout.appendLayoutNode(oldLayout, tabLayout);
             }
         }
         panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
@@ -562,7 +593,7 @@ class LayoutNode {
                     if (direction !== LAYOUT_DIRECTION.TAB) {
                         if (
                             l.direction === direction &&
-                            l.children.length < c.max &&
+                            l.layoutNodes.length < c.max &&
                             level <= index
                         ) {
                             if (c.limitLevel != null) {
