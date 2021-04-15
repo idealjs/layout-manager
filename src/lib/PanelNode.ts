@@ -20,7 +20,7 @@ class PanelNode {
             this.id = options.panelJSON.id;
         }
         if (options.panelJSON.data != null) {
-            this.id = options.panelJSON.data;
+            this.data = options.panelJSON.data;
         }
         if (options.panelJSON.page != null) {
             this.page = options.panelJSON.page;
