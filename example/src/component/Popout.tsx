@@ -1,8 +1,12 @@
 import { Fragment, useContext } from "react";
 import { createContext } from "react";
-import { Layout, Provider, LayoutNode } from "@idealjs/layout-manager";
+import {
+    Layout,
+    Provider,
+    LayoutNode,
+    ILayoutJSON,
+} from "@idealjs/layout-manager";
 import Portal from "./Portal";
-import { ILayoutJSON } from "../../../dist/lib/type";
 import layoutJSON from "./layout.json";
 
 export const PopoutContext = createContext<string[]>([]);
