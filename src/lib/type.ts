@@ -10,7 +10,7 @@ export interface IRule {
 export interface IPanelJSON {
     id: string;
     page: string;
-    data: any;
+    data?: any;
 }
 
 export interface ILayoutJSON {

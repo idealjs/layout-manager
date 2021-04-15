@@ -28,7 +28,7 @@ class LayoutNode {
 
     constructor(options: {
         layoutJSON: Partial<Exclude<ILayoutJSON, "direction">> & {
-            direction: LAYOUT_DIRECTION;
+            direction: LAYOUT_DIRECTION | keyof typeof LAYOUT_DIRECTION;
         };
     }) {
         this.direction = options.layoutJSON.direction;
@@ -41,14 +41,14 @@ class LayoutNode {
         if (options.layoutJSON.secondaryOffset != null) {
             this.secondaryOffset = options.layoutJSON.secondaryOffset;
         }
-        if (options.layoutJSON.layouts != null) {
+        if (options.layoutJSON.layouts != null && options.layoutJSON.layouts.length !== 0) {
             this.appendLayoutNode(
                 ...options.layoutJSON.layouts.map(
                     (l) => new LayoutNode({ layoutJSON: l })
                 )
             );
         }
-        if (options.layoutJSON.panels != null) {
+        if (options.layoutJSON.panels != null && options.layoutJSON.panels.length !== 0) {
             this.appendPanelNode(
                 ...options.layoutJSON.panels.map(
                     (p) => new PanelNode({ panelJSON: p })
@@ -70,6 +70,7 @@ class LayoutNode {
                 c.parent = this;
             });
         } else {
+            console.debug("[Debug]", this.id)
             throw new Error("Can't appendPanelNode to none tab layout");
         }
         if (!this.panelNodes.map((c) => c.selected).includes(true)) {
@@ -286,9 +287,8 @@ class LayoutNode {
         }
 
         const splitter: ISplitterNode = {
-            id: `${this.parent.id}_${this.id}_${
-                this.parent.layoutNodes[index + 1].id
-            }`,
+            id: `${this.parent.id}_${this.id}_${this.parent.layoutNodes[index + 1].id
+                }`,
             height: splitterHeight,
             width: splitterWidth,
             left: splitterLeft,
