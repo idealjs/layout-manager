@@ -164,9 +164,15 @@ const factory: CMPTFactory = (page: string) => {
                     }
                 }, [update]);
 
+                const onShow = useCallback(() => {
+                    console.log(JSON.stringify(ROOT.toJSON(), null, 2));
+                }, []);
+
                 return (
                     <div>
-                        <button onClick={onClick}>test</button>
+                        <button onClick={onClick}>add panel</button>
+                        <button onClick={onShow}>show layout obj</button>
+
                         {nodeData}
                         {counter}
                     </div>
@@ -182,18 +188,13 @@ const factory: CMPTFactory = (page: string) => {
 function App() {
     const [portalState, setPortalState] = useState<string[]>([]);
     const onClick = useCallback(() => {
-        setPortalState((s) => s.concat("b"));
-    }, []);
-
-    const onShow = useCallback(() => {
-        console.log(JSON.stringify(ROOT.toJSON(), null, 2));
+        setPortalState((s) => s.concat(uniqueId()));
     }, []);
 
     return (
         <Fragment>
-            <div className="App" style={{ height: 500, width: 500 }}>
+            <div className="App" style={{ height: "100vh", width: "100vW" }}>
                 <button onClick={onClick}>open portal</button>
-                <button onClick={onShow}>show layout obj</button>
                 <Provider factory={factory}>
                     <Layout layoutNode={ROOT} />
                 </Provider>

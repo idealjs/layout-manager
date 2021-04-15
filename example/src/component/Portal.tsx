@@ -8,13 +8,17 @@ const Portal: FC = (props) => {
     const [container] = useState(document.createElement("div"));
     useEffect(() => {
         container.style.height = "400px";
-        container.style.width = "600px"
+        container.style.width = "600px";
         const externalWindow = window.open(
             "",
             "",
             "width=600,height=400,left=200,top=200"
         );
         externalWindow?.document.body.appendChild(container);
+        if (externalWindow != null) {
+            externalWindow.document.body.style.margin = "0px";
+            externalWindow.document.body.style.overflow = "hidden";
+        }
         window.onbeforeunload = () => {
             externalWindow?.close();
         };
