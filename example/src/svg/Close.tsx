@@ -1,4 +1,4 @@
-import close from "./24dp/close-black.svg";
+import close from "./32dp/close.svg";
 
 const Close = () => {
     return (

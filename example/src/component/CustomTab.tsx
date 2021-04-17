@@ -1,6 +1,8 @@
+import { CSSProperties, forwardRef, useCallback } from "react";
 import { TABCMPT } from "@idealjs/layout-manager";
-import { CSSProperties, forwardRef } from "react";
+
 import Close from "../svg/Close";
+import Pop from "../svg/Pop";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -13,17 +15,20 @@ const root: CSSProperties = {
     userSelect: "none",
 };
 const close = {
+    marginLeft: "4px",
+    marginRight: "2px",
     "&:hover": {
         backgroundColor: "#00000025",
     },
-
-    width: "20px",
-    height: "20px",
+    width: "16px",
+    height: "16px",
 };
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
-
+    const onPopout = useCallback(() => {
+        console.log("[Debug] popout");
+    }, []);
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div
@@ -33,7 +38,10 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             >
                 {nodeTitle}
             </div>
-            <div style={close} onClick={onClose} draggable={false}>
+            <div style={close} onClick={onPopout}>
+                <Pop />
+            </div>
+            <div style={close} onClick={onClose}>
                 <Close />
             </div>
         </div>

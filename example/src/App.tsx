@@ -14,6 +14,7 @@ import {
 import Popout, { PopoutContext } from "./component/Popout";
 import { Fragment } from "react";
 import { uniqueId } from "lodash";
+import CustomTab from "./component/CustomTab";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -187,15 +188,11 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     const [portalState, setPortalState] = useState<string[]>([]);
-    const onClick = useCallback(() => {
-        setPortalState((s) => s.concat(uniqueId()));
-    }, []);
 
     return (
         <Fragment>
             <div className="App" style={{ height: "100vh", width: "100vW" }}>
-                <button onClick={onClick}>open portal</button>
-                <Provider factory={factory}>
+                <Provider factory={factory} Tab={CustomTab}>
                     <Layout layoutNode={ROOT} />
                 </Provider>
             </div>
