@@ -2,7 +2,9 @@ import { CSSProperties, forwardRef, useCallback } from "react";
 import { TABCMPT } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
-import Pop from "../svg/Pop";
+import Pop from "../svg/Popout";
+import { usePopout } from "./Popout";
+import { uniqueId } from "lodash";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -26,9 +28,11 @@ const close = {
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
+    const { setPortalState } = usePopout();
     const onPopout = useCallback(() => {
         console.log("[Debug] popout");
-    }, []);
+        setPortalState((s) => [...s, uniqueId()]);
+    }, [setPortalState]);
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div

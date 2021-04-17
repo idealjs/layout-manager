@@ -1,8 +1,10 @@
 export { default as Layout } from "./component/Layout";
 export { default as Provider } from "./component/Provider";
 export * from "./component/Provider";
+export * from "./component/Provider/LayoutSymbolProvider"
 export * from "./constant";
 export * from "./enum";
+export { default as useStateRef } from "./hook/useStateRef"
 export { default as useUpdate } from "./hook/useUpdate";
 export { default as LayoutNode } from "./lib/LayoutNode";
 export { default as PanelNode } from "./lib/PanelNode";

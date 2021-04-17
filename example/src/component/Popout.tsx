@@ -1,5 +1,10 @@
-import { Fragment, useContext } from "react";
-import { createContext } from "react";
+import {
+    Fragment,
+    SetStateAction,
+    useContext,
+    createContext,
+    Dispatch,
+} from "react";
 import {
     Layout,
     Provider,
@@ -9,23 +14,27 @@ import {
 import Portal from "./Portal";
 import layoutJSON from "./layout.json";
 
-export const PopoutContext = createContext<string[]>([]);
+export const PopoutContext = createContext<{
+    portalState: string[];
+    setPortalState: Dispatch<SetStateAction<string[]>>;
+} | null>(null);
 
 const ROOT = new LayoutNode({
     layoutJSON: layoutJSON as ILayoutJSON,
 });
 
 const Popout = () => {
-    const data = useContext(PopoutContext);
+    const { portalState } = usePopout();
+
     return (
         <Fragment>
-            {data.map((d) => {
+            {portalState.map((d) => {
                 return (
-                    <Portal key={d}>
-                        <Provider factory={() => () => <div>test</div>}>
+                    <Provider key={d} factory={() => () => <div>test</div>}>
+                        <Portal>
                             <Layout layoutNode={ROOT} />
-                        </Provider>
-                    </Portal>
+                        </Portal>
+                    </Provider>
                 );
             })}
         </Fragment>
@@ -33,3 +42,11 @@ const Popout = () => {
 };
 
 export default Popout;
+
+export const usePopout = () => {
+    const ctx = useContext(PopoutContext);
+    if (ctx == null) {
+        throw new Error("");
+    }
+    return ctx;
+};

@@ -188,15 +188,19 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     const [portalState, setPortalState] = useState<string[]>([]);
+    // const [mainLayoutSymbol] = useState(Symbol("mainLayout"));
 
     return (
         <Fragment>
-            <div className="App" style={{ height: "100vh", width: "100vW" }}>
-                <Provider factory={factory} Tab={CustomTab}>
-                    <Layout layoutNode={ROOT} />
-                </Provider>
-            </div>
-            <PopoutContext.Provider value={portalState}>
+            <PopoutContext.Provider value={{ portalState, setPortalState }}>
+                <div
+                    className="App"
+                    style={{ height: "100vh", width: "100vW" }}
+                >
+                    <Provider factory={factory} Tab={CustomTab}>
+                        <Layout layoutNode={ROOT} />
+                    </Provider>
+                </div>
                 <Popout />
             </PopoutContext.Provider>
         </Fragment>
