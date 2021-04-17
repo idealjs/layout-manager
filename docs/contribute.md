@@ -12,6 +12,7 @@ commit 以 `type: message` 为统一规范，其中 type、module、message 均�
 * refactor：重构（即不是新增功能，也不是修改bug的代码变动）
 * test：增加测试 case
 * chore：构建过程或辅助工具的变动
+* example: 示例修改
 
 ## message
 message 是本次实际的提交信息，统一使用 `英文` 提交。
