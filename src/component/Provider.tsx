@@ -24,12 +24,13 @@ const Provider: FC<{
     factory: CMPTFactory;
     Tab?: TABCMPT;
     RID?: string;
+    layoutSymbol?: symbol;
 }> = (props) => {
-    const { children, factory, Tab, RID } = props;
+    const { children, factory, Tab, RID, layoutSymbol } = props;
 
     return (
         <CMPTContext.Provider value={{ factory, Tab: Tab ? Tab : CustomTab }}>
-            <LayoutSymbolProvider>
+            <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
                 <LayoutsProvider>
                     <PanelsProvider>
                         <SplittersProvider>

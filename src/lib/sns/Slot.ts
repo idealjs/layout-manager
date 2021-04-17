@@ -1,8 +1,8 @@
 import EventEmitter from "events";
 
 class Slot extends EventEmitter {
-    public id: Symbol;
-    constructor(id: Symbol) {
+    public id: symbol;
+    constructor(id: symbol) {
         super();
         this.id = id;
     }

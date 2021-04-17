@@ -109,7 +109,7 @@ const Panel = (props: { nodeId: string }) => {
 
     const onDrop = useCallback(
         (
-            data: IDropData<{ id: string; type: string; layoutSymbol: Symbol }>
+            data: IDropData<{ id: string; type: string; layoutSymbol: symbol }>
         ) => {
             console.debug("[Debug] onDrop", data);
             if (data.item?.type === "Tab") {
@@ -233,7 +233,11 @@ const Panel = (props: { nodeId: string }) => {
 
     const node = usePanel(nodeId);
     const factory = useFactory();
-    const Page = useMemo(() => factory(node?.page!, node?.data), [factory, node?.data, node?.page]);
+    const Page = useMemo(() => factory(node?.page!, node?.data), [
+        factory,
+        node?.data,
+        node?.page,
+    ]);
     return (
         <div
             ref={ref}

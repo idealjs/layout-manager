@@ -3,11 +3,11 @@ import { createContext, FC, useContext, useMemo } from "react";
 
 const context = createContext<symbol | null>(null);
 
-const Provider: FC = (props) => {
-    const { children } = props;
+const Provider: FC<{ uniqueSymbol?: symbol }> = (props) => {
+    const { uniqueSymbol, children } = props;
     const layoutSymbol = useMemo(() => {
-        return Symbol(uniqueId());
-    }, []);
+        return uniqueSymbol != null ? uniqueSymbol : Symbol(uniqueId());
+    }, [uniqueSymbol]);
     return <context.Provider value={layoutSymbol}>{children}</context.Provider>;
 };
 
