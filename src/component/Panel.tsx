@@ -1,7 +1,7 @@
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { MASK_PART, SLOT_EVENT } from "../enum";
-import useStateContainer from "../hook/useStateContainer";
+import useStateRef from "../hook/useStateRef";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDropData } from "../lib/dnd/type";
 import { useFactory } from "./Provider";
@@ -67,11 +67,9 @@ const Panel = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
     const panel = usePanel(nodeId)!;
-    const [
-        maskPartContainer,
-        maskPart,
-        setMaskPart,
-    ] = useStateContainer<MASK_PART | null>(null);
+    const [maskPartRef, maskPart, setMaskPart] = useStateRef<MASK_PART | null>(
+        null
+    );
     const dnd = useDnd();
     const sns = useSns();
     const symbol = useMemo(() => Symbol(nodeId), [nodeId]);
@@ -100,11 +98,11 @@ const Panel = (props: { nodeId: string }) => {
             slot.removeListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
             sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: data.panelNode,
-                mask: maskPartContainer.current,
+                mask: maskPartRef.current,
                 targetId: nodeId,
             });
         },
-        [layoutSymbol, maskPartContainer, nodeId, slot, sns]
+        [layoutSymbol, maskPartRef, nodeId, slot, sns]
     );
 
     const onDrop = useCallback(
@@ -113,13 +111,13 @@ const Panel = (props: { nodeId: string }) => {
         ) => {
             console.debug("[Debug] onDrop", data);
             if (data.item?.type === "Tab") {
-                if (maskPartContainer.current != null) {
+                if (maskPartRef.current != null) {
                     if (data.item.layoutSymbol === layoutSymbol) {
                         sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
                             symbol: symbol,
                             searchId: data.item.id,
                             targetId: nodeId,
-                            mask: maskPartContainer.current,
+                            mask: maskPartRef.current,
                         });
                     } else {
                         slot.addListener(
@@ -141,7 +139,7 @@ const Panel = (props: { nodeId: string }) => {
         },
         [
             layoutSymbol,
-            maskPartContainer,
+            maskPartRef,
             nodeId,
             onNodeRemoved,
             setMaskPart,

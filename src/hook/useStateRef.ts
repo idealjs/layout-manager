@@ -7,7 +7,7 @@ import {
     useState,
 } from "react";
 
-const useStateContainer = <S>(
+const useStateRef = <S>(
     initState: S
 ): [MutableRefObject<S>, S, Dispatch<SetStateAction<S>>] => {
     const stateContainer = useRef(initState);
@@ -18,4 +18,4 @@ const useStateContainer = <S>(
     return [stateContainer, state, setState];
 };
 
-export default useStateContainer;
+export default useStateRef;
