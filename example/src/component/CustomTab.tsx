@@ -6,7 +6,7 @@ import {
     TABCMPT,
     useSlot,
     useSns,
-    ROOTID,
+    PanelNode,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
@@ -40,23 +40,32 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const sns = useSns();
     const slot = useSlot(nodeId);
 
-    const panelNode = usePanel(nodeId);
+    const panel = usePanel(nodeId);
+
+    const popoutReady = useCallback(
+        (data: { layoutSymbol: string | number }) => {
+            console.debug("[Debug] popout ready", data);
+            console.log("test test", panel);
+            const panelNode = new PanelNode({
+                panelJSON: panel!,
+            });
+            slot.removeListener("ready", popoutReady);
+            sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
+                panelNode: panelNode,
+                mask: MASK_PART.RIGHT,
+                targetId: "X_P_A_A",
+            });
+        },
+        [panel, slot, sns]
+    );
 
     const onPopout = useCallback(() => {
         console.debug("[Debug] popout");
-        slot.addListener("ready", (data: { layoutSymbol: string | number }) => {
-            console.debug("[Debug] popout ready", data);
-            console.log("test ", panelNode);
-            // sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
-            //     panelNode: panelNode,
-            //     mask: MASK_PART.CENTER,
-            //     targetId: ROOTID,
-            // });
-        });
+        slot.addListener("ready", popoutReady);
         setPortalState((s) => {
             return [...s, uniqueId()];
         });
-    }, [panelNode, setPortalState, slot, sns]);
+    }, [popoutReady, setPortalState, slot]);
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div
