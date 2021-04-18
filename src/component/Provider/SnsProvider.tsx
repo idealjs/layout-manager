@@ -18,7 +18,7 @@ export const useSns = () => {
     return sns;
 };
 
-export const useSlot = (id: symbol) => {
+export const useSlot = (id: string | number) => {
     const sns = useSns();
 
     const slot = useMemo(() => {

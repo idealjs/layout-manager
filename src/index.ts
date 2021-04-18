@@ -2,6 +2,7 @@ export { default as Layout } from "./component/Layout";
 export { default as Provider } from "./component/Provider";
 export * from "./component/Provider";
 export * from "./component/Provider/LayoutSymbolProvider"
+export * from "./component/Provider/SnsProvider"
 export * from "./constant";
 export * from "./enum";
 export { default as useStateRef } from "./hook/useStateRef"

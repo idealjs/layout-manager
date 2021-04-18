@@ -72,8 +72,7 @@ const Panel = (props: { nodeId: string }) => {
     );
     const dnd = useDnd();
     const sns = useSns();
-    const symbol = useMemo(() => Symbol(nodeId), [nodeId]);
-    const slot = useSlot(symbol);
+    const slot = useSlot(nodeId);
     const layoutSymbol = useLayoutSymbol();
     const hidden = useMemo(() => !panel.selected, [panel.selected]);
     const maskPartStyle = useMemo(() => {
@@ -107,14 +106,18 @@ const Panel = (props: { nodeId: string }) => {
 
     const onDrop = useCallback(
         (
-            data: IDropData<{ id: string; type: string; layoutSymbol: symbol }>
+            data: IDropData<{
+                id: string;
+                type: string;
+                layoutSymbol: string | number;
+            }>
         ) => {
             console.debug("[Debug] onDrop", data);
             if (data.item?.type === "Tab") {
                 if (maskPartRef.current != null) {
                     if (data.item.layoutSymbol === layoutSymbol) {
                         sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
-                            symbol: symbol,
+                            symbol: nodeId,
                             searchId: data.item.id,
                             targetId: nodeId,
                             mask: maskPartRef.current,
@@ -128,7 +131,7 @@ const Panel = (props: { nodeId: string }) => {
                             data.item.layoutSymbol,
                             SLOT_EVENT.REMOVE_PANEL,
                             {
-                                symbol: symbol,
+                                symbol: nodeId,
                                 searchId: data.item.id,
                             }
                         );
@@ -145,7 +148,6 @@ const Panel = (props: { nodeId: string }) => {
             setMaskPart,
             slot,
             sns,
-            symbol,
         ]
     );
 

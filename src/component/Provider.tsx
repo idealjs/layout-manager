@@ -24,7 +24,7 @@ const Provider: FC<{
     factory: CMPTFactory;
     Tab?: TABCMPT;
     RID?: string;
-    layoutSymbol?: symbol;
+    layoutSymbol?: string|number;
 }> = (props) => {
     const { children, factory, Tab, RID, layoutSymbol } = props;
 

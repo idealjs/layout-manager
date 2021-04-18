@@ -28,6 +28,10 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const update = useUpdate(layoutNode, rect);
 
+    useEffect(() => {
+        sns.broadcast("ready", { layoutSymbol });
+    }, [layoutSymbol, sns]);
+
     const addPanel = useCallback(
         (data) => {
             layoutNode.addPanelNode(data.panelNode, data.mask, data.targetId);

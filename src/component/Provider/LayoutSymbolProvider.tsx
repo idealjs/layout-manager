@@ -1,13 +1,13 @@
 import { uniqueId } from "lodash";
-import { createContext, FC, useContext, useMemo } from "react";
+import { createContext, FC, useContext, useState } from "react";
 
-const context = createContext<symbol | null>(null);
+const context = createContext<string | number | null>(null);
 
-const Provider: FC<{ uniqueSymbol?: symbol }> = (props) => {
+const Provider: FC<{ uniqueSymbol?: string | number }> = (props) => {
     const { uniqueSymbol, children } = props;
-    const layoutSymbol = useMemo(() => {
-        return uniqueSymbol != null ? uniqueSymbol : Symbol(uniqueId());
-    }, [uniqueSymbol]);
+    const [layoutSymbol] = useState(() =>
+        uniqueSymbol ? uniqueSymbol : uniqueId()
+    );
     return <context.Provider value={layoutSymbol}>{children}</context.Provider>;
 };
 

@@ -1,5 +1,5 @@
 import { CSSProperties, forwardRef, useCallback } from "react";
-import { TABCMPT } from "@idealjs/layout-manager";
+import { TABCMPT, useSlot } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
 import Pop from "../svg/Popout";
@@ -29,10 +29,14 @@ const close = {
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
     const { setPortalState } = usePopout();
+    const slot = useSlot(nodeId);
     const onPopout = useCallback(() => {
         console.log("[Debug] popout");
+        slot.addListener("ready", (data) => {
+            console.log("test test", data);
+        });
         setPortalState((s) => [...s, uniqueId()]);
-    }, [setPortalState]);
+    }, [setPortalState, slot]);
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div
