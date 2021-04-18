@@ -4,7 +4,7 @@ import { FC } from "react";
 import { createPortal } from "react-dom";
 import { useStateRef } from "@idealjs/layout-manager";
 import { useCallback } from "react";
-import { usePopout } from "./Popout";
+import { usePopout } from "./PopoutManager";
 
 const Portal: FC<{ id: string }> = (props) => {
     const { children, id } = props;

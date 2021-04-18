@@ -11,7 +11,7 @@ import {
     ROOTID,
     useUpdate,
 } from "@idealjs/layout-manager";
-import Popout, { PopoutContext } from "./component/Popout";
+import PopoutManager, { PopoutContext } from "./component/PopoutManager";
 import { Fragment } from "react";
 import { uniqueId } from "lodash";
 import CustomTab from "./component/CustomTab";
@@ -201,7 +201,7 @@ function App() {
                         <Layout layoutNode={ROOT} />
                     </Provider>
                 </div>
-                <Popout />
+                <PopoutManager />
             </PopoutContext.Provider>
         </Fragment>
     );

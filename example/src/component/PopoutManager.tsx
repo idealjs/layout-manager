@@ -23,7 +23,7 @@ const ROOT = new LayoutNode({
     layoutJSON: layoutJSON as ILayoutJSON,
 });
 
-const Popout = () => {
+const PopoutManager = () => {
     const { portalState } = usePopout();
 
     return (
@@ -41,7 +41,7 @@ const Popout = () => {
     );
 };
 
-export default Popout;
+export default PopoutManager;
 
 export const usePopout = () => {
     const ctx = useContext(PopoutContext);

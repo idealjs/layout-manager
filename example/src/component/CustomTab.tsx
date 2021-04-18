@@ -1,9 +1,17 @@
 import { CSSProperties, forwardRef, useCallback } from "react";
-import { TABCMPT, useSlot } from "@idealjs/layout-manager";
+import {
+    MASK_PART,
+    SLOT_EVENT,
+    usePanel,
+    TABCMPT,
+    useSlot,
+    useSns,
+    ROOTID,
+} from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
 import Pop from "../svg/Popout";
-import { usePopout } from "./Popout";
+import { usePopout } from "./PopoutManager";
 import { uniqueId } from "lodash";
 
 const root: CSSProperties = {
@@ -29,16 +37,26 @@ const close = {
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
     const { setPortalState } = usePopout();
+    const sns = useSns();
     const slot = useSlot(nodeId);
+
+    const panelNode = usePanel(nodeId);
+
     const onPopout = useCallback(() => {
         console.debug("[Debug] popout");
-        slot.addListener("ready", (data) => {
+        slot.addListener("ready", (data: { layoutSymbol: string | number }) => {
             console.debug("[Debug] popout ready", data);
+            console.log("test ", panelNode);
+            // sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
+            //     panelNode: panelNode,
+            //     mask: MASK_PART.CENTER,
+            //     targetId: ROOTID,
+            // });
         });
         setPortalState((s) => {
             return [...s, uniqueId()];
         });
-    }, [setPortalState, slot]);
+    }, [panelNode, setPortalState, slot, sns]);
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div
