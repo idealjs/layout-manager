@@ -18,7 +18,7 @@ const PopoutManager = () => {
     return (
         <Fragment>
             {portalState.map((d) => {
-                return <Popout portalId={d} />;
+                return <Popout key={d} portalId={d} />;
             })}
         </Fragment>
     );
