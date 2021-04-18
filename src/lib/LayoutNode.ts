@@ -527,33 +527,7 @@ class LayoutNode {
             panelNode.remove();
         }
 
-        const direction = directionFromMask(mask);
-        if (mask === MASK_PART.CENTER) {
-            oldLayout.appendPanelNode(panelNode);
-        } else {
-            const tabLayout = new LayoutNode({
-                layoutJSON: { direction: LAYOUT_DIRECTION.TAB },
-            });
-            tabLayout.appendPanelNode(panelNode);
-            const layout = new LayoutNode({
-                layoutJSON: { direction: direction },
-            });
-
-            if (oldLayout == null) {
-                throw new Error("");
-            }
-            oldLayout.parent?.replaceChild(layout, oldLayout);
-            oldLayout.primaryOffset = 0;
-            oldLayout.secondaryOffset = 0;
-            if (mask === MASK_PART.LEFT || mask === MASK_PART.TOP) {
-                layout.appendLayoutNode(tabLayout, oldLayout);
-            }
-            if (mask === MASK_PART.RIGHT || mask === MASK_PART.BOTTOM) {
-                layout.appendLayoutNode(oldLayout, tabLayout);
-            }
-        }
-        panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
-        panelNode.selected = true;
+        this.addPanelNode(panelNode, mask, oldLayout);
     }
 
     public findNodeByRules(

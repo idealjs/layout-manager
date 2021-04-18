@@ -145,6 +145,7 @@ const factory: CMPTFactory = (page: string) => {
                             { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
                             { part: MASK_PART.CENTER, max: 2 },
                         ]);
+                        console.debug("[Debug] target is", target);
                         if (target) {
                             const test = new PanelNode({
                                 panelJSON: {
@@ -188,7 +189,6 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     const [portalState, setPortalState] = useState<string[]>([]);
-    // const [mainLayoutSymbol] = useState(Symbol("mainLayout"));
 
     return (
         <Fragment>

@@ -28,12 +28,9 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
 
     const update = useUpdate(layoutNode, rect);
 
-    useEffect(() => {
-        sns.broadcast("ready", { layoutSymbol });
-    }, [layoutSymbol, sns]);
-
     const addPanel = useCallback(
         (data) => {
+            console.debug("[Debug] addPanel", data);
             layoutNode.addPanelNode(data.panelNode, data.mask, data.targetId);
             update();
         },
@@ -104,6 +101,8 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
         slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
         slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
 
+        sns.broadcast("ready", { layoutSymbol });
+
         return () => {
             slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
             slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
@@ -111,15 +110,7 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
             slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
             slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
         };
-    }, [
-        addPanel,
-        movePanel,
-        moveSplitter,
-        removePanel,
-        selectTab,
-        slot,
-        update,
-    ]);
+    }, [addPanel, layoutSymbol, movePanel, moveSplitter, removePanel, selectTab, slot, sns, update]);
 
     return (
         <div
