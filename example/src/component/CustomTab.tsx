@@ -31,11 +31,13 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { setPortalState } = usePopout();
     const slot = useSlot(nodeId);
     const onPopout = useCallback(() => {
-        console.log("[Debug] popout");
+        console.debug("[Debug] popout");
         slot.addListener("ready", (data) => {
-            console.log("test test", data);
+            console.debug("[Debug] popout ready", data);
         });
-        setPortalState((s) => [...s, uniqueId()]);
+        setPortalState((s) => {
+            return [...s, uniqueId()];
+        });
     }, [setPortalState, slot]);
     return (
         <div id={nodeId} className={"Tab"} style={root}>

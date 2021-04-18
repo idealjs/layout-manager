@@ -3,35 +3,44 @@ import {
     useCallback,
     useLayoutEffect,
     useMemo,
+    useRef,
     useState,
 } from "react";
+
+import useMountedRef from "./useMounted";
 
 const useRect = (
     ref: MutableRefObject<HTMLDivElement | null>
 ): [
-    {
-        height: number;
-        width: number;
-    }
-] => {
+        {
+            height: number;
+            width: number;
+        }
+    ] => {
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
+    const requestRef = useRef<number>();
+    const { mountedRef } = useMountedRef();
 
     const setRect = useCallback(() => {
         if (
             height !== ref.current?.getBoundingClientRect().height ||
             width !== ref.current?.getBoundingClientRect().width
         ) {
-            setHeight(ref.current?.getBoundingClientRect().height || 0);
-            setWidth(ref.current?.getBoundingClientRect().width || 0);
+            if (mountedRef.current === true) {
+                setHeight(ref.current?.getBoundingClientRect().height || 0);
+                setWidth(ref.current?.getBoundingClientRect().width || 0);
+            }
         }
-        requestAnimationFrame(setRect);
-    }, [height, ref, width]);
+        requestRef.current = requestAnimationFrame(setRect);
+    }, [height, mountedRef, ref, width]);
 
     useLayoutEffect(() => {
-        const count = requestAnimationFrame(setRect);
+        requestRef.current = requestAnimationFrame(setRect);
         return () => {
-            cancelAnimationFrame(count);
+            if (requestRef.current != null) {
+                cancelAnimationFrame(requestRef.current);
+            }
         };
     }, [ref, setRect]);
 

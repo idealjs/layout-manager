@@ -31,7 +31,7 @@ const Popout = () => {
             {portalState.map((d) => {
                 return (
                     <Provider key={d} factory={() => () => <div>test</div>}>
-                        <Portal>
+                        <Portal id={d}>
                             <Layout layoutNode={ROOT} />
                         </Portal>
                     </Provider>
