@@ -359,21 +359,24 @@ class LayoutNode {
         predicate: (layoutNode: LayoutNode, level: number) => boolean,
         level = 0
     ): LayoutNode | null {
-        let result = this.layoutNodes.reduce(
-            (p: LayoutNode | null, c: LayoutNode) => {
-                if (p != null) {
-                    return p;
-                }
-                if (predicate(c, level)) {
-                    return c;
-                }
-                return null;
-            },
-            null
-        );
-        if (result != null) {
-            return result;
+        if (predicate(this, level)) {
+            return this;
         }
+        // let result = this.layoutNodes.reduce(
+        //     (p: LayoutNode | null, c: LayoutNode) => {
+        //         if (p != null) {
+        //             return p;
+        //         }
+        //         if (predicate(c, level)) {
+        //             return c;
+        //         }
+        //         return null;
+        //     },
+        //     null
+        // );
+        // if (result != null) {
+        //     return result;
+        // }
 
         return this.layoutNodes.reduce(
             (p: LayoutNode | null, c: LayoutNode) => {
@@ -450,11 +453,33 @@ class LayoutNode {
         const oldLayout =
             target instanceof LayoutNode
                 ? target
-                : this.findPanelNode((p) => p.id === target)?.parent;
+                : this.findPanelNode((p) => p.id === target)?.parent || this.findLayoutNode((p) => p.id === target);
+
+        console.log("test test next add", target, oldLayout)
+
+        if (oldLayout?.direction === LAYOUT_DIRECTION.ROOT) {
+
+            // const layoutNode = new LayoutNode(
+
+            // )
+            if (oldLayout.layoutNodes.length !== 0) {
+                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
+            } else {
+                oldLayout.appendLayoutNode(new LayoutNode({
+                    layoutJSON: {
+                        direction: LAYOUT_DIRECTION.TAB
+                    }
+                }))
+                console.log("test test next add")
+                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
+            }
+            return this;
+        }
 
         if (oldLayout == null) {
             throw new Error("");
         }
+
         if (mask === MASK_PART.CENTER) {
             oldLayout.appendPanelNode(panelNode);
         } else {
@@ -481,6 +506,7 @@ class LayoutNode {
         }
         panelNode.parent?.panelNodes.forEach((p) => (p.selected = false));
         panelNode.selected = true;
+        return this;
     }
 
     public removePanelNode(data: {
@@ -556,7 +582,7 @@ class LayoutNode {
                         l.panelNodes.length < c.max
                     ) {
                         if (c.limitLevel != null) {
-                            if (c.limitLevel >= level) {
+                            if (c.limitLevel >= (level - 1)) {
                                 return true;
                             }
                         } else {
@@ -568,19 +594,19 @@ class LayoutNode {
                         if (
                             l.direction === direction &&
                             l.layoutNodes.length < c.max &&
-                            level <= index
+                            (level - 1) <= index
                         ) {
                             if (c.limitLevel != null) {
-                                if (c.limitLevel >= level) {
+                                if (c.limitLevel >= (level - 1)) {
                                     return true;
                                 }
                             } else {
                                 return true;
                             }
                         }
-                        if (l.direction !== direction && level === index) {
+                        if (l.direction !== direction && (level - 1) === index) {
                             if (c.limitLevel != null) {
-                                if (c.limitLevel >= level) {
+                                if (c.limitLevel >= (level - 1)) {
                                     return true;
                                 }
                             } else {

@@ -7,6 +7,7 @@ import {
     useSlot,
     useSns,
     PanelNode,
+    ROOTID,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
@@ -52,8 +53,8 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             slot.removeListener("ready", popoutReady);
             sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: panelNode,
-                mask: MASK_PART.RIGHT,
-                targetId: "X_P_A_A",
+                mask: MASK_PART.CENTER,
+                targetId: ROOTID,
             });
         },
         [panel, slot, sns]

@@ -3,29 +3,6 @@
     "direction": "ROOT",
     "primaryOffset": 0,
     "secondaryOffset": 0,
-    "layouts": [
-        {
-            "id": "mainN",
-            "direction": "COL",
-            "primaryOffset": 0,
-            "secondaryOffset": 0,
-            "layouts": [
-                {
-                    "id": "N_A",
-                    "direction": "TAB",
-                    "primaryOffset": 0,
-                    "secondaryOffset": 0,
-                    "layouts": [],
-                    "panels": [
-                        {
-                            "id": "X_P_A_A",
-                            "page": "test2"
-                        }
-                    ]
-                }
-            ],
-            "panels": []
-        }
-    ],
+    "layouts": [],
     "panels": []
 }
