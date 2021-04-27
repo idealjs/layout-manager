@@ -8,10 +8,11 @@ import {
     useSns,
     PanelNode,
     ROOTID,
+    useLayoutSymbol,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
-import Pop from "../svg/Popout";
+import Popout from "../svg/Popout";
 import { usePopout } from "./PopoutManager";
 import { uniqueId } from "lodash";
 
@@ -38,6 +39,7 @@ const close = {
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
     const { setPortalState } = usePopout();
+    const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(nodeId);
 
@@ -46,18 +48,23 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const popoutReady = useCallback(
         (data: { layoutSymbol: string | number }) => {
             console.debug("[Debug] popout ready", data);
-            console.log("test test", panel);
             const panelNode = new PanelNode({
                 panelJSON: panel!,
             });
             slot.removeListener("ready", popoutReady);
+            sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+                searchId: panelNode.id,
+                mask: MASK_PART.CENTER,
+                targetId: ROOTID,
+            });
+
             sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: panelNode,
                 mask: MASK_PART.CENTER,
                 targetId: ROOTID,
             });
         },
-        [panel, slot, sns]
+        [layoutSymbol, panel, slot, sns]
     );
 
     const onPopout = useCallback(() => {
@@ -77,7 +84,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 {nodeTitle}
             </div>
             <div style={close} onClick={onPopout}>
-                <Pop />
+                <Popout />
             </div>
             <div style={close} onClick={onClose}>
                 <Close />

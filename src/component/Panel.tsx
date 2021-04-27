@@ -4,10 +4,11 @@ import { MASK_PART, SLOT_EVENT } from "../enum";
 import useStateRef from "../hook/useStateRef";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDropData } from "../lib/dnd/type";
+import PanelNode from "../lib/PanelNode";
 import { useFactory } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel } from "./Provider/PanelsProvider";
-import { useSlot, useSns } from "./Provider/SnsProvider";
+import { useSns } from "./Provider/SnsProvider";
 
 const top: CSSProperties = {
     zIndex: 1,
@@ -72,7 +73,6 @@ const Panel = (props: { nodeId: string }) => {
     );
     const dnd = useDnd();
     const sns = useSns();
-    const slot = useSlot(nodeId);
     const layoutSymbol = useLayoutSymbol();
     const hidden = useMemo(() => !panel.selected, [panel.selected]);
     const maskPartStyle = useMemo(() => {
@@ -92,22 +92,12 @@ const Panel = (props: { nodeId: string }) => {
         }
     }, [maskPart]);
 
-    const onNodeRemoved = useCallback(
-        (data) => {
-            slot.removeListener(SLOT_EVENT.NODE_REMOVED, onNodeRemoved);
-            sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
-                panelNode: data.panelNode,
-                mask: maskPartRef.current,
-                targetId: nodeId,
-            });
-        },
-        [layoutSymbol, maskPartRef, nodeId, slot, sns]
-    );
-
     const onDrop = useCallback(
         (
             data: IDropData<{
                 id: string;
+                data: any;
+                page: string;
                 type: string;
                 layoutSymbol: string | number;
             }>
@@ -123,10 +113,17 @@ const Panel = (props: { nodeId: string }) => {
                             mask: maskPartRef.current,
                         });
                     } else {
-                        slot.addListener(
-                            SLOT_EVENT.NODE_REMOVED,
-                            onNodeRemoved
-                        );
+                        sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
+                            panelNode: new PanelNode({
+                                panelJSON: {
+                                    id: data.item.id,
+                                    data: data.item.data,
+                                    page: data.item.page,
+                                },
+                            }),
+                            mask: maskPartRef.current,
+                            targetId: nodeId,
+                        });
                         sns.send(
                             data.item.layoutSymbol,
                             SLOT_EVENT.REMOVE_PANEL,
@@ -140,15 +137,7 @@ const Panel = (props: { nodeId: string }) => {
                 setMaskPart(null);
             }
         },
-        [
-            layoutSymbol,
-            maskPartRef,
-            nodeId,
-            onNodeRemoved,
-            setMaskPart,
-            slot,
-            sns,
-        ]
+        [layoutSymbol, maskPartRef, nodeId, setMaskPart, sns]
     );
 
     const onDragLeave = useCallback(
