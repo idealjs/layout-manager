@@ -13,9 +13,10 @@ import {
 
 import Close from "../svg/Close";
 import Popout from "../svg/Popout";
-import { usePopout } from "./PopoutManager";
+import { usePortals } from "./PopoutManager";
 import { uniqueId } from "lodash";
 import { useMemo } from "react";
+import Popin from "../svg/Popin";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -39,21 +40,19 @@ const close = {
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
-    const { setPortalState } = usePopout();
+    const { setPortals } = usePortals();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(nodeId);
 
     const panel = usePanel(nodeId);
 
-    const { portalState } = usePopout();
+    const { portals } = usePortals();
 
-    const popout = useMemo(() => portalState.includes(layoutSymbol), [
+    const popout = useMemo(() => portals.includes(layoutSymbol), [
         layoutSymbol,
-        portalState,
+        portals,
     ]);
-
-    console.log(layoutSymbol, popout);
 
     const popoutReady = useCallback(
         (data: { layoutSymbol: string | number }) => {
@@ -77,13 +76,16 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
         [layoutSymbol, panel, slot, sns]
     );
 
-    const onPopout = useCallback(() => {
-        console.debug("[Debug] popout");
-        slot.addListener("ready", popoutReady);
-        setPortalState((s) => {
-            return [...s, uniqueId()];
-        });
-    }, [popoutReady, setPortalState, slot]);
+    const onPopClick = useCallback(() => {
+        if (popout) {
+        } else {
+            console.debug("[Debug] popout");
+            slot.addListener("ready", popoutReady);
+            setPortals((s) => {
+                return [...s, uniqueId()];
+            });
+        }
+    }, [popout, popoutReady, setPortals, slot]);
 
     return (
         <div id={nodeId} className={"Tab"} style={root}>
@@ -94,8 +96,8 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             >
                 {nodeTitle}
             </div>
-            <div style={close} onClick={onPopout}>
-                <Popout />
+            <div style={close} onClick={onPopClick}>
+                {popout ? <Popin /> : <Popout />}
             </div>
             <div style={close} onClick={onClose}>
                 <Close />

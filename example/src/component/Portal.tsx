@@ -4,7 +4,7 @@ import { FC } from "react";
 import { createPortal } from "react-dom";
 import { useStateRef } from "@idealjs/layout-manager";
 import { useCallback } from "react";
-import { usePopout } from "./PopoutManager";
+import { usePortals } from "./PopoutManager";
 
 const Portal: FC<{ id: string | number }> = (props) => {
     const { children, id } = props;
@@ -14,15 +14,15 @@ const Portal: FC<{ id: string | number }> = (props) => {
         externalWindow,
         setExternalWindow,
     ] = useStateRef<Window | null>(null);
-    const { setPortalState } = usePopout();
+    const { setPortals } = usePortals();
 
     const onMainBeforeunload = useCallback(() => {
         externalWindowRef.current?.close();
     }, [externalWindowRef]);
 
     const onExternalBeforeunload = useCallback(() => {
-        setPortalState((state) => state.filter((d) => d !== id));
-    }, [id, setPortalState]);
+        setPortals((state) => state.filter((d) => d !== id));
+    }, [id, setPortals]);
 
     useEffect(() => {
         container.style.height = "100%";

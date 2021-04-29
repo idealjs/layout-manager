@@ -11,7 +11,7 @@ import {
     ROOTID,
     useUpdate,
 } from "@idealjs/layout-manager";
-import PopoutManager, { PopoutContext } from "./component/PopoutManager";
+import PopoutManager, { PortalsContext } from "./component/PopoutManager";
 import { Fragment } from "react";
 import { uniqueId } from "lodash";
 import CustomTab from "./component/CustomTab";
@@ -188,11 +188,11 @@ const factory: CMPTFactory = (page: string) => {
 };
 
 function App() {
-    const [portalState, setPortalState] = useState<(string | number)[]>([]);
+    const [portals, setPortals] = useState<(string | number)[]>([]);
 
     return (
         <Fragment>
-            <PopoutContext.Provider value={{ portalState, setPortalState }}>
+            <PortalsContext.Provider value={{ portals, setPortals }}>
                 <div
                     className="App"
                     style={{ height: "100vh", width: "100vW" }}
@@ -206,7 +206,7 @@ function App() {
                     </Provider>
                 </div>
                 <PopoutManager />
-            </PopoutContext.Provider>
+            </PortalsContext.Provider>
         </Fragment>
     );
 }

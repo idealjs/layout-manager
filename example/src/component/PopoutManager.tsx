@@ -7,17 +7,17 @@ import {
 } from "react";
 import Popout from "./Popout";
 
-export const PopoutContext = createContext<{
-    portalState: (string | number)[];
-    setPortalState: Dispatch<SetStateAction<(string | number)[]>>;
+export const PortalsContext = createContext<{
+    portals: (string | number)[];
+    setPortals: Dispatch<SetStateAction<(string | number)[]>>;
 } | null>(null);
 
 const PopoutManager = () => {
-    const { portalState } = usePopout();
+    const { portals } = usePortals();
 
     return (
         <Fragment>
-            {portalState.map((d) => {
+            {portals.map((d) => {
                 return <Popout key={d} portalId={d} />;
             })}
         </Fragment>
@@ -26,8 +26,8 @@ const PopoutManager = () => {
 
 export default PopoutManager;
 
-export const usePopout = () => {
-    const ctx = useContext(PopoutContext);
+export const usePortals = () => {
+    const ctx = useContext(PortalsContext);
     if (ctx == null) {
         throw new Error("");
     }
