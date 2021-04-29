@@ -6,7 +6,7 @@ import { useStateRef } from "@idealjs/layout-manager";
 import { useCallback } from "react";
 import { usePopout } from "./PopoutManager";
 
-const Portal: FC<{ id: string }> = (props) => {
+const Portal: FC<{ id: string | number }> = (props) => {
     const { children, id } = props;
     const [container] = useState(document.createElement("div"));
     const [
@@ -25,8 +25,8 @@ const Portal: FC<{ id: string }> = (props) => {
     }, [id, setPortalState]);
 
     useEffect(() => {
-        container.style.height = "400px";
-        container.style.width = "600px";
+        container.style.height = "100%";
+        container.style.width = "100%";
         const externalWindow = window.open(
             "",
             "",

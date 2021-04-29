@@ -15,6 +15,7 @@ import Close from "../svg/Close";
 import Popout from "../svg/Popout";
 import { usePopout } from "./PopoutManager";
 import { uniqueId } from "lodash";
+import { useMemo } from "react";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -45,6 +46,15 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
 
     const panel = usePanel(nodeId);
 
+    const { portalState } = usePopout();
+
+    const popout = useMemo(() => portalState.includes(layoutSymbol), [
+        layoutSymbol,
+        portalState,
+    ]);
+
+    console.log(layoutSymbol, popout);
+
     const popoutReady = useCallback(
         (data: { layoutSymbol: string | number }) => {
             console.debug("[Debug] popout ready", data);
@@ -74,6 +84,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             return [...s, uniqueId()];
         });
     }, [popoutReady, setPortalState, slot]);
+
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div

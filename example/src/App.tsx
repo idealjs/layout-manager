@@ -188,7 +188,7 @@ const factory: CMPTFactory = (page: string) => {
 };
 
 function App() {
-    const [portalState, setPortalState] = useState<string[]>([]);
+    const [portalState, setPortalState] = useState<(string | number)[]>([]);
 
     return (
         <Fragment>
@@ -197,7 +197,11 @@ function App() {
                     className="App"
                     style={{ height: "100vh", width: "100vW" }}
                 >
-                    <Provider factory={factory} Tab={CustomTab}>
+                    <Provider
+                        layoutSymbol="mainlayout"
+                        factory={factory}
+                        Tab={CustomTab}
+                    >
                         <Layout layoutNode={ROOT} />
                     </Provider>
                 </div>

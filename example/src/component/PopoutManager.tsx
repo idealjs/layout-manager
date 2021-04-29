@@ -8,8 +8,8 @@ import {
 import Popout from "./Popout";
 
 export const PopoutContext = createContext<{
-    portalState: string[];
-    setPortalState: Dispatch<SetStateAction<string[]>>;
+    portalState: (string | number)[];
+    setPortalState: Dispatch<SetStateAction<(string | number)[]>>;
 } | null>(null);
 
 const PopoutManager = () => {
