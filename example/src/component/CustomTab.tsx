@@ -17,6 +17,7 @@ import { usePortals } from "./PopoutManager";
 import { uniqueId } from "lodash";
 import { useMemo } from "react";
 import Popin from "../svg/Popin";
+import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -41,6 +42,7 @@ const close = {
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
     const { setPortals } = usePortals();
+    const mainLayoutSymbol = useMainLayoutSymbol();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(nodeId);
@@ -78,6 +80,21 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
 
     const onPopClick = useCallback(() => {
         if (popout) {
+            console.debug("[Debug] popint");
+            const panelNode = new PanelNode({
+                panelJSON: panel!,
+            });
+            sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+                searchId: panelNode.id,
+                mask: MASK_PART.CENTER,
+                targetId: ROOTID,
+            });
+
+            sns.send(mainLayoutSymbol, "popin", {
+                panelNode: panelNode,
+                mask: MASK_PART.CENTER,
+                targetId: ROOTID,
+            });
         } else {
             console.debug("[Debug] popout");
             slot.addListener("ready", popoutReady);
@@ -85,7 +102,16 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 return [...s, uniqueId()];
             });
         }
-    }, [popout, popoutReady, setPortals, slot]);
+    }, [
+        layoutSymbol,
+        mainLayoutSymbol,
+        panel,
+        popout,
+        popoutReady,
+        setPortals,
+        slot,
+        sns,
+    ]);
 
     return (
         <div id={nodeId} className={"Tab"} style={root}>

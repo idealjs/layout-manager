@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
     Fragment,
     SetStateAction,
@@ -7,10 +8,12 @@ import {
 } from "react";
 import Popout from "./Popout";
 
-export const PortalsContext = createContext<{
+type ContextType = {
     portals: (string | number)[];
     setPortals: Dispatch<SetStateAction<(string | number)[]>>;
-} | null>(null);
+} | null;
+
+const PortalsContext = createContext<ContextType>(null);
 
 const PopoutManager = () => {
     const { portals } = usePortals();
@@ -25,6 +28,15 @@ const PopoutManager = () => {
 };
 
 export default PopoutManager;
+
+export const PortalsProvider: FC<NonNullable<ContextType>> = (props) => {
+    const { portals, setPortals, children } = props;
+    return (
+        <PortalsContext.Provider value={{ portals, setPortals }}>
+            {children}
+        </PortalsContext.Provider>
+    );
+};
 
 export const usePortals = () => {
     const ctx = useContext(PortalsContext);

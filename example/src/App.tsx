@@ -11,10 +11,11 @@ import {
     ROOTID,
     useUpdate,
 } from "@idealjs/layout-manager";
-import PopoutManager, { PortalsContext } from "./component/PopoutManager";
+import PopoutManager, { PortalsProvider } from "./component/PopoutManager";
 import { Fragment } from "react";
 import { uniqueId } from "lodash";
 import CustomTab from "./component/CustomTab";
+import MainLayoutSymbolProvider from "./component/MainLayoutSymbolProvider";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -189,24 +190,26 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     const [portals, setPortals] = useState<(string | number)[]>([]);
-
+    const [mainLayoutSymbol] = useState("mainLayout");
     return (
         <Fragment>
-            <PortalsContext.Provider value={{ portals, setPortals }}>
-                <div
-                    className="App"
-                    style={{ height: "100vh", width: "100vW" }}
-                >
-                    <Provider
-                        layoutSymbol="mainlayout"
-                        factory={factory}
-                        Tab={CustomTab}
+            <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
+                <PortalsProvider portals={portals} setPortals={setPortals}>
+                    <div
+                        className="App"
+                        style={{ height: "100vh", width: "100vW" }}
                     >
-                        <Layout layoutNode={ROOT} />
-                    </Provider>
-                </div>
-                <PopoutManager />
-            </PortalsContext.Provider>
+                        <Provider
+                            layoutSymbol={mainLayoutSymbol}
+                            factory={factory}
+                            Tab={CustomTab}
+                        >
+                            <Layout layoutNode={ROOT} />
+                        </Provider>
+                    </div>
+                    <PopoutManager />
+                </PortalsProvider>
+            </MainLayoutSymbolProvider>
         </Fragment>
     );
 }
