@@ -511,24 +511,13 @@ class LayoutNode {
 
     public removePanelNode(data: {
         searchId: string; //panelNodeId
-        targetId?: string; //panelNodeId
-        mask?: MASK_PART;
     }) {
         const panelNode = this.findPanelNode((p) => p.id === data.searchId);
 
         if (panelNode == null) {
             throw new Error("");
         }
-        if (data.searchId === data.targetId && data.mask === MASK_PART.CENTER) {
-            return;
-        }
 
-        if (
-            panelNode?.parent?.panelNodes.length === 1 &&
-            data.searchId === data.targetId
-        ) {
-            return;
-        }
         panelNode.remove();
 
         return panelNode;
