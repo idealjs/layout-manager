@@ -3,6 +3,7 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { SLOT_EVENT } from "../enum";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDragData } from "../lib/dnd/type";
+import { MOVE_SPLITTER_DATA } from "../lib/type";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
@@ -80,10 +81,10 @@ const Splitter = (props: {
         };
         const onDragEnd = () => {
             sns.send(layoutSymbol, SLOT_EVENT.MOVE_SPLITTER, {
-                primaryId,
-                secondaryId,
+                primary: primaryId,
+                secondary: secondaryId,
                 offset,
-            });
+            } as MOVE_SPLITTER_DATA);
             setDragging(false);
             setMovingOffset(0);
         };

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { SLOT_EVENT } from "../enum";
 import { useDnd } from "../lib/dnd";
+import { REMOVE_PANEL_DATA, SELECT_TAB_DATA } from "../lib/type";
 import { useCustomTab } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel } from "./Provider/PanelsProvider";
@@ -18,7 +19,9 @@ const Tab = (props: { nodeId: string }) => {
     const layoutSymbol = useLayoutSymbol();
 
     const onSelect = useCallback(() => {
-        sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, { id: nodeId });
+        sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
+            selected: nodeId,
+        } as SELECT_TAB_DATA);
     }, [layoutSymbol, nodeId, sns]);
 
     useEffect(() => {
@@ -39,7 +42,9 @@ const Tab = (props: { nodeId: string }) => {
     }, [dnd, layoutSymbol, node, nodeId]);
 
     const closeTab = useCallback(() => {
-        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, { searchId: nodeId });
+        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+            search: nodeId,
+        } as REMOVE_PANEL_DATA);
     }, [layoutSymbol, nodeId, sns]);
 
     const CustomTab = useCustomTab();

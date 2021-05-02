@@ -454,14 +454,7 @@ class LayoutNode {
             target instanceof LayoutNode
                 ? target
                 : this.findPanelNode((p) => p.id === target)?.parent || this.findLayoutNode((p) => p.id === target);
-
-        console.log("test test next add", target, oldLayout)
-
         if (oldLayout?.direction === LAYOUT_DIRECTION.ROOT) {
-
-            // const layoutNode = new LayoutNode(
-
-            // )
             if (oldLayout.layoutNodes.length !== 0) {
                 this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
             } else {
@@ -470,7 +463,6 @@ class LayoutNode {
                         direction: LAYOUT_DIRECTION.TAB
                     }
                 }))
-                console.log("test test next add")
                 this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
             }
             return this;
@@ -509,10 +501,8 @@ class LayoutNode {
         return this;
     }
 
-    public removePanelNode(data: {
-        searchId: string; //panelNodeId
-    }) {
-        const panelNode = this.findPanelNode((p) => p.id === data.searchId);
+    public removePanelNode(searchId: string) {
+        const panelNode = this.findPanelNode((p) => p.id === searchId);
 
         if (panelNode == null) {
             throw new Error("");

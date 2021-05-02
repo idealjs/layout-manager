@@ -4,6 +4,13 @@ import { SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
 import useUpdate from "../hook/useUpdate";
 import LayoutNode from "../lib/LayoutNode";
+import {
+    ADD_PANEL_DATA,
+    MOVE_PANEL_DATA,
+    MOVE_SPLITTER_DATA,
+    REMOVE_PANEL_DATA,
+    SELECT_TAB_DATA,
+} from "../lib/type";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import Panel from "./Panel";
 import { useLayouts } from "./Provider/LayoutsProvider";
@@ -29,34 +36,34 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     const update = useUpdate(layoutNode, rect);
 
     const addPanel = useCallback(
-        (data) => {
+        (data: ADD_PANEL_DATA) => {
             console.debug("[Debug] addPanel", data);
-            layoutNode.addPanelNode(data.panelNode, data.mask, data.targetId);
+            layoutNode.addPanelNode(data.panelNode, data.mask, data.target);
             update();
         },
         [layoutNode, update]
     );
 
     const removePanel = useCallback(
-        (data) => {
-            layoutNode.removePanelNode(data);
+        (data: REMOVE_PANEL_DATA) => {
+            layoutNode.removePanelNode(data.search);
             update();
         },
         [layoutNode, update]
     );
 
     const movePanel = useCallback(
-        (data) => {
-            layoutNode.movePanelNode(data.searchId, data.mask, data.targetId);
+        (data: MOVE_PANEL_DATA) => {
+            layoutNode.movePanelNode(data.search, data.mask, data.target);
             update();
         },
         [layoutNode, update]
     );
 
     const moveSplitter = useCallback(
-        (data) => {
-            const primaryNode = layoutNode.getLayoutById(data.primaryId);
-            const secondaryNode = layoutNode.getLayoutById(data.secondaryId);
+        (data: MOVE_SPLITTER_DATA) => {
+            const primaryNode = layoutNode.getLayoutById(data.primary);
+            const secondaryNode = layoutNode.getLayoutById(data.secondary);
 
             if (primaryNode != null && secondaryNode != null) {
                 primaryNode.secondaryOffset =
@@ -70,8 +77,8 @@ const Layout = (props: { layoutNode: LayoutNode }) => {
     );
 
     const selectTab = useCallback(
-        (data) => {
-            const panelNode = layoutNode.getPanelById(data.id);
+        (data: SELECT_TAB_DATA) => {
+            const panelNode = layoutNode.getPanelById(data.selected);
 
             if (
                 panelNode != null &&

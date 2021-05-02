@@ -5,6 +5,11 @@ import useStateRef from "../hook/useStateRef";
 import { DND_EVENT, useDnd } from "../lib/dnd";
 import { IDropData } from "../lib/dnd/type";
 import PanelNode from "../lib/PanelNode";
+import {
+    ADD_PANEL_DATA,
+    MOVE_PANEL_DATA,
+    REMOVE_PANEL_DATA,
+} from "../lib/type";
 import { useFactory } from "./Provider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanel } from "./Provider/PanelsProvider";
@@ -107,11 +112,10 @@ const Panel = (props: { nodeId: string }) => {
                 if (maskPartRef.current != null) {
                     if (data.item.layoutSymbol === layoutSymbol) {
                         sns.send(layoutSymbol, SLOT_EVENT.MOVE_PANEL, {
-                            symbol: nodeId,
-                            searchId: data.item.id,
-                            targetId: nodeId,
+                            search: data.item.id,
+                            target: nodeId,
                             mask: maskPartRef.current,
-                        });
+                        } as MOVE_PANEL_DATA);
                     } else {
                         sns.send(layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                             panelNode: new PanelNode({
@@ -122,15 +126,14 @@ const Panel = (props: { nodeId: string }) => {
                                 },
                             }),
                             mask: maskPartRef.current,
-                            targetId: nodeId,
-                        });
+                            target: nodeId,
+                        } as ADD_PANEL_DATA);
                         sns.send(
                             data.item.layoutSymbol,
                             SLOT_EVENT.REMOVE_PANEL,
                             {
-                                symbol: nodeId,
-                                searchId: data.item.id,
-                            }
+                                search: data.item.id,
+                            } as REMOVE_PANEL_DATA
                         );
                     }
                 }

@@ -9,6 +9,8 @@ import {
     PanelNode,
     ROOTID,
     useLayoutSymbol,
+    REMOVE_PANEL_DATA,
+    ADD_PANEL_DATA,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
@@ -64,16 +66,16 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             });
             slot.removeListener("ready", popoutReady);
             sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
-                searchId: panelNode.id,
+                search: panelNode.id,
                 mask: MASK_PART.CENTER,
-                targetId: ROOTID,
-            });
+                target: ROOTID,
+            } as REMOVE_PANEL_DATA);
 
             sns.send(data.layoutSymbol, SLOT_EVENT.ADD_PANEL, {
                 panelNode: panelNode,
                 mask: MASK_PART.CENTER,
-                targetId: ROOTID,
-            });
+                target: ROOTID,
+            } as ADD_PANEL_DATA);
         },
         [layoutSymbol, panel, slot, sns]
     );
@@ -85,10 +87,8 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 panelJSON: panel!,
             });
             sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
-                searchId: panelNode.id,
-                mask: MASK_PART.CENTER,
-                targetId: ROOTID,
-            });
+                search: panelNode.id,
+            } as REMOVE_PANEL_DATA);
 
             sns.send(mainLayoutSymbol, "popin", {
                 panelNode: panelNode,
