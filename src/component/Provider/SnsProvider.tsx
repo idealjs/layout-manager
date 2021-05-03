@@ -1,5 +1,6 @@
 import { createContext, FC, useContext, useMemo } from "react";
 
+import Slot from "../../lib/sns/Slot";
 import Sns from "../../lib/sns/Sns";
 
 const sns = new Sns();
@@ -18,7 +19,7 @@ export const useSns = () => {
     return sns;
 };
 
-export const useSlot = (id: string | number) => {
+export const useSlot = (id: string | number):Slot => {
     const sns = useSns();
 
     const slot = useMemo(() => {
