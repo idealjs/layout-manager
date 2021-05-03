@@ -11,7 +11,7 @@ interface Slot {
     addListener(event: SLOT_EVENT.MOVE_SPLITTER, listener: (data: MOVE_SPLITTER_DATA) => void): this;
     addListener(event: SLOT_EVENT.REMOVE_PANEL, listener: (data: REMOVE_PANEL_DATA) => void): this;
     addListener(event: SLOT_EVENT.SELECT_TAB, listener: (data: SELECT_TAB_DATA) => void): this;
-    addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+    // addListener(event: string | symbol, listener: (...args: any[]) => void): this;
 }
 
 class Slot extends EventEmitter {

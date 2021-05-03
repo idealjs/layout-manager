@@ -20,7 +20,7 @@ class Sns {
     public send(target: string | number, event: SLOT_EVENT.MOVE_SPLITTER, data: MOVE_SPLITTER_DATA): this;
     public send(target: string | number, event: SLOT_EVENT.REMOVE_PANEL, data: REMOVE_PANEL_DATA): this;
     public send(target: string | number, event: SLOT_EVENT.SELECT_TAB, data: SELECT_TAB_DATA): this;
-    public send(target: string | number, event: string, data?: any): this;
+    // public send(target: string | number, event: string, data?: any): this;
 
     public send(target: string | number, event: string | symbol, data?: any) {
         this.slots.find((slot) => slot.id === target)?.emit(event, data);
