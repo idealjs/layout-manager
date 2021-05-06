@@ -92,8 +92,6 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
 
             sns.send(mainLayoutSymbol, "popin", {
                 panelNode: panelNode,
-                mask: MASK_PART.CENTER,
-                targetId: ROOTID,
             });
         } else {
             console.debug("[Debug] popout");

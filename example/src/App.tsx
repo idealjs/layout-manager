@@ -7,7 +7,6 @@ import {
     LAYOUT_DIRECTION,
     LayoutNode,
     PanelNode,
-    MASK_PART,
     ROOTID,
     useUpdate,
 } from "@idealjs/layout-manager";
@@ -16,6 +15,8 @@ import { Fragment } from "react";
 import { uniqueId } from "lodash";
 import CustomTab from "./component/CustomTab";
 import MainLayoutSymbolProvider from "./component/MainLayoutSymbolProvider";
+import { rules } from "./lib/constant";
+import PopinListener from "./component/PopinListener";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -140,12 +141,7 @@ const factory: CMPTFactory = (page: string) => {
 
                 const onClick = useCallback(async () => {
                     try {
-                        const target = ROOT.findNodeByRules([
-                            { part: MASK_PART.BOTTOM, max: 2 },
-                            { part: MASK_PART.RIGHT, max: 2 },
-                            { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
-                            { part: MASK_PART.CENTER, max: 2 },
-                        ]);
+                        const target = ROOT.findNodeByRules(rules);
                         console.debug("[Debug] target is", target);
                         if (target) {
                             const test = new PanelNode({
@@ -205,6 +201,7 @@ function App() {
                             Tab={CustomTab}
                         >
                             <Layout layoutNode={ROOT} />
+                            <PopinListener layoutNode={ROOT} />
                         </Provider>
                     </div>
                     <PopoutManager />
