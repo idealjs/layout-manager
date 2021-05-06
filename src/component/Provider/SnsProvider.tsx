@@ -4,22 +4,19 @@ import Slot from "../../lib/sns/Slot";
 import Sns from "../../lib/sns/Sns";
 
 const sns = new Sns();
-const context = createContext<Sns | null>(null);
+const context = createContext<Sns>(sns);
 
-const SnsProvider: FC = (props) => {
-    const { children } = props;
+const SnsProvider: FC<{ sns: Sns }> = (props) => {
+    const { sns, children } = props;
     return <context.Provider value={sns}>{children}</context.Provider>;
 };
 
 export const useSns = () => {
     const sns = useContext(context);
-    if (sns == null) {
-        throw new Error("");
-    }
     return sns;
 };
 
-export const useSlot = (id: string | number):Slot => {
+export const useSlot = (id: string | number): Slot => {
     const sns = useSns();
 
     const slot = useMemo(() => {

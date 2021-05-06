@@ -5,7 +5,6 @@ import CustomTab from "./CustomTab";
 import LayoutsProvider from "./Provider/LayoutsProvider";
 import LayoutSymbolProvider from "./Provider/LayoutSymbolProvider";
 import PanelsProvider from "./Provider/PanelsProvider";
-import SnsProvider from "./Provider/SnsProvider";
 import SplittersProvider from "./Provider/SplittersProvider";
 
 export type CMPTFactory = (
@@ -35,9 +34,7 @@ const Provider: FC<{
                     <PanelsProvider>
                         <SplittersProvider>
                             <RIDContext.Provider value={RID ? RID : "RID"}>
-                                <LayoutsProvider>
-                                    <SnsProvider>{children}</SnsProvider>
-                                </LayoutsProvider>
+                                <LayoutsProvider>{children}</LayoutsProvider>
                             </RIDContext.Provider>
                         </SplittersProvider>
                     </PanelsProvider>
