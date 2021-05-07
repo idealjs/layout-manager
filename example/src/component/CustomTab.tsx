@@ -53,7 +53,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
 
     const { portals } = usePortals();
 
-    const popout = useMemo(() => portals.includes(layoutSymbol), [
+    const inPopout = useMemo(() => portals.includes(layoutSymbol), [
         layoutSymbol,
         portals,
     ]);
@@ -81,7 +81,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
     );
 
     const onPopClick = useCallback(() => {
-        if (popout) {
+        if (inPopout) {
             console.debug("[Debug] popint");
             const panelNode = new PanelNode({
                 panelJSON: panel!,
@@ -104,7 +104,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
         layoutSymbol,
         mainLayoutSymbol,
         panel,
-        popout,
+        inPopout,
         popoutReady,
         setPortals,
         slot,
@@ -121,7 +121,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 {nodeTitle}
             </div>
             <div style={close} onClick={onPopClick}>
-                {popout ? <Popin /> : <Popout />}
+                {inPopout ? <Popin /> : <Popout />}
             </div>
             <div style={close} onClick={onClose}>
                 <Close />
