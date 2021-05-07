@@ -199,9 +199,10 @@ function App() {
                             layoutSymbol={mainLayoutSymbol}
                             factory={factory}
                             Tab={CustomTab}
+                            layoutNode={ROOT}
                         >
-                            <Layout layoutNode={ROOT} />
-                            <PopinListener layoutNode={ROOT} />
+                            <Layout />
+                            <PopinListener />
                         </Provider>
                     </div>
                     <PopoutManager />

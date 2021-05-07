@@ -4,7 +4,7 @@ import { createContext, FC, useContext, useState } from "react";
 const context = createContext<string | number | null>(null);
 
 const Provider: FC<{ uniqueSymbol?: string | number }> = (props) => {
-    const { uniqueSymbol, children } = props;
+    const { children, uniqueSymbol } = props;
     const [layoutSymbol] = useState(() =>
         uniqueSymbol ? uniqueSymbol : uniqueId()
     );

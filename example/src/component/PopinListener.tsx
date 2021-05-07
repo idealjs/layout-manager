@@ -1,11 +1,10 @@
-import { LayoutNode, useSlot, useUpdate } from "@idealjs/layout-manager";
-import { FC } from "react";
+import { useLayoutNode, useSlot, useUpdate } from "@idealjs/layout-manager";
 import { useEffect } from "react";
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 
-const PopinListener: FC<{ layoutNode: LayoutNode }> = (props) => {
-    const { layoutNode } = props;
+const PopinListener = () => {
+    const layoutNode = useLayoutNode();
     const mainlayoutSymbol = useMainLayoutSymbol();
     const slot = useSlot(mainlayoutSymbol);
     const update = useUpdate(layoutNode);

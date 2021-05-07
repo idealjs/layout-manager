@@ -30,7 +30,7 @@ const PopoutManager = () => {
 export default PopoutManager;
 
 export const PortalsProvider: FC<NonNullable<ContextType>> = (props) => {
-    const { portals, setPortals, children } = props;
+    const { children, portals, setPortals } = props;
     return (
         <PortalsContext.Provider value={{ portals, setPortals }}>
             {children}

@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef } from "react";
 import { SLOT_EVENT } from "../enum";
 import useRect from "../hook/useRect";
 import useUpdate from "../hook/useUpdate";
-import LayoutNode from "../lib/LayoutNode";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
@@ -13,6 +12,7 @@ import {
 } from "../lib/type";
 import { LAYOUT_DIRECTION } from "../reducer/type";
 import Panel from "./Panel";
+import { useLayoutNode } from "./Provider/LayoutNodeProvider";
 import { useLayouts } from "./Provider/LayoutsProvider";
 import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
 import { usePanels } from "./Provider/PanelsProvider";
@@ -21,11 +21,10 @@ import { useSplitters } from "./Provider/SplittersProvider";
 import Splitter from "./Splitter";
 import Titlebar from "./Titlebar";
 
-const Layout = (props: { layoutNode: LayoutNode }) => {
-    const { layoutNode } = props;
+const Layout = () => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [rect] = useRect(ref);
-
+    const layoutNode = useLayoutNode();
     const [splitters] = useSplitters();
     const [layouts] = useLayouts();
     const [panels] = usePanels();

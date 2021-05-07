@@ -7,7 +7,7 @@ const context = createContext<string | number | null>(null);
 const MainLayoutSymbolProvider: FC<{
     mainLayoutSymbol: string | number;
 }> = (props) => {
-    const { mainLayoutSymbol, children } = props;
+    const { children, mainLayoutSymbol } = props;
     return (
         <context.Provider value={mainLayoutSymbol}>{children}</context.Provider>
     );

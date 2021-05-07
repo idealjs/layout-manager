@@ -7,7 +7,7 @@ const sns = new Sns();
 const context = createContext<Sns>(sns);
 
 const SnsProvider: FC<{ sns: Sns }> = (props) => {
-    const { sns, children } = props;
+    const { children, sns } = props;
     return <context.Provider value={sns}>{children}</context.Provider>;
 };
 

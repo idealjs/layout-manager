@@ -20,15 +20,16 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
             }),
         []
     );
-    
+
     return (
         <Provider
+            layoutNode={ROOT}
             layoutSymbol={portalId}
             Tab={CustomTab}
             factory={() => () => <div>test</div>}
         >
             <Portal id={portalId}>
-                <Layout layoutNode={ROOT} />
+                <Layout />
             </Portal>
         </Provider>
     );
