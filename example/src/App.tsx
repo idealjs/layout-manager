@@ -193,7 +193,7 @@ function App() {
                 <PortalsProvider portals={portals} setPortals={setPortals}>
                     <div
                         className="App"
-                        style={{ height: "100vh", width: "100vW" }}
+                        style={{ height: "100vh", width: "100vw" }}
                     >
                         <Provider
                             layoutSymbol={mainLayoutSymbol}
