@@ -32,7 +32,7 @@ const Layout = () => {
     const sns = useSns();
     const slot = useSlot(layoutSymbol);
 
-    const update = useUpdate(layoutNode, rect);
+    const update = useUpdate(rect);
 
     const addPanel = useCallback(
         (data: ADD_PANEL_DATA) => {
