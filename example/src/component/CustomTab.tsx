@@ -11,6 +11,8 @@ import {
     useLayoutSymbol,
     REMOVE_PANEL_DATA,
     ADD_PANEL_DATA,
+    useLayoutNode,
+    useUpdate,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
@@ -43,15 +45,17 @@ const close = {
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
     const { nodeId, nodeTitle, onClose, onSelect } = props;
-    const { setPortals } = usePortals();
-    const mainLayoutSymbol = useMainLayoutSymbol();
+
+    const { portals, setPortals } = usePortals();
+
+    const layoutNode = useLayoutNode();
     const layoutSymbol = useLayoutSymbol();
+    const mainLayoutSymbol = useMainLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(nodeId);
-
     const panel = usePanel(nodeId);
 
-    const { portals } = usePortals();
+    const update = useUpdate(layoutNode);
 
     const inPopout = useMemo(() => portals.includes(layoutSymbol), [
         layoutSymbol,
@@ -86,13 +90,17 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             const panelNode = new PanelNode({
                 panelJSON: panel!,
             });
-            sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
-                search: panelNode.id,
-            } as REMOVE_PANEL_DATA);
+
+            layoutNode.removePanelNode(nodeId);
 
             sns.send(mainLayoutSymbol, "popin", {
                 panelNode: panelNode,
             });
+            update();
+            if (layoutNode.layoutNodes.length === 0) {
+                console.log("[Debug] closing popout", layoutSymbol);
+                setPortals((s) => s.filter((s) => s !== layoutSymbol));
+            }
         } else {
             console.debug("[Debug] popout");
             slot.addListener("ready", popoutReady);
@@ -101,14 +109,17 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             });
         }
     }, [
-        layoutSymbol,
-        mainLayoutSymbol,
-        panel,
         inPopout,
-        popoutReady,
-        setPortals,
-        slot,
+        panel,
+        layoutNode,
+        nodeId,
         sns,
+        mainLayoutSymbol,
+        update,
+        setPortals,
+        layoutSymbol,
+        slot,
+        popoutReady,
     ]);
 
     return (

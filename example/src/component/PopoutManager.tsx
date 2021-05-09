@@ -17,7 +17,6 @@ const PortalsContext = createContext<ContextType>(null);
 
 const PopoutManager = () => {
     const { portals } = usePortals();
-
     return (
         <Fragment>
             {portals.map((d) => {

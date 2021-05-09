@@ -54,6 +54,12 @@ const Portal: FC<{ id: string | number }> = (props) => {
         };
     }, [externalWindow, onExternalBeforeunload]);
 
+    useEffect(() => {
+        return () => {
+            externalWindow?.close();
+        };
+    }, [externalWindow]);
+
     return createPortal(children, container);
 };
 
