@@ -13,4 +13,4 @@ yarn add @idealjs/layout-manager
 ## Example
 
 - CodeSandbox
-    > https://codesandbox.io/s/optimistic-bhabha-udcul
+    > https://codesandbox.io/s/layout-manager-example-evxop
