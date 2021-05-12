@@ -22,7 +22,7 @@ const close = {
 };
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
-    const { nodeId, nodeTitle, onClose, onSelect } = props;
+    const { nodeId, onClose, onSelect } = props;
 
     return (
         <div id={nodeId} className={"Tab"} style={root}>
@@ -31,7 +31,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 style={{ lineHeight: "100%", textAlign: "center" }}
                 onClick={onSelect}
             >
-                {nodeTitle}
+                {nodeId}
             </div>
             <div style={close} onClick={onClose}>
                 <Close />

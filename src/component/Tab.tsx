@@ -52,7 +52,6 @@ const Tab = (props: { nodeId: string }) => {
     return (
         <CustomTab
             nodeId={nodeId}
-            nodeTitle={nodeId}
             ref={ref}
             onSelect={onSelect}
             onClose={closeTab}
