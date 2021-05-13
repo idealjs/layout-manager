@@ -58,7 +58,5 @@ export interface IPanelNode {
 export type TABCMPT = ForwardRefExoticComponent<
     {
         nodeId: string;
-        onClose: () => void;
-        onSelect: () => void;
     } & RefAttributes<HTMLDivElement>
 >;

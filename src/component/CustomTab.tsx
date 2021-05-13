@@ -1,7 +1,11 @@
-import { CSSProperties, forwardRef } from "react";
+import { CSSProperties, forwardRef, useCallback } from "react";
 
+import { SLOT_EVENT } from "../enum";
+import { REMOVE_PANEL_DATA, SELECT_TAB_DATA } from "../lib/type";
 import { TABCMPT } from "../reducer/type";
 import Close from "../svg/Close";
+import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
+import { useSns } from "./Provider/SnsProvider";
 
 const root: CSSProperties = {
     touchAction: "none",
@@ -22,7 +26,22 @@ const close = {
 };
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
-    const { nodeId, onClose, onSelect } = props;
+    const { nodeId } = props;
+
+    const sns = useSns();
+    const layoutSymbol = useLayoutSymbol();
+
+    const onSelect = useCallback(() => {
+        sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
+            selected: nodeId,
+        } as SELECT_TAB_DATA);
+    }, [layoutSymbol, nodeId, sns]);
+
+    const onClose = useCallback(() => {
+        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+            search: nodeId,
+        } as REMOVE_PANEL_DATA);
+    }, [layoutSymbol, nodeId, sns]);
 
     return (
         <div id={nodeId} className={"Tab"} style={root}>

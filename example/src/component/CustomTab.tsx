@@ -13,6 +13,7 @@ import {
     ADD_PANEL_DATA,
     useLayoutNode,
     useUpdate,
+    SELECT_TAB_DATA,
 } from "@idealjs/layout-manager";
 
 import Close from "../svg/Close";
@@ -44,7 +45,7 @@ const close = {
 };
 
 const CustomTab: TABCMPT = forwardRef((props, ref) => {
-    const { nodeId, nodeTitle, onClose, onSelect } = props;
+    const { nodeId } = props;
 
     const { portals, setPortals } = usePortals();
 
@@ -57,10 +58,10 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
 
     const update = useUpdate(layoutNode);
 
-    const inPopout = useMemo(() => portals.includes(layoutSymbol), [
-        layoutSymbol,
-        portals,
-    ]);
+    const inPopout = useMemo(
+        () => portals.includes(layoutSymbol),
+        [layoutSymbol, portals]
+    );
 
     const popoutReady = useCallback(
         (data: { layoutSymbol: string | number }) => {
@@ -122,6 +123,24 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
         popoutReady,
     ]);
 
+    const onSelect = useCallback(() => {
+        sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
+            selected: nodeId,
+        } as SELECT_TAB_DATA);
+    }, [layoutSymbol, nodeId, sns]);
+
+    const onClose = useCallback(() => {
+        sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
+            search: nodeId,
+        } as REMOVE_PANEL_DATA);
+        if (inPopout) {
+            if (layoutNode.layoutNodes.length === 0) {
+                console.log("[Debug] closing popout", layoutSymbol);
+                setPortals((s) => s.filter((s) => s !== layoutSymbol));
+            }
+        }
+    }, [inPopout, layoutNode, layoutSymbol, nodeId, setPortals, sns]);
+
     return (
         <div id={nodeId} className={"Tab"} style={root}>
             <div
@@ -129,7 +148,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 style={{ lineHeight: "100%", textAlign: "center" }}
                 onClick={onSelect}
             >
-                {nodeTitle}
+                {nodeId}
             </div>
             <div style={close} onClick={onPopClick}>
                 {inPopout ? <Popin /> : <Popout />}
