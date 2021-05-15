@@ -1,11 +1,11 @@
-import { uniqueId } from "lodash";
+import { nanoid } from "nanoid";
 
 import { IPanelNode } from "../reducer/type";
 import LayoutNode from "./LayoutNode";
 import { IPanelJSON } from "./type";
 
 class PanelNode {
-    id: string = uniqueId();
+    id: string = nanoid();
     height: number = 0;
     width: number = 0;
     left: number = 0;

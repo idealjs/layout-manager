@@ -19,7 +19,7 @@ import {
 import Close from "../svg/Close";
 import Popout from "../svg/Popout";
 import { usePortals } from "./PopoutManager";
-import { uniqueId } from "lodash";
+import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import Popin from "../svg/Popin";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
@@ -106,7 +106,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             console.debug("[Debug] popout");
             slot.addListener("ready", popoutReady);
             setPortals((s) => {
-                return [...s, uniqueId()];
+                return [...s, nanoid()];
             });
         }
     }, [

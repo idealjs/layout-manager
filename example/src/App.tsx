@@ -12,7 +12,7 @@ import {
 } from "@idealjs/layout-manager";
 import PopoutManager, { PortalsProvider } from "./component/PopoutManager";
 import { Fragment } from "react";
-import { uniqueId } from "lodash";
+import { nanoid } from "nanoid";
 import CustomTab from "./component/CustomTab";
 import MainLayoutSymbolProvider from "./component/MainLayoutSymbolProvider";
 import { rules } from "./lib/constant";
@@ -146,7 +146,7 @@ const factory: CMPTFactory = (page: string) => {
                         if (target) {
                             const test = new PanelNode({
                                 panelJSON: {
-                                    id: uniqueId(),
+                                    id: nanoid(),
                                     page: "test",
                                 },
                             });

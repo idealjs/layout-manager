@@ -1,4 +1,4 @@
-import { uniqueId } from "lodash";
+import { nanoid } from "nanoid";
 import { createContext, FC, useContext, useState } from "react";
 
 const context = createContext<string | number | null>(null);
@@ -6,7 +6,7 @@ const context = createContext<string | number | null>(null);
 const Provider: FC<{ uniqueSymbol?: string | number }> = (props) => {
     const { children, uniqueSymbol } = props;
     const [layoutSymbol] = useState(() =>
-        uniqueSymbol ? uniqueSymbol : uniqueId()
+        uniqueSymbol ? uniqueSymbol : nanoid()
     );
     return <context.Provider value={layoutSymbol}>{children}</context.Provider>;
 };

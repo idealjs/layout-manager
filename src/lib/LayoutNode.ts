@@ -1,4 +1,4 @@
-import { uniqueId } from "lodash";
+import { nanoid } from "nanoid";
 
 import { ROOTID } from "../constant";
 import { MASK_PART } from "../enum";
@@ -13,7 +13,7 @@ import PanelNode from "./PanelNode";
 import { ILayoutJSON, IRule } from "./type";
 const splitterBlock = 10;
 class LayoutNode {
-    id: string = uniqueId();
+    id: string = nanoid();
     height: number = 0;
     width: number = 0;
     left: number = 0;
