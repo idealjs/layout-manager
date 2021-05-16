@@ -1696,18 +1696,6 @@
   resolved "https://registry.npm.taobao.org/@types/json5/download/@types/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/lodash.uniqueid@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.npm.taobao.org/@types/lodash.uniqueid/download/@types/lodash.uniqueid-4.0.6.tgz#63f1354f9193896f77e4510d4b7bc763d1479b9a"
-  integrity sha1-Y/E1T5GTiW935FENS3vHY9FHm5o=
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*":
-  version "4.14.167"
-  resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.167.tgz?cache=0&sync_timestamp=1609522432567&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Flodash%2Fdownload%2F%40types%2Flodash-4.14.167.tgz#ce7d78553e3c886d4ea643c37ec7edc20f16765e"
-  integrity sha1-zn14VT48iG1OpkPDfsftwg8Wdl4=
-
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.npm.taobao.org/@types/minimatch/download/@types/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
@@ -10989,6 +10977,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha1-wdjRSTFtPqhShIiVy2oL/oh7h98=
   dependencies:
     minimalistic-assert "^1.0.0"
+
+web-vitals@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.nlark.com/web-vitals/download/web-vitals-1.1.2.tgz#06535308168986096239aa84716e68b4c6ae6d1c"
+  integrity sha1-BlNTCBaJhgliOaqEcW5otMaubRw=
 
 webidl-conversions@^5.0.0:
   version "5.0.0"

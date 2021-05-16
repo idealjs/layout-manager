@@ -19,10 +19,8 @@
         "nanoid": "^3.1.23"
     },
     "scripts": {
-        "postbuild": "rsync -avum --include='*.svg' --include='*/' --exclude='*' './src/' './dist'",
         "build": "tsc",
         "lint": "eslint src/**/*.{tsx,ts} --fix",
-        "build:react-scripts": "react-scripts build",
         "build:webpack": "webpack",
         "prepublish": "rm -rf dist&yarn build:webpack"
     },
@@ -70,6 +68,7 @@
         "ts-loader": "^8.0.14",
         "typescript": "^4.1.3",
         "url-loader": "^4.1.1",
+        "web-vitals": "^1.1.2",
         "webpack-cli": "^4.4.0"
     },
     "peerDependencies": {
