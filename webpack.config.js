@@ -28,5 +28,11 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["react", "react-dom", "@reduxjs/toolkit", "html2canvas"],
+    externals: [
+        "react",
+        "react-dom",
+        "@reduxjs/toolkit",
+        "html2canvas",
+        "nanoid",
+    ],
 };
