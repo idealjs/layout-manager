@@ -1,4 +1,3 @@
-export * from "./type";
 export { default as Layout } from "components/Layout";
 export { default as Provider } from "components/Provider";
 export * from "components/Provider";
@@ -14,3 +13,4 @@ export { default as Slot } from "lib/sns/Slot";
 export { default as Sns } from "lib/sns/Sns";
 export * from "src/constant";
 export * from "src/enum";
+export * from "src/type";

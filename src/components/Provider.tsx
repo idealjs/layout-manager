@@ -1,4 +1,3 @@
-import { createContext, FC, FunctionComponent, useContext } from "react";
 import CustomTab from "components/CustomTab";
 import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
 import LayoutsProvider from "components/providers/LayoutsProvider";
@@ -6,6 +5,7 @@ import LayoutSymbolProvider from "components/providers/LayoutSymbolProvider";
 import PanelsProvider from "components/providers/PanelsProvider";
 import SplittersProvider from "components/providers/SplittersProvider";
 import LayoutNode from "lib/LayoutNode";
+import { createContext, FC, FunctionComponent, useContext } from "react";
 import { TABCMPT } from "src/type";
 
 export type CMPTFactory = (

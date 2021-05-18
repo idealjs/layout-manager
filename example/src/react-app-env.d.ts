@@ -11,6 +11,4 @@ declare module '@idealjs/layout-manager' {
     interface Sns extends ISns {
         public send(target: string | number, event: "popin", data?: any): this;
     }
-
 }
-

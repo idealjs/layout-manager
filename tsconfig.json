@@ -23,7 +23,14 @@
             "lib/*": ["src/lib/*"],
             "reducers/*": ["src/reducers/*"],
             "hooks/*": ["src/hooks/*"]
-        }
+        },
+        "plugins": [
+            { "transform": "typescript-transform-paths" },
+            {
+                "transform": "typescript-transform-paths",
+                "afterDeclarations": true
+            }
+        ]
     },
     "include": ["src"],
     "exclude": ["dist"]

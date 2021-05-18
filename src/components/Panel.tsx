@@ -2,12 +2,12 @@ import { useFactory } from "components/Provider";
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
 import { usePanel } from "components/providers/PanelsProvider";
 import { useSns } from "components/providers/SnsProvider";
-import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
-import { MASK_PART, SLOT_EVENT } from "src/enum";
 import useStateRef from "hooks/useStateRef";
 import { DND_EVENT, useDnd } from "lib/dnd";
 import { IDropData } from "lib/dnd/type";
 import PanelNode from "lib/PanelNode";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
+import { MASK_PART, SLOT_EVENT } from "src/enum";
 import { ADD_PANEL_DATA, MOVE_PANEL_DATA, REMOVE_PANEL_DATA } from "src/type";
 
 const top: CSSProperties = {
