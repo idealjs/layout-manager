@@ -1,4 +1,5 @@
 const path = require("path");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
     mode: "production",
@@ -22,6 +23,7 @@ module.exports = {
         alias: {
             "react/jsx-runtime": "react/jsx-runtime.js",
         },
+        plugins: [new TsconfigPathsPlugin()],
     },
     output: {
         path: path.resolve(__dirname, "dist"),

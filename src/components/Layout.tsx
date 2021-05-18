@@ -1,25 +1,23 @@
+import Panel from "components/Panel";
+import { useLayoutNode } from "components/providers/LayoutNodeProvider";
+import { useLayouts } from "components/providers/LayoutsProvider";
+import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
+import { usePanels } from "components/providers/PanelsProvider";
+import { useSlot, useSns } from "components/providers/SnsProvider";
+import { useSplitters } from "components/providers/SplittersProvider";
+import Splitter from "components/Splitter";
+import Titlebar from "components/Titlebar";
+import useRect from "hooks/useRect";
+import useUpdate from "hooks/useUpdate";
 import { useCallback, useEffect, useRef } from "react";
-
-import { SLOT_EVENT } from "../enum";
-import useRect from "../hook/useRect";
-import useUpdate from "../hook/useUpdate";
+import { LAYOUT_DIRECTION, SLOT_EVENT } from "src/enum";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
     MOVE_SPLITTER_DATA,
     REMOVE_PANEL_DATA,
     SELECT_TAB_DATA,
-} from "../lib/type";
-import { LAYOUT_DIRECTION } from "../reducer/type";
-import Panel from "./Panel";
-import { useLayoutNode } from "./Provider/LayoutNodeProvider";
-import { useLayouts } from "./Provider/LayoutsProvider";
-import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
-import { usePanels } from "./Provider/PanelsProvider";
-import { useSlot, useSns } from "./Provider/SnsProvider";
-import { useSplitters } from "./Provider/SplittersProvider";
-import Splitter from "./Splitter";
-import Titlebar from "./Titlebar";
+} from "src/type";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement | null>(null);

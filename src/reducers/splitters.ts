@@ -1,6 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-
-import { ISplitterNode } from "./type";
+import { ISplitterNode } from "src/type";
 
 export const adapter = createEntityAdapter<ISplitterNode>();
 

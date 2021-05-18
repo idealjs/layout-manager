@@ -1,6 +1,5 @@
+import LayoutNode from "lib/LayoutNode";
 import { createContext, FC, useContext } from "react";
-
-import LayoutNode from "../../lib/LayoutNode";
 
 const context = createContext<LayoutNode | null>(null);
 

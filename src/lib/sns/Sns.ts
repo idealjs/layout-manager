@@ -1,5 +1,6 @@
-import { SLOT_EVENT } from "../../enum";
-import { ADD_PANEL_DATA, MOVE_PANEL_DATA, MOVE_SPLITTER_DATA, REMOVE_PANEL_DATA, SELECT_TAB_DATA } from "../type";
+import { SLOT_EVENT } from "src/enum";
+import { ADD_PANEL_DATA, MOVE_PANEL_DATA, MOVE_SPLITTER_DATA, REMOVE_PANEL_DATA, SELECT_TAB_DATA } from "src/type";
+
 import Slot from "./Slot";
 
 

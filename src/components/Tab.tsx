@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
-
-import { useDnd } from "../lib/dnd";
-import { useCustomTab } from "./Provider";
-import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
-import { usePanel } from "./Provider/PanelsProvider";
+import { useCustomTab } from "components/Provider";
+import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
+import { usePanel } from "components/providers/PanelsProvider";
+import { useDnd } from "lib/dnd";
 
 const Tab = (props: { nodeId: string }) => {
     const { nodeId } = props;

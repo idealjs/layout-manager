@@ -1,11 +1,9 @@
+import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
+import { useSns } from "components/providers/SnsProvider";
+import Close from "components/svg/Close";
 import { CSSProperties, forwardRef, useCallback } from "react";
-
-import { SLOT_EVENT } from "../enum";
-import { REMOVE_PANEL_DATA, SELECT_TAB_DATA } from "../lib/type";
-import { TABCMPT } from "../reducer/type";
-import Close from "../svg/Close";
-import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
-import { useSns } from "./Provider/SnsProvider";
+import { SLOT_EVENT } from "src/enum";
+import { REMOVE_PANEL_DATA, SELECT_TAB_DATA, TABCMPT } from "src/type";
 
 const root: CSSProperties = {
     touchAction: "none",

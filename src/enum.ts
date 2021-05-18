@@ -21,3 +21,10 @@ export enum MASK_PART {
     RIGHT = "RIGHT",
     CENTER = "CENTER",
 }
+
+export enum LAYOUT_DIRECTION {
+    ROOT = "ROOT",
+    COL = "COL",
+    ROW = "ROW",
+    TAB = "TAB",
+}

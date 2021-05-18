@@ -1,23 +1,23 @@
 import { createContext, FC, FunctionComponent, useContext } from "react";
-
-import LayoutNode from "../lib/LayoutNode";
-import { TABCMPT } from "../reducer/type";
-import CustomTab from "./CustomTab";
-import LayoutNodeProvider from "./Provider/LayoutNodeProvider";
-import LayoutsProvider from "./Provider/LayoutsProvider";
-import LayoutSymbolProvider from "./Provider/LayoutSymbolProvider";
-import PanelsProvider from "./Provider/PanelsProvider";
-import SplittersProvider from "./Provider/SplittersProvider";
+import CustomTab from "components/CustomTab";
+import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
+import LayoutsProvider from "components/providers/LayoutsProvider";
+import LayoutSymbolProvider from "components/providers/LayoutSymbolProvider";
+import PanelsProvider from "components/providers/PanelsProvider";
+import SplittersProvider from "components/providers/SplittersProvider";
+import LayoutNode from "lib/LayoutNode";
+import { TABCMPT } from "src/type";
 
 export type CMPTFactory = (
     page: string,
     data?: any
 ) => FunctionComponent<{ nodeData: any }>;
 
-const CMPTContext = createContext<{
-    factory: CMPTFactory;
-    Tab: TABCMPT;
-} | null>(null);
+const CMPTContext =
+    createContext<{
+        factory: CMPTFactory;
+        Tab: TABCMPT;
+    } | null>(null);
 
 const RIDContext = createContext("RID");
 

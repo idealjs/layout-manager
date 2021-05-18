@@ -16,12 +16,12 @@ import {
     SELECT_TAB_DATA,
 } from "@idealjs/layout-manager";
 
-import Close from "../svg/Close";
-import Popout from "../svg/Popout";
+import Close from "./svg/Close";
+import Popout from "./svg/Popout";
 import { usePortals } from "./PopoutManager";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
-import Popin from "../svg/Popin";
+import Popin from "./svg/Popin";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 
 const root: CSSProperties = {

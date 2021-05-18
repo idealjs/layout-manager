@@ -1,6 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-
-import { ILayoutNode } from "./type";
+import { ILayoutNode } from "src/type";
 
 export const adapter = createEntityAdapter<ILayoutNode>();
 

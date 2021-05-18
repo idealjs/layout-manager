@@ -1,7 +1,6 @@
+import Slot from "lib/sns/Slot";
+import Sns from "lib/sns/Sns";
 import { createContext, FC, useContext, useMemo } from "react";
-
-import Slot from "../../lib/sns/Slot";
-import Sns from "../../lib/sns/Sns";
 
 const sns = new Sns();
 const context = createContext<Sns>(sns);

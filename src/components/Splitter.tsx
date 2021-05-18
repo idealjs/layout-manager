@@ -1,13 +1,11 @@
+import { useLayout, useLayouts } from "components/providers/LayoutsProvider";
+import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
+import { useSns } from "components/providers/SnsProvider";
+import { DND_EVENT, useDnd } from "lib/dnd";
+import { IDragData } from "lib/dnd/type";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
-
-import { SLOT_EVENT } from "../enum";
-import { DND_EVENT, useDnd } from "../lib/dnd";
-import { IDragData } from "../lib/dnd/type";
-import { MOVE_SPLITTER_DATA } from "../lib/type";
-import { LAYOUT_DIRECTION } from "../reducer/type";
-import { useLayout, useLayouts } from "./Provider/LayoutsProvider";
-import { useLayoutSymbol } from "./Provider/LayoutSymbolProvider";
-import { useSns } from "./Provider/SnsProvider";
+import { LAYOUT_DIRECTION, SLOT_EVENT } from "src/enum";
+import { MOVE_SPLITTER_DATA } from "src/type";
 
 const Splitter = (props: {
     id: string;

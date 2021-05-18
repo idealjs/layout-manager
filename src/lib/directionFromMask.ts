@@ -1,5 +1,4 @@
-import { MASK_PART } from "../enum";
-import { LAYOUT_DIRECTION } from "../reducer/type";
+import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
 
 const directionFromMask = (mask: MASK_PART): LAYOUT_DIRECTION => {
     switch (mask) {

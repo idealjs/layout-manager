@@ -6,8 +6,7 @@ import {
     useRef,
     useState,
 } from "react";
-
-import useMountedRef from "./useMounted";
+import useMountedRef from "hooks/useMounted";
 
 const useRect = (
     ref: MutableRefObject<HTMLDivElement | null>

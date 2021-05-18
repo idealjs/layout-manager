@@ -1,5 +1,5 @@
-import { useLayout } from "./Provider/LayoutsProvider";
-import Tab from "./Tab";
+import { useLayout } from "components/providers/LayoutsProvider";
+import Tab from "components/Tab";
 
 const Titlebar = (props: { nodeId: string }) => {
     const { nodeId } = props;

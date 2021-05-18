@@ -1,12 +1,11 @@
 import { useCallback } from "react";
-
-import { useLayoutNode } from "../component/Provider/LayoutNodeProvider";
-import { useLayouts } from "../component/Provider/LayoutsProvider";
-import { usePanels } from "../component/Provider/PanelsProvider";
-import { useSplitters } from "../component/Provider/SplittersProvider";
-import { setAll as setAllLayouts } from "../reducer/layouts";
-import { setAll as setAllPanels } from "../reducer/panels";
-import { setAll as setAllSplitters } from "../reducer/splitters";
+import { useLayoutNode } from "components/providers/LayoutNodeProvider";
+import { useLayouts } from "components/providers/LayoutsProvider";
+import { usePanels } from "components/providers/PanelsProvider";
+import { useSplitters } from "components/providers/SplittersProvider";
+import { setAll as setAllLayouts } from "reducers/layouts";
+import { setAll as setAllPanels } from "reducers/panels";
+import { setAll as setAllSplitters } from "reducers/splitters";
 
 const useUpdate = (
     rect?: {
@@ -19,7 +18,7 @@ const useUpdate = (
     const [, , dispatchSplitters] = useSplitters();
     const [, , dispatchLayouts] = useLayouts();
     const [, , dispatchPanels] = usePanels();
-    
+
     return useCallback(() => {
         layoutNode.shakeTree();
         if (rect != null) {

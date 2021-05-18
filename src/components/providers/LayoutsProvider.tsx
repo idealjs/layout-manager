@@ -1,13 +1,13 @@
 import { AnyAction, EntityState } from "@reduxjs/toolkit";
 import { createContext, FC, useContext, useReducer } from "react";
+import { selectAll, selectById } from "reducers/layouts";
+import reducer, { adapter } from "reducers/layouts";
+import { ILayoutNode } from "src/type";
 
-import { selectAll, selectById } from "../../reducer/layouts";
-import reducer, { adapter } from "../../reducer/layouts";
-import { ILayoutNode } from "../../reducer/type";
-
-const context = createContext<
-    [EntityState<ILayoutNode>, React.Dispatch<AnyAction>] | null
->(null);
+const context =
+    createContext<[EntityState<ILayoutNode>, React.Dispatch<AnyAction>] | null>(
+        null
+    );
 const LayoutsProvider: FC = (props) => {
     const { children } = props;
     const [layouts, dispatch] = useReducer(reducer, adapter.getInitialState());
