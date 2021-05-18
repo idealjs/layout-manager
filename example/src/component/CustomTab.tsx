@@ -98,10 +98,6 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
                 panelNode: panelNode,
             });
             update();
-            if (layoutNode.layoutNodes.length === 0) {
-                console.log("[Debug] closing popout", layoutSymbol);
-                setPortals((s) => s.filter((s) => s !== layoutSymbol));
-            }
         } else {
             console.debug("[Debug] popout");
             slot.addListener("ready", popoutReady);
@@ -118,7 +114,6 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
         mainLayoutSymbol,
         update,
         setPortals,
-        layoutSymbol,
         slot,
         popoutReady,
     ]);
@@ -133,13 +128,7 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
         sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
             search: nodeId,
         } as REMOVE_PANEL_DATA);
-        if (inPopout) {
-            if (layoutNode.layoutNodes.length === 0) {
-                console.log("[Debug] closing popout", layoutSymbol);
-                setPortals((s) => s.filter((s) => s !== layoutSymbol));
-            }
-        }
-    }, [inPopout, layoutNode, layoutSymbol, nodeId, setPortals, sns]);
+    }, [layoutSymbol, nodeId, sns]);
 
     return (
         <div id={nodeId} className={"Tab"} style={root}>

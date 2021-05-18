@@ -6,7 +6,9 @@ import PanelsProvider from "components/providers/PanelsProvider";
 import SplittersProvider from "components/providers/SplittersProvider";
 import LayoutNode from "lib/LayoutNode";
 import { createContext, FC, FunctionComponent, useContext } from "react";
-import { TABCMPT } from "src/type";
+import { TABCMPT, UPDATE_HOOK } from "src/type";
+
+import UpdateHookProvider from "./providers/UpdateHookProvider";
 
 export type CMPTFactory = (
     page: string,
@@ -27,29 +29,42 @@ const Provider: FC<{
     RID?: string;
     layoutSymbol?: string | number;
     layoutNode: LayoutNode;
+    updateHook?: UPDATE_HOOK;
 }> = (props) => {
-    const { children, factory, Tab, RID, layoutSymbol, layoutNode } = props;
+    const {
+        children,
+        factory,
+        Tab,
+        RID,
+        layoutSymbol,
+        layoutNode,
+        updateHook,
+    } = props;
 
     return (
-        <LayoutNodeProvider layoutNode={layoutNode}>
-            <CMPTContext.Provider
-                value={{ factory, Tab: Tab ? Tab : CustomTab }}
-            >
-                <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
-                    <LayoutsProvider>
-                        <PanelsProvider>
-                            <SplittersProvider>
-                                <RIDContext.Provider value={RID ? RID : "RID"}>
-                                    <LayoutsProvider>
-                                        {children}
-                                    </LayoutsProvider>
-                                </RIDContext.Provider>
-                            </SplittersProvider>
-                        </PanelsProvider>
-                    </LayoutsProvider>
-                </LayoutSymbolProvider>
-            </CMPTContext.Provider>
-        </LayoutNodeProvider>
+        <UpdateHookProvider hook={updateHook}>
+            <LayoutNodeProvider layoutNode={layoutNode}>
+                <CMPTContext.Provider
+                    value={{ factory, Tab: Tab ? Tab : CustomTab }}
+                >
+                    <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
+                        <LayoutsProvider>
+                            <PanelsProvider>
+                                <SplittersProvider>
+                                    <RIDContext.Provider
+                                        value={RID ? RID : "RID"}
+                                    >
+                                        <LayoutsProvider>
+                                            {children}
+                                        </LayoutsProvider>
+                                    </RIDContext.Provider>
+                                </SplittersProvider>
+                            </PanelsProvider>
+                        </LayoutsProvider>
+                    </LayoutSymbolProvider>
+                </CMPTContext.Provider>
+            </LayoutNodeProvider>
+        </UpdateHookProvider>
     );
 };
 

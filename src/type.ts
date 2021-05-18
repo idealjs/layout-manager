@@ -105,3 +105,8 @@ export type REMOVE_PANEL_DATA = {
 export type SELECT_TAB_DATA = {
     selected: string;
 }
+
+export type UPDATE_HOOK = {
+    before?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void
+    after?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void
+}

@@ -9,6 +9,7 @@ import {
     PanelNode,
     ROOTID,
     useUpdate,
+    useStateRef,
 } from "@idealjs/layout-manager";
 import PopoutManager, { PortalsProvider } from "./component/PopoutManager";
 import { Fragment } from "react";
@@ -185,12 +186,19 @@ const factory: CMPTFactory = (page: string) => {
 };
 
 function App() {
-    const [portals, setPortals] = useState<(string | number)[]>([]);
+    const [portalsRef, portals, setPortals] = useStateRef<(string | number)[]>(
+        []
+    );
     const [mainLayoutSymbol] = useState("mainLayout");
+
     return (
         <Fragment>
             <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
-                <PortalsProvider portals={portals} setPortals={setPortals}>
+                <PortalsProvider
+                    portalsRef={portalsRef}
+                    portals={portals}
+                    setPortals={setPortals}
+                >
                     <div
                         className="App"
                         style={{ height: "100vh", width: "100vw" }}

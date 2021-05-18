@@ -9,6 +9,7 @@ import {
 import Popout from "./Popout";
 
 type ContextType = {
+    portalsRef: React.MutableRefObject<(string | number)[]>;
     portals: (string | number)[];
     setPortals: Dispatch<SetStateAction<(string | number)[]>>;
 } | null;
@@ -29,9 +30,9 @@ const PopoutManager = () => {
 export default PopoutManager;
 
 export const PortalsProvider: FC<NonNullable<ContextType>> = (props) => {
-    const { children, portals, setPortals } = props;
+    const { children, portalsRef, portals, setPortals } = props;
     return (
-        <PortalsContext.Provider value={{ portals, setPortals }}>
+        <PortalsContext.Provider value={{ portalsRef, portals, setPortals }}>
             {children}
         </PortalsContext.Provider>
     );
