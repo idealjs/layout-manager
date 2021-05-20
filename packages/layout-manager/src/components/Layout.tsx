@@ -134,7 +134,6 @@ const Layout = () => {
                 .map((n) => {
                     return <Titlebar key={n.id} nodeId={n.id} />;
                 })}
-
             {splitters.map((n) => {
                 return (
                     <div
