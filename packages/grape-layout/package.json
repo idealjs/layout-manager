@@ -8,7 +8,8 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build:webpack": "webpack -c config/webpack.config.js"
+        "build:webpack": "webpack -c config/webpack.config.js",
+        "prepublish": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [
