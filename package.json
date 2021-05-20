@@ -11,9 +11,7 @@
         "widget"
     ],
     "scripts": {
-        "bootstrap": "lerna bootstrap",
-        "start": "lerna run start",
-        "build:webpack": "lerna run build:webpack"
+        "lerna": "lerna"
     },
     "devDependencies": {
         "lerna": "^4.0.0"
