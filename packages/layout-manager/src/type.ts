@@ -1,6 +1,6 @@
 import LayoutNode from "lib/LayoutNode";
 import PanelNode from "lib/PanelNode";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
 import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
 
 export interface ISplitterNode {
@@ -53,11 +53,10 @@ export interface IPanelNode {
     data?: any;
 }
 
-export type TABCMPT = ForwardRefExoticComponent<
-    {
-        nodeId: string;
-    } & RefAttributes<HTMLDivElement>
->;
+export type TABCMPT = FC<{ nodeId: string }>
+
+
+export type TitlebarCMPT = FC<{ nodeId: string }>
 
 export interface IRule {
     part: MASK_PART;

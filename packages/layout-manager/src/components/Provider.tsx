@@ -1,14 +1,14 @@
 import CustomTab from "components/CustomTab";
+import CustomTitlebar from "components/CustomTitlebar";
 import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
 import LayoutsProvider from "components/providers/LayoutsProvider";
 import LayoutSymbolProvider from "components/providers/LayoutSymbolProvider";
 import PanelsProvider from "components/providers/PanelsProvider";
 import SplittersProvider from "components/providers/SplittersProvider";
+import UpdateHookProvider from "components/providers/UpdateHookProvider";
 import LayoutNode from "lib/LayoutNode";
 import { createContext, FC, FunctionComponent, useContext } from "react";
-import { TABCMPT, UPDATE_HOOK } from "src/type";
-
-import UpdateHookProvider from "./providers/UpdateHookProvider";
+import { TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "src/type";
 
 export type CMPTFactory = (
     page: string,
@@ -19,6 +19,7 @@ const CMPTContext =
     createContext<{
         factory: CMPTFactory;
         Tab: TABCMPT;
+        Titlebar: TitlebarCMPT;
     } | null>(null);
 
 const RIDContext = createContext("RID");
@@ -26,6 +27,7 @@ const RIDContext = createContext("RID");
 const Provider: FC<{
     factory: CMPTFactory;
     Tab?: TABCMPT;
+    Titlebar?: TitlebarCMPT;
     RID?: string;
     layoutSymbol?: string | number;
     layoutNode: LayoutNode;
@@ -35,6 +37,7 @@ const Provider: FC<{
         children,
         factory,
         Tab,
+        Titlebar,
         RID,
         layoutSymbol,
         layoutNode,
@@ -45,7 +48,11 @@ const Provider: FC<{
         <UpdateHookProvider hook={updateHook}>
             <LayoutNodeProvider layoutNode={layoutNode}>
                 <CMPTContext.Provider
-                    value={{ factory, Tab: Tab ? Tab : CustomTab }}
+                    value={{
+                        factory,
+                        Tab: Tab ? Tab : CustomTab,
+                        Titlebar: Titlebar ? Titlebar : CustomTitlebar,
+                    }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
                         <LayoutsProvider>
@@ -82,6 +89,14 @@ export const useCustomTab = (): TABCMPT => {
         throw new Error("Tab CMPT not Provide");
     }
     return content.Tab;
+};
+
+export const useCustomTitlebar = (): TitlebarCMPT => {
+    const content = useContext(CMPTContext);
+    if (content == null) {
+        throw new Error("Tab CMPT not Provide");
+    }
+    return content.Titlebar;
 };
 
 export default Provider;

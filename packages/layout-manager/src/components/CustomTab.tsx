@@ -1,7 +1,8 @@
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
 import { useSns } from "components/providers/SnsProvider";
 import Close from "components/svg/Close";
-import { CSSProperties, forwardRef, useCallback } from "react";
+import useTabRef from "hooks/useTabRef";
+import { CSSProperties, useCallback } from "react";
 import { SLOT_EVENT } from "src/enum";
 import { REMOVE_PANEL_DATA, SELECT_TAB_DATA, TABCMPT } from "src/type";
 
@@ -23,9 +24,10 @@ const close = {
     height: "20px",
 };
 
-const CustomTab: TABCMPT = forwardRef((props, ref) => {
+const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
 
+    const ref = useTabRef(nodeId);
     const sns = useSns();
     const layoutSymbol = useLayoutSymbol();
 
@@ -55,6 +57,6 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             </div>
         </div>
     );
-});
+};
 
 export default CustomTab;

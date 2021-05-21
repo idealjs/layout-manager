@@ -1,4 +1,5 @@
 import Panel from "components/Panel";
+import { useCustomTitlebar } from "components/Provider";
 import { useLayoutNode } from "components/providers/LayoutNodeProvider";
 import { useLayouts } from "components/providers/LayoutsProvider";
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
@@ -6,7 +7,6 @@ import { usePanels } from "components/providers/PanelsProvider";
 import { useSlot, useSns } from "components/providers/SnsProvider";
 import { useSplitters } from "components/providers/SplittersProvider";
 import Splitter from "components/Splitter";
-import Titlebar from "components/Titlebar";
 import useRect from "hooks/useRect";
 import useUpdate from "hooks/useUpdate";
 import { useCallback, useEffect, useRef } from "react";
@@ -121,6 +121,8 @@ const Layout = () => {
         update,
     ]);
 
+    const CustomTitlebar = useCustomTitlebar();
+
     return (
         <div
             ref={ref}
@@ -132,7 +134,7 @@ const Layout = () => {
             {layouts
                 .filter((l) => l.direction === LAYOUT_DIRECTION.TAB)
                 .map((n) => {
-                    return <Titlebar key={n.id} nodeId={n.id} />;
+                    return <CustomTitlebar key={n.id} nodeId={n.id} />;
                 })}
             {splitters.map((n) => {
                 return (

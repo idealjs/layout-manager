@@ -1,14 +1,12 @@
-import { useLayout } from "components/providers/LayoutsProvider";
-import Tab from "components/Tab";
+import { useCustomTab, useLayout } from "@idealjs/layout-manager";
 
 const Titlebar = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const layout = useLayout(nodeId)!;
+    const CustomTab = useCustomTab();
 
     return (
         <div
-            id={layout.id}
-            key={layout.id}
             style={{
                 position: "absolute",
                 height: "25px",
@@ -21,7 +19,7 @@ const Titlebar = (props: { nodeId: string }) => {
             }}
         >
             {layout.children.map((id) => (
-                <Tab key={id} nodeId={id} />
+                <CustomTab key={id} nodeId={id} />
             ))}
         </div>
     );

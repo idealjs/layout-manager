@@ -1,4 +1,4 @@
-import { CSSProperties, forwardRef, useCallback } from "react";
+import { CSSProperties, useCallback } from "react";
 import {
     MASK_PART,
     SLOT_EVENT,
@@ -14,6 +14,7 @@ import {
     useLayoutNode,
     useUpdate,
     SELECT_TAB_DATA,
+    useTabRef,
 } from "@idealjs/layout-manager";
 
 import Close from "./svg/Close";
@@ -44,8 +45,9 @@ const close = {
     height: "16px",
 };
 
-const CustomTab: TABCMPT = forwardRef((props, ref) => {
+const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
+    const ref = useTabRef(nodeId);
 
     const { portals, setPortals } = usePortals();
 
@@ -147,6 +149,6 @@ const CustomTab: TABCMPT = forwardRef((props, ref) => {
             </div>
         </div>
     );
-});
+};
 
 export default CustomTab;
