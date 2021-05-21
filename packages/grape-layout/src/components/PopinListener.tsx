@@ -1,4 +1,10 @@
-import { useLayoutNode, useSlot, useUpdate } from "@idealjs/layout-manager";
+import {
+    MASK_PART,
+    ROOTID,
+    useLayoutNode,
+    useSlot,
+    useUpdate,
+} from "@idealjs/layout-manager";
 import { useEffect } from "react";
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
@@ -20,8 +26,16 @@ const PopinListener = () => {
                         target.rule.part,
                         target.layoutNode
                     );
-                    update();
+                } else {
+                    if (layoutNode.layoutNodes.length === 0) {
+                        layoutNode.addPanelNode(
+                            e.panelNode,
+                            MASK_PART.CENTER,
+                            ROOTID
+                        );
+                    }
                 }
+                update();
             } catch (error) {
                 console.error(error);
             }

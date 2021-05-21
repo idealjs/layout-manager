@@ -181,9 +181,9 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     return (
-        <Fragment>
+        <div className="App" style={{ height: "100vh", width: "100vw" }}>
             <GrapeLayout factory={factory} layout={ROOT} />
-        </Fragment>
+        </div>
     );
 }
 
