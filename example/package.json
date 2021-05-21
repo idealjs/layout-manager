@@ -1,9 +1,9 @@
 {
     "name": "example",
-    "version": "1.6.1",
+    "version": "1.6.2",
     "private": true,
     "dependencies": {
-        "@idealjs/grape-layout": "^1.6.1",
+        "@idealjs/grape-layout": "^1.6.2",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
