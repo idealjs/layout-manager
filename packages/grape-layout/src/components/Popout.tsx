@@ -10,6 +10,7 @@ import layoutJSON from "./layout.json";
 import { useMemo } from "react";
 import CustomTab from "./CustomTab";
 import { usePortals } from "./PopoutManager";
+import { useFactory } from "./FactoryProvider";
 
 const Popout: FC<{ portalId: string | number }> = (props) => {
     const { portalId } = props;
@@ -42,13 +43,13 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
         }),
         [afterUpdate]
     );
-
+    const factory = useFactory();
     return (
         <Provider
             layoutNode={ROOT}
             layoutSymbol={portalId}
             Tab={CustomTab}
-            factory={() => () => <div>test</div>}
+            factory={factory}
             updateHook={updateHook}
         >
             <Portal id={portalId}>

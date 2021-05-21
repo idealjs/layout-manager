@@ -10,6 +10,7 @@ import {
 } from "@idealjs/layout-manager";
 import PopinListener from "./PopinListener";
 import CustomTab from "./CustomTab";
+import FactoryProvider from "./FactoryProvider";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     const { factory, layout } = props;
@@ -24,10 +25,7 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                 portals={portals}
                 setPortals={setPortals}
             >
-                <div
-                    className="App"
-                    style={{ height: "100vh", width: "100vw" }}
-                >
+                <div className="App" style={{ height: "100%", width: "100%" }}>
                     <Provider
                         layoutSymbol={mainLayoutSymbol}
                         factory={factory}
@@ -38,7 +36,9 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                         <PopinListener />
                     </Provider>
                 </div>
-                <PopoutManager />
+                <FactoryProvider factory={factory}>
+                    <PopoutManager />
+                </FactoryProvider>
             </PortalsProvider>
         </MainLayoutSymbolProvider>
     );
