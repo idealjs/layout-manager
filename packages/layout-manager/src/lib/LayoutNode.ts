@@ -141,11 +141,14 @@ class LayoutNode {
     }
 
     private isValid(): boolean {
-        const includes = this.parent?.layoutNodes.includes(this);
+        const includes = this.direction === LAYOUT_DIRECTION.ROOT ? true : this.parent?.layoutNodes.includes(this);
         const childrenValidation = this.layoutNodes.reduce((p, c) => {
-            return c.isValid();
+            if (c.direction === LAYOUT_DIRECTION.TAB) {
+                return c.isValid() && c.panelNodes.length !== 0 && p;
+            }
+            return c.isValid() && p;
         }, true);
-        return childrenValidation || (includes ? includes : false);
+        return childrenValidation && (includes != null ? includes : false);
     }
 
     public fill(rect: {
@@ -362,21 +365,6 @@ class LayoutNode {
         if (predicate(this, level)) {
             return this;
         }
-        // let result = this.layoutNodes.reduce(
-        //     (p: LayoutNode | null, c: LayoutNode) => {
-        //         if (p != null) {
-        //             return p;
-        //         }
-        //         if (predicate(c, level)) {
-        //             return c;
-        //         }
-        //         return null;
-        //     },
-        //     null
-        // );
-        // if (result != null) {
-        //     return result;
-        // }
 
         return this.layoutNodes.reduce(
             (p: LayoutNode | null, c: LayoutNode) => {
@@ -388,16 +376,21 @@ class LayoutNode {
 
     private DLR(t: (layout: LayoutNode) => void) {
         t(this);
-        this.layoutNodes.forEach((node) => node.DLR(t));
+        for (let index = 0; index < this.layoutNodes.length; index++) {
+            this.layoutNodes[index].LRD(t)
+        }
     }
 
     private LRD(t: (layout: LayoutNode) => void) {
-        this.layoutNodes.forEach((node) => node.LRD(t));
+        for (let index = 0; index < this.layoutNodes.length; index++) {
+            this.layoutNodes[index].LRD(t)
+        }
         t(this);
     }
 
     public shakeTree() {
         console.debug("[Debug] start shakeTree");
+
         this.LRD((l) => {
             if (
                 l.panelNodes.length === 0 &&
@@ -441,6 +434,7 @@ class LayoutNode {
             }
         });
         console.debug("[Debug] end shakeTree", this);
+        console.debug("[Debug] isTreeValid", this.isValid());
         return this;
     }
 
