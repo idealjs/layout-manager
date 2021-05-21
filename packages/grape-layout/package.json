@@ -1,10 +1,10 @@
 {
     "name": "@idealjs/grape-layout",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "main": "dist/index.js",
     "types": "dist/components/index.d.ts",
     "dependencies": {
-        "@idealjs/layout-manager": "^1.6.0"
+        "@idealjs/layout-manager": "^1.6.1"
     },
     "scripts": {
         "start": "react-scripts start",
