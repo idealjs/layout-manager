@@ -6,6 +6,9 @@ export * from "components/providers/LayoutsProvider"
 export * from "components/providers/LayoutSymbolProvider";
 export * from "components/providers/PanelsProvider";
 export * from "components/providers/SnsProvider";
+export { default as Close } from "components/svg/Close"
+export { default as Popin } from "components/svg/Popin"
+export { default as Popout } from "components/svg/Popout"
 export { default as useStateRef } from "hooks/useStateRef"
 export { default as useTabRef } from "hooks/useTabRef"
 export { default as useUpdate } from "hooks/useUpdate";

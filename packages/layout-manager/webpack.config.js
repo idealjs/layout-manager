@@ -18,8 +18,8 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.svg/,
-                use: "url-loader",
+                test: /\.svg$/,
+                use: ["@svgr/webpack", "url-loader"],
             },
         ],
     },

@@ -1,15 +1,7 @@
-import close from "./resources/close.svg";
+import { ReactComponent } from "./resources/close.svg";
 
 const Close = () => {
-    return (
-        <img
-            src={close}
-            className="Close"
-            alt="close"
-            style={{ width: "100%", height: "100%" }}
-            draggable={false}
-        />
-    );
+    return <ReactComponent style={{ height: "100%", width: "100%" }} />;
 };
 
 export default Close;
