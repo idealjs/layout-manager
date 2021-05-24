@@ -1,6 +1,6 @@
 import LayoutNode from "lib/LayoutNode";
 import PanelNode from "lib/PanelNode";
-import { FC, ForwardRefExoticComponent, RefAttributes } from "react";
+import { FC } from "react";
 import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
 
 export interface ISplitterNode {
@@ -57,6 +57,13 @@ export type TABCMPT = FC<{ nodeId: string }>
 
 
 export type TitlebarCMPT = FC<{ nodeId: string }>
+
+export type SplitterCMPT = FC<{
+    id: string;
+    parentId: string;
+    primaryId: string;
+    secondaryId: string;
+}>
 
 export interface IRule {
     part: MASK_PART;

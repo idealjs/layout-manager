@@ -1,3 +1,4 @@
+import CustomSplitter from "components/CustomSplitter";
 import CustomTab from "components/CustomTab";
 import CustomTitlebar from "components/CustomTitlebar";
 import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
@@ -8,7 +9,7 @@ import SplittersProvider from "components/providers/SplittersProvider";
 import UpdateHookProvider from "components/providers/UpdateHookProvider";
 import LayoutNode from "lib/LayoutNode";
 import { createContext, FC, FunctionComponent, useContext } from "react";
-import { TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "src/type";
+import { SplitterCMPT, TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "src/type";
 
 export type CMPTFactory = (
     page: string,
@@ -20,6 +21,7 @@ const CMPTContext =
         factory: CMPTFactory;
         Tab: TABCMPT;
         Titlebar: TitlebarCMPT;
+        Splitter: SplitterCMPT;
     } | null>(null);
 
 const RIDContext = createContext("RID");
@@ -28,6 +30,7 @@ const Provider: FC<{
     factory: CMPTFactory;
     Tab?: TABCMPT;
     Titlebar?: TitlebarCMPT;
+    Splitter?: SplitterCMPT;
     RID?: string;
     layoutSymbol?: string | number;
     layoutNode: LayoutNode;
@@ -38,6 +41,7 @@ const Provider: FC<{
         factory,
         Tab,
         Titlebar,
+        Splitter,
         RID,
         layoutSymbol,
         layoutNode,
@@ -52,6 +56,7 @@ const Provider: FC<{
                         factory,
                         Tab: Tab ? Tab : CustomTab,
                         Titlebar: Titlebar ? Titlebar : CustomTitlebar,
+                        Splitter: Splitter ? Splitter : CustomSplitter,
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
@@ -97,6 +102,14 @@ export const useCustomTitlebar = (): TitlebarCMPT => {
         throw new Error("Tab CMPT not Provide");
     }
     return content.Titlebar;
+};
+
+export const useCustomSplitter = (): SplitterCMPT => {
+    const content = useContext(CMPTContext);
+    if (content == null) {
+        throw new Error("Tab CMPT not Provide");
+    }
+    return content.Splitter;
 };
 
 export default Provider;

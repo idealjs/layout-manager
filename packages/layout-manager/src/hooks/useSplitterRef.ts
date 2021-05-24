@@ -3,17 +3,46 @@ import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
 import { useSns } from "components/providers/SnsProvider";
 import { DND_EVENT, useDnd } from "lib/dnd";
 import { IDragData } from "lib/dnd/type";
+import LayoutNode from "lib/LayoutNode";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { LAYOUT_DIRECTION, SLOT_EVENT } from "src/enum";
 import { MOVE_SPLITTER_DATA } from "src/type";
 
-const Splitter = (props: {
-    id: string;
-    parentId: string;
-    primaryId: string;
-    secondaryId: string;
+export const createSplitterStyle = (dragging: boolean): CSSProperties => {
+    const hoverBackgroundColor = "#00000085";
+    return {
+        width: "100%",
+        height: "100%",
+        backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
+        userSelect: "none",
+        position: "relative",
+        zIndex: 1,
+    };
+}
+
+export const createShadowStyle = (parent: LayoutNode | undefined, movingOffset: number, dragging: boolean): CSSProperties => {
+    const parentDirection = parent?.direction;
+
+    let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
+    let y = parentDirection === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
+    const transform = `translate(${x}px, ${y}px)`;
+    return {
+        display: dragging ? undefined : "none",
+        position: "relative",
+        zIndex: -1,
+        transform,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#00000065",
+    } as CSSProperties;
+}
+
+const useSplitterRef = (data: {
+    id: string, parentId: string, primaryId: string, secondaryId: string,
+    createSplitterStyle: (dragging: boolean) => CSSProperties,
+    createShadowStyle: (parent: LayoutNode | undefined, movingOffset: number, dragging: boolean) => CSSProperties
 }) => {
-    const { id, parentId, primaryId, secondaryId } = props;
+    const { id, parentId, primaryId, secondaryId } = data;
 
     const [, , dispatch] = useLayouts();
 
@@ -160,11 +189,12 @@ const Splitter = (props: {
         sns,
     ]);
 
-    return (
-        <div id={id} ref={ref} style={splitterStyle}>
-            <div ref={shadowRef} style={shadowStyle}></div>
-        </div>
-    );
-};
+    return {
+        ref,
+        shadowRef,
+        splitterStyle,
+        shadowStyle
+    }
+}
 
-export default Splitter;
+export default useSplitterRef;
