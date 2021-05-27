@@ -136,7 +136,11 @@ const CustomTab: TABCMPT = (props) => {
         <div id={nodeId} className={"Tab"} style={root}>
             <div
                 ref={ref}
-                style={{ lineHeight: "100%", textAlign: "center" }}
+                style={{
+                    lineHeight: "100%",
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
+                }}
                 onClick={onSelect}
             >
                 {nodeId}

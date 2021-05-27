@@ -4,7 +4,9 @@
     "main": "dist/index.js",
     "types": "dist/components/index.d.ts",
     "dependencies": {
-        "@idealjs/layout-manager": "^1.6.1"
+        "@idealjs/layout-manager": "^1.6.1",
+        "clsx": "^1.1.1",
+        "react-jss": "^10.6.0"
     },
     "scripts": {
         "start": "react-scripts start",

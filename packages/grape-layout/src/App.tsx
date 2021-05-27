@@ -7,10 +7,9 @@ import {
     PanelNode,
     ROOTID,
     useUpdate,
+    MASK_PART,
 } from "@idealjs/layout-manager";
-import { Fragment } from "react";
 import { nanoid } from "nanoid";
-import { rules } from "./lib/constant";
 import GrapeLayout from "./components/GrapeLayout";
 
 const ROOT = new LayoutNode({
@@ -98,6 +97,13 @@ const P_B_B_B = new PanelNode({
 });
 
 N_B_B.appendPanelNode(P_B_B_A, P_B_B_B);
+
+const rules = [
+    // { part: MASK_PART.BOTTOM, max: 2 },
+    // { part: MASK_PART.RIGHT, max: 2 },
+    // { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
+    { part: MASK_PART.CENTER, max: 20 },
+];
 
 const factory: CMPTFactory = (page: string) => {
     switch (page) {

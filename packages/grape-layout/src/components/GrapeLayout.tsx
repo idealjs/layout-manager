@@ -11,6 +11,8 @@ import {
 import PopinListener from "./PopinListener";
 import CustomTab from "./CustomTab";
 import FactoryProvider from "./FactoryProvider";
+import CustomTitlebar from "./CustomTitlebar";
+import { JssProvider } from "react-jss";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     const { factory, layout } = props;
@@ -19,28 +21,34 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     );
     const [mainLayoutSymbol] = useState("mainLayout");
     return (
-        <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
-            <PortalsProvider
-                portalsRef={portalsRef}
-                portals={portals}
-                setPortals={setPortals}
-            >
-                <div className="App" style={{ height: "100%", width: "100%" }}>
-                    <Provider
-                        layoutSymbol={mainLayoutSymbol}
-                        factory={factory}
-                        Tab={CustomTab}
-                        layoutNode={layout}
+        <JssProvider>
+            <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
+                <PortalsProvider
+                    portalsRef={portalsRef}
+                    portals={portals}
+                    setPortals={setPortals}
+                >
+                    <div
+                        className="App"
+                        style={{ height: "100%", width: "100%" }}
                     >
-                        <Layout />
-                        <PopinListener />
-                    </Provider>
-                </div>
-                <FactoryProvider factory={factory}>
-                    <PopoutManager />
-                </FactoryProvider>
-            </PortalsProvider>
-        </MainLayoutSymbolProvider>
+                        <Provider
+                            layoutSymbol={mainLayoutSymbol}
+                            factory={factory}
+                            Tab={CustomTab}
+                            Titlebar={CustomTitlebar}
+                            layoutNode={layout}
+                        >
+                            <Layout />
+                            <PopinListener />
+                        </Provider>
+                    </div>
+                    <FactoryProvider factory={factory}>
+                        <PopoutManager />
+                    </FactoryProvider>
+                </PortalsProvider>
+            </MainLayoutSymbolProvider>
+        </JssProvider>
     );
 };
 
