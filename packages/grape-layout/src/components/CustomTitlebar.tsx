@@ -1,11 +1,12 @@
 import { useCustomTab, useLayout } from "@idealjs/layout-manager";
 import { createUseStyles } from "react-jss";
 import clsx from "clsx";
+import { useCallback, useRef, WheelEvent } from "react";
 
 const useStyles = createUseStyles({
     test: {
         "&::-webkit-scrollbar-thumb": {
-            background: "#888",
+            background: "#5464e2",
         },
         "&::-webkit-scrollbar": {
             height: "1px",
@@ -15,12 +16,19 @@ const useStyles = createUseStyles({
 
 const Titlebar = (props: { nodeId: string }) => {
     const { nodeId } = props;
+    const ref = useRef<HTMLDivElement>(null);
     const classes = useStyles();
     const layout = useLayout(nodeId)!;
     const CustomTab = useCustomTab();
-
+    const onWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
+        ref.current?.scrollTo({
+            left: ref.current?.scrollLeft + e.deltaY * 1.5,
+            behavior: "smooth",
+        });
+    }, []);
     return (
         <div
+            ref={ref}
             className={clsx(classes.test)}
             style={{
                 position: "absolute",
@@ -34,6 +42,7 @@ const Titlebar = (props: { nodeId: string }) => {
                 overflowY: "hidden",
                 overflowX: "scroll",
             }}
+            onWheel={onWheel}
         >
             {layout.children.map((id) => (
                 <CustomTab key={id} nodeId={id} />
