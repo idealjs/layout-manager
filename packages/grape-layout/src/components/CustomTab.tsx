@@ -30,8 +30,8 @@ const root: CSSProperties = {
     backgroundColor: "#00000025",
     display: "flex",
     alignItems: "center",
-    borderStyle: "solid",
-    borderWidth: "thin",
+    borderRadius: "10px 10px 0px 0px",
+    padding: "0px 10px",
     margin: "2px",
     userSelect: "none",
 };
@@ -57,7 +57,7 @@ const CustomTab: TABCMPT = (props) => {
     const sns = useSns();
     const slot = useSlot(nodeId);
     const panel = usePanel(nodeId);
-
+    const selected = panel?.selected;
     const update = useUpdate(layoutNode);
 
     const inPopout = useMemo(

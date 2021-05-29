@@ -1,4 +1,8 @@
-import { useCustomTab, useLayout } from "@idealjs/layout-manager";
+import {
+    useCustomTab,
+    useLayout,
+    useTitlebarHeight,
+} from "@idealjs/layout-manager";
 import { createUseStyles } from "react-jss";
 import clsx from "clsx";
 import { useCallback, useRef, WheelEvent } from "react";
@@ -26,13 +30,14 @@ const Titlebar = (props: { nodeId: string }) => {
             behavior: "smooth",
         });
     }, []);
+    const titlebarHeight = useTitlebarHeight();
     return (
         <div
             ref={ref}
             className={clsx(classes.test)}
             style={{
                 position: "absolute",
-                height: "25px",
+                height: `${titlebarHeight}px`,
                 width: layout.width,
                 left: layout.left,
                 top: layout.top,

@@ -38,6 +38,7 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                             Tab={CustomTab}
                             Titlebar={CustomTitlebar}
                             layoutNode={layout}
+                            titlebarHeight={30}
                         >
                             <Layout />
                             <PopinListener />
