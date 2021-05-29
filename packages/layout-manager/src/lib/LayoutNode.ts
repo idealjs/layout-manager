@@ -11,7 +11,6 @@ import {
     ISplitterNode,
 } from "src/type";
 
-const splitterBlock = 10;
 class LayoutNode {
     id: string = nanoid();
     height: number = 0;
@@ -41,14 +40,20 @@ class LayoutNode {
         if (options.layoutJSON.secondaryOffset != null) {
             this.secondaryOffset = options.layoutJSON.secondaryOffset;
         }
-        if (options.layoutJSON.layouts != null && options.layoutJSON.layouts.length !== 0) {
+        if (
+            options.layoutJSON.layouts != null &&
+            options.layoutJSON.layouts.length !== 0
+        ) {
             this.appendLayoutNode(
                 ...options.layoutJSON.layouts.map(
                     (l) => new LayoutNode({ layoutJSON: l })
                 )
             );
         }
-        if (options.layoutJSON.panels != null && options.layoutJSON.panels.length !== 0) {
+        if (
+            options.layoutJSON.panels != null &&
+            options.layoutJSON.panels.length !== 0
+        ) {
             this.appendPanelNode(
                 ...options.layoutJSON.panels.map(
                     (p) => new PanelNode({ panelJSON: p })
@@ -70,7 +75,7 @@ class LayoutNode {
                 c.parent = this;
             });
         } else {
-            console.debug("[Debug]", this.id)
+            console.debug("[Debug]", this.id);
             throw new Error("Can't appendPanelNode to none tab layout");
         }
         if (!this.panelNodes.map((c) => c.selected).includes(true)) {
@@ -141,7 +146,10 @@ class LayoutNode {
     }
 
     private isValid(): boolean {
-        const includes = this.direction === LAYOUT_DIRECTION.ROOT ? true : this.parent?.layoutNodes.includes(this);
+        const includes =
+            this.direction === LAYOUT_DIRECTION.ROOT
+                ? true
+                : this.parent?.layoutNodes.includes(this);
         const childrenValidation = this.layoutNodes.reduce((p, c) => {
             if (c.direction === LAYOUT_DIRECTION.TAB) {
                 return c.isValid() && c.panelNodes.length !== 0 && p;
@@ -151,12 +159,15 @@ class LayoutNode {
         return childrenValidation && (includes != null ? includes : false);
     }
 
-    public fill(rect: {
-        height: number;
-        width: number;
-        left: number;
-        top: number;
-    }) {
+    public fill(
+        rect: {
+            height: number;
+            width: number;
+            left: number;
+            top: number;
+        },
+        splitterThickness: number
+    ) {
         this.height = rect.height;
         this.width = rect.width;
         this.left = rect.left;
@@ -184,7 +195,7 @@ class LayoutNode {
                 if (this.direction === LAYOUT_DIRECTION.COL) {
                     avgHeight =
                         (rect.height -
-                            (this.layoutNodes.length - 1) * splitterBlock) /
+                            (this.layoutNodes.length - 1) * splitterThickness) /
                         this.layoutNodes.length;
                     avgWidth = rect.width;
 
@@ -196,7 +207,7 @@ class LayoutNode {
                     childTop =
                         currentIndex * avgHeight +
                         rect.top +
-                        currentIndex * splitterBlock -
+                        currentIndex * splitterThickness -
                         node.primaryOffset;
                 }
 
@@ -204,7 +215,7 @@ class LayoutNode {
                     avgHeight = rect.height;
                     avgWidth =
                         (rect.width -
-                            (this.layoutNodes.length - 1) * splitterBlock) /
+                            (this.layoutNodes.length - 1) * splitterThickness) /
                         this.layoutNodes.length;
 
                     childHeight = avgHeight;
@@ -213,17 +224,20 @@ class LayoutNode {
                     childLeft =
                         currentIndex * avgWidth +
                         rect.left +
-                        currentIndex * splitterBlock -
+                        currentIndex * splitterThickness -
                         node.primaryOffset;
                     childTop = rect.top;
                 }
 
-                node.fill({
-                    height: childHeight,
-                    width: childWidth,
-                    left: childLeft,
-                    top: childTop,
-                });
+                node.fill(
+                    {
+                        height: childHeight,
+                        width: childWidth,
+                        left: childLeft,
+                        top: childTop,
+                    },
+                    splitterThickness
+                );
             });
         }
     }
@@ -257,7 +271,7 @@ class LayoutNode {
             .concat(layout);
     }
 
-    public parseSplitter(): ISplitterNode[] {
+    public parseSplitter(splitterThickness: number): ISplitterNode[] {
         const index = this.parent?.layoutNodes.findIndex(
             (node) => node === this
         );
@@ -267,7 +281,9 @@ class LayoutNode {
             index === -1 ||
             index === this.parent.layoutNodes.length - 1
         ) {
-            return this.layoutNodes.flatMap((node) => node.parseSplitter());
+            return this.layoutNodes.flatMap((node) =>
+                node.parseSplitter(splitterThickness)
+            );
         }
 
         let splitterHeight = 0;
@@ -276,7 +292,7 @@ class LayoutNode {
         let splitterTop = 0;
 
         if (this.parent.direction === LAYOUT_DIRECTION.COL) {
-            splitterHeight = splitterBlock;
+            splitterHeight = splitterThickness;
             splitterWidth = this.parent.width;
             splitterLeft = this.parent.left;
             splitterTop = this.top + this.height;
@@ -284,14 +300,15 @@ class LayoutNode {
 
         if (this.parent.direction === LAYOUT_DIRECTION.ROW) {
             splitterHeight = this.parent.height;
-            splitterWidth = splitterBlock;
+            splitterWidth = splitterThickness;
             splitterLeft = this.left + this.width;
             splitterTop = this.parent.top;
         }
 
         const splitter: ISplitterNode = {
-            id: `${this.parent.id}_${this.id}_${this.parent.layoutNodes[index + 1].id
-                }`,
+            id: `${this.parent.id}_${this.id}_${
+                this.parent.layoutNodes[index + 1].id
+            }`,
             height: splitterHeight,
             width: splitterWidth,
             left: splitterLeft,
@@ -302,14 +319,18 @@ class LayoutNode {
         };
 
         return this.layoutNodes
-            .flatMap((node) => node.parseSplitter())
+            .flatMap((node) => node.parseSplitter(splitterThickness))
             .concat(splitter);
     }
 
-    public parsePanel(): IPanelNode[] {
+    public parsePanel(titlebarHeight: number = 25): IPanelNode[] {
         return this.layoutNodes
-            .flatMap((node) => node.parsePanel())
-            .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
+            .flatMap((node) => node.parsePanel(titlebarHeight))
+            .concat(
+                this.panelNodes.map((pChild) =>
+                    pChild.parsePanel(titlebarHeight)
+                )
+            );
     }
 
     public toJSON(): ILayoutJSON {
@@ -377,13 +398,13 @@ class LayoutNode {
     private DLR(t: (layout: LayoutNode) => void) {
         t(this);
         for (let index = 0; index < this.layoutNodes.length; index++) {
-            this.layoutNodes[index].LRD(t)
+            this.layoutNodes[index].LRD(t);
         }
     }
 
     private LRD(t: (layout: LayoutNode) => void) {
         for (let index = 0; index < this.layoutNodes.length; index++) {
-            this.layoutNodes[index].LRD(t)
+            this.layoutNodes[index].LRD(t);
         }
         t(this);
     }
@@ -421,12 +442,12 @@ class LayoutNode {
                 const secondaryNode = l.parent.layoutNodes[index + 1];
                 l.parent.layoutNodes.splice(index, 1, ...l.layoutNodes);
                 if (primaryNode != null) {
-                    l.layoutNodes[0].primaryOffset = -primaryNode.secondaryOffset;
+                    l.layoutNodes[0].primaryOffset =
+                        -primaryNode.secondaryOffset;
                 }
                 if (secondaryNode != null) {
-                    l.layoutNodes[
-                        l.layoutNodes.length - 1
-                    ].secondaryOffset = -secondaryNode.primaryOffset;
+                    l.layoutNodes[l.layoutNodes.length - 1].secondaryOffset =
+                        -secondaryNode.primaryOffset;
                 }
                 l.layoutNodes.forEach((c) => (c.parent = l.parent));
                 l.parent = null;
@@ -447,17 +468,20 @@ class LayoutNode {
         const oldLayout =
             target instanceof LayoutNode
                 ? target
-                : this.findPanelNode((p) => p.id === target)?.parent || this.findLayoutNode((p) => p.id === target);
+                : this.findPanelNode((p) => p.id === target)?.parent ||
+                  this.findLayoutNode((p) => p.id === target);
         if (oldLayout?.direction === LAYOUT_DIRECTION.ROOT) {
             if (oldLayout.layoutNodes.length !== 0) {
-                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
+                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0]);
             } else {
-                oldLayout.appendLayoutNode(new LayoutNode({
-                    layoutJSON: {
-                        direction: LAYOUT_DIRECTION.TAB
-                    }
-                }))
-                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0])
+                oldLayout.appendLayoutNode(
+                    new LayoutNode({
+                        layoutJSON: {
+                            direction: LAYOUT_DIRECTION.TAB,
+                        },
+                    })
+                );
+                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0]);
             }
             return this;
         }
@@ -529,9 +553,7 @@ class LayoutNode {
         this.addPanelNode(panelNode, mask, oldLayout);
     }
 
-    public findNodeByRules(
-        rules: IRule[]
-    ): {
+    public findNodeByRules(rules: IRule[]): {
         layoutNode: LayoutNode;
         rule: IRule;
     } | null {
@@ -555,7 +577,7 @@ class LayoutNode {
                         l.panelNodes.length < c.max
                     ) {
                         if (c.limitLevel != null) {
-                            if (c.limitLevel >= (level - 1)) {
+                            if (c.limitLevel >= level - 1) {
                                 return true;
                             }
                         } else {
@@ -567,19 +589,19 @@ class LayoutNode {
                         if (
                             l.direction === direction &&
                             l.layoutNodes.length < c.max &&
-                            (level - 1) <= index
+                            level - 1 <= index
                         ) {
                             if (c.limitLevel != null) {
-                                if (c.limitLevel >= (level - 1)) {
+                                if (c.limitLevel >= level - 1) {
                                     return true;
                                 }
                             } else {
                                 return true;
                             }
                         }
-                        if (l.direction !== direction && (level - 1) === index) {
+                        if (l.direction !== direction && level - 1 === index) {
                             if (c.limitLevel != null) {
-                                if (c.limitLevel >= (level - 1)) {
+                                if (c.limitLevel >= level - 1) {
                                     return true;
                                 }
                             } else {

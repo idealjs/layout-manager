@@ -22,6 +22,8 @@ const CMPTContext =
         Tab: TABCMPT;
         Titlebar: TitlebarCMPT;
         Splitter: SplitterCMPT;
+        titlebarHeight: number;
+        splitterThickness: number;
     } | null>(null);
 
 const RIDContext = createContext("RID");
@@ -35,6 +37,8 @@ const Provider: FC<{
     layoutSymbol?: string | number;
     layoutNode: LayoutNode;
     updateHook?: UPDATE_HOOK;
+    titlebarHeight?: number;
+    splitterThickness?: number;
 }> = (props) => {
     const {
         children,
@@ -46,6 +50,8 @@ const Provider: FC<{
         layoutSymbol,
         layoutNode,
         updateHook,
+        titlebarHeight,
+        splitterThickness,
     } = props;
 
     return (
@@ -57,6 +63,10 @@ const Provider: FC<{
                         Tab: Tab ? Tab : CustomTab,
                         Titlebar: Titlebar ? Titlebar : CustomTitlebar,
                         Splitter: Splitter ? Splitter : CustomSplitter,
+                        titlebarHeight: titlebarHeight ? titlebarHeight : 25,
+                        splitterThickness: splitterThickness
+                            ? splitterThickness
+                            : 10,
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
@@ -110,6 +120,22 @@ export const useCustomSplitter = (): SplitterCMPT => {
         throw new Error("Tab CMPT not Provide");
     }
     return content.Splitter;
+};
+
+export const useTitlebarHeight = (): number => {
+    const content = useContext(CMPTContext);
+    if (content == null) {
+        throw new Error("Tab CMPT not Provide");
+    }
+    return content.titlebarHeight;
+};
+
+export const useSplitterThickness = (): number => {
+    const content = useContext(CMPTContext);
+    if (content == null) {
+        throw new Error("Tab CMPT not Provide");
+    }
+    return content.splitterThickness;
 };
 
 export default Provider;
