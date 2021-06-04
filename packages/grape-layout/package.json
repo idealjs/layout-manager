@@ -31,6 +31,7 @@
         ]
     },
     "devDependencies": {
+        "@idealjs/layout-manager": "^1.6.3",
         "@svgr/webpack": "^5.5.0",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
@@ -47,6 +48,6 @@
         "web-vitals": "^1.0.1"
     },
     "peerDependencies": {
-        "@idealjs/layout-manager": "^1.6.1"
+        "@idealjs/layout-manager": "^1.6.3"
     }
 }
