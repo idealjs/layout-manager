@@ -24,7 +24,7 @@ const close = {
     height: "20px",
 };
 
-const CustomTab: TABCMPT = (props) => {
+const DefaultTab: TABCMPT = (props) => {
     const { nodeId } = props;
 
     const ref = useTabRef(nodeId);
@@ -59,4 +59,4 @@ const CustomTab: TABCMPT = (props) => {
     );
 };
 
-export default CustomTab;
+export default DefaultTab;

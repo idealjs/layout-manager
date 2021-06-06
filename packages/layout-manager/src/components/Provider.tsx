@@ -1,6 +1,6 @@
-import CustomSplitter from "components/CustomSplitter";
-import CustomTab from "components/CustomTab";
-import CustomTitlebar from "components/CustomTitlebar";
+import DefaultSplitter from "components/DefaultSplitter";
+import DefaultTab from "components/DefaultTab";
+import DefaultTitlebar from "components/DefaultTitlebar";
 import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
 import LayoutsProvider from "components/providers/LayoutsProvider";
 import LayoutSymbolProvider from "components/providers/LayoutSymbolProvider";
@@ -60,9 +60,9 @@ const Provider: FC<{
                 <CMPTContext.Provider
                     value={{
                         factory,
-                        Tab: Tab ? Tab : CustomTab,
-                        Titlebar: Titlebar ? Titlebar : CustomTitlebar,
-                        Splitter: Splitter ? Splitter : CustomSplitter,
+                        Tab: Tab ? Tab : DefaultTab,
+                        Titlebar: Titlebar ? Titlebar : DefaultTitlebar,
+                        Splitter: Splitter ? Splitter : DefaultSplitter,
                         titlebarHeight: titlebarHeight ? titlebarHeight : 25,
                         splitterThickness: splitterThickness
                             ? splitterThickness

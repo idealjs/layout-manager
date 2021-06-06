@@ -1,7 +1,7 @@
 import { useCustomTab } from "components/Provider";
 import { useLayout } from "components/providers/LayoutsProvider";
 
-const Titlebar = (props: { nodeId: string }) => {
+const DefaultTitlebar = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const layout = useLayout(nodeId)!;
     const CustomTab = useCustomTab();
@@ -25,4 +25,4 @@ const Titlebar = (props: { nodeId: string }) => {
     );
 };
 
-export default Titlebar;
+export default DefaultTitlebar;
