@@ -48,6 +48,6 @@
         "web-vitals": "^1.0.1"
     },
     "peerDependencies": {
-        "@idealjs/layout-manager": "^1.6.3"
+        "@idealjs/layout-manager": "^1.7.0"
     }
 }
