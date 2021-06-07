@@ -6,19 +6,19 @@ import {
     LayoutNode,
     PanelNode,
     ROOTID,
-    useUpdate,
     MASK_PART,
+    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 import { Fragment } from "react";
 import { nanoid } from "nanoid";
-import {GrapeLayout} from "@idealjs/grape-layout";
+import { GrapeLayout } from "@idealjs/grape-layout";
 
 const rules = [
     { part: MASK_PART.BOTTOM, max: 2 },
     { part: MASK_PART.RIGHT, max: 2 },
     { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
     { part: MASK_PART.CENTER, max: 2 },
-]
+];
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -131,7 +131,6 @@ const factory: CMPTFactory = (page: string) => {
             return (props) => {
                 const { nodeData } = props;
                 const [counter, setCounter] = useState(0);
-                const update = useUpdate(ROOT);
                 useEffect(() => {
                     const handler = setInterval(() => {
                         setCounter((c) => c + 1);
@@ -152,18 +151,16 @@ const factory: CMPTFactory = (page: string) => {
                                     page: "test",
                                 },
                             });
-
-                            ROOT.addPanelNode(
-                                test,
-                                target.rule.part,
-                                target.layoutNode
-                            );
-                            update();
+                            ROOT.doAction(LayoutNodeActionType.ADD_PANEL, {
+                                panelNode: test,
+                                mask: target.rule.part,
+                                target: target.layoutNode,
+                            });
                         }
                     } catch (error) {
                         console.error(error);
                     }
-                }, [update]);
+                }, []);
 
                 const onShow = useCallback(() => {
                     console.log(JSON.stringify(ROOT.toJSON(), null, 2));
@@ -188,9 +185,9 @@ const factory: CMPTFactory = (page: string) => {
 
 function App() {
     return (
-        <Fragment>
+        <div className="App" style={{ height: "100vh", width: "100vw" }}>
             <GrapeLayout factory={factory} layout={ROOT} />
-        </Fragment>
+        </div>
     );
 }
 
