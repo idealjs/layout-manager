@@ -3,7 +3,7 @@ import {
     ROOTID,
     useLayoutNode,
     useSlot,
-    useUpdate,
+    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 import { useEffect } from "react";
 import { rules } from "../lib/constant";
@@ -13,7 +13,6 @@ const PopinListener = () => {
     const layoutNode = useLayoutNode();
     const mainlayoutSymbol = useMainLayoutSymbol();
     const slot = useSlot(mainlayoutSymbol);
-    const update = useUpdate(layoutNode);
     useEffect(() => {
         slot.addListener("popin", (e) => {
             console.log(e);
@@ -21,26 +20,25 @@ const PopinListener = () => {
                 const target = layoutNode.findNodeByRules(rules);
                 console.debug("[Debug] target is", target);
                 if (target) {
-                    layoutNode.addPanelNode(
-                        e.panelNode,
-                        target.rule.part,
-                        target.layoutNode
-                    );
+                    layoutNode.doAction(LayoutNodeActionType.ADD_PANEL, {
+                        panelNode: e.panelNode,
+                        mask: target.rule.part,
+                        target: target.layoutNode,
+                    });
                 } else {
                     if (layoutNode.layoutNodes.length === 0) {
-                        layoutNode.addPanelNode(
-                            e.panelNode,
-                            MASK_PART.CENTER,
-                            ROOTID
-                        );
+                        layoutNode.doAction(LayoutNodeActionType.ADD_PANEL, {
+                            panelNode: e.panelNode,
+                            mask: MASK_PART.CENTER,
+                            target: ROOTID,
+                        });
                     }
                 }
-                update();
             } catch (error) {
                 console.error(error);
             }
         });
-    }, [layoutNode, slot, update]);
+    }, [layoutNode, slot]);
 
     return null;
 };

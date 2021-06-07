@@ -1,17 +1,99 @@
+import EventEmitter from "events";
 import directionFromMask from "lib/directionFromMask";
 import PanelNode from "lib/PanelNode";
 import { nanoid } from "nanoid";
 import { ROOTID } from "src/constant";
 import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
 import {
+    ADD_PANEL_DATA,
     ILayoutJSON,
     ILayoutNode,
     IPanelNode,
     IRule,
     ISplitterNode,
+    MOVE_PANEL_DATA,
+    MOVE_SPLITTER_DATA,
+    REMOVE_PANEL_DATA,
+    SELECT_TAB_DATA,
 } from "src/type";
 
-class LayoutNode {
+const is_ADD_PANEL_DATA = (data: ActionPayload): data is ADD_PANEL_DATA => {
+    return (
+        (data as ADD_PANEL_DATA).mask != null &&
+        (data as ADD_PANEL_DATA).panelNode != null &&
+        (data as ADD_PANEL_DATA).target != null
+    );
+};
+
+const is_MOVE_PANEL_DATA = (data: ActionPayload): data is MOVE_PANEL_DATA => {
+    return (
+        (data as MOVE_PANEL_DATA).mask != null &&
+        (data as MOVE_PANEL_DATA).search != null &&
+        (data as MOVE_PANEL_DATA).target != null
+    );
+};
+
+const is_MOVE_SPLITTER_DATA = (
+    data: ActionPayload
+): data is MOVE_SPLITTER_DATA => {
+    return (
+        (data as MOVE_SPLITTER_DATA).offset != null &&
+        (data as MOVE_SPLITTER_DATA).primary != null &&
+        (data as MOVE_SPLITTER_DATA).secondary != null
+    );
+};
+
+const is_REMOVE_PANEL_DATA = (
+    data: ActionPayload
+): data is REMOVE_PANEL_DATA => {
+    return (data as REMOVE_PANEL_DATA).search != null;
+};
+
+const is_SELECT_TAB_DATA = (data: ActionPayload): data is SELECT_TAB_DATA => {
+    return (data as SELECT_TAB_DATA).search != null;
+};
+
+export enum LayoutNodeActionType {
+    ADD_PANEL = "ADD_PANEL",
+    MOVE_PANEL = "MOVE_PANEL",
+    MOVE_SPLITTER = "MOVE_SPLITTER",
+    REMOVE_PANEL = "REMOVE_PANEL",
+    SELECT_TAB = "SELECT_TAB",
+}
+
+export type ActionPayload =
+    | ADD_PANEL_DATA
+    | MOVE_PANEL_DATA
+    | MOVE_SPLITTER_DATA
+    | REMOVE_PANEL_DATA
+    | SELECT_TAB_DATA;
+
+export const LayoutNodeUpdate = Symbol("LayoutNodeUpdate");
+
+interface LayoutNode {
+    doAction(
+        actionType: LayoutNodeActionType.ADD_PANEL,
+        actionPayload: ADD_PANEL_DATA
+    ): void;
+    doAction(
+        actionType: LayoutNodeActionType.MOVE_PANEL,
+        actionPayload: MOVE_PANEL_DATA
+    ): void;
+    doAction(
+        actionType: LayoutNodeActionType.MOVE_SPLITTER,
+        actionPayload: MOVE_SPLITTER_DATA
+    ): void;
+    doAction(
+        actionType: LayoutNodeActionType.REMOVE_PANEL,
+        actionPayload: REMOVE_PANEL_DATA
+    ): void;
+    doAction(
+        actionType: LayoutNodeActionType.SELECT_TAB,
+        actionPayload: SELECT_TAB_DATA
+    ): void;
+}
+
+class LayoutNode extends EventEmitter implements LayoutNode {
     id: string = nanoid();
     height: number = 0;
     width: number = 0;
@@ -30,6 +112,7 @@ class LayoutNode {
             direction: LAYOUT_DIRECTION | keyof typeof LAYOUT_DIRECTION;
         };
     }) {
+        super();
         this.direction = options.layoutJSON.direction;
         if (options.layoutJSON.id != null) {
             this.id = options.layoutJSON.id;
@@ -60,6 +143,42 @@ class LayoutNode {
                 )
             );
         }
+    }
+
+    public doAction(
+        actionType: LayoutNodeActionType,
+        actionPayload: ActionPayload
+    ) {
+        switch (actionType) {
+            case LayoutNodeActionType.ADD_PANEL:
+                if (is_ADD_PANEL_DATA(actionPayload)) {
+                    this.addPanelNode(actionPayload);
+                }
+                break;
+            case LayoutNodeActionType.MOVE_PANEL:
+                if (is_MOVE_PANEL_DATA(actionPayload)) {
+                    this.movePanelNode(actionPayload);
+                }
+                break;
+            case LayoutNodeActionType.MOVE_SPLITTER:
+                if (is_MOVE_SPLITTER_DATA(actionPayload)) {
+                    this.moveSplitter(actionPayload);
+                }
+                break;
+            case LayoutNodeActionType.REMOVE_PANEL:
+                if (is_REMOVE_PANEL_DATA(actionPayload)) {
+                    this.removePanelNode(actionPayload);
+                }
+                break;
+            case LayoutNodeActionType.SELECT_TAB:
+                if (is_SELECT_TAB_DATA(actionPayload)) {
+                    this.selectTab(actionPayload);
+                }
+                break;
+            default:
+                break;
+        }
+        this.emit(LayoutNodeUpdate);
     }
 
     public appendLayoutNode(...children: LayoutNode[]) {
@@ -459,11 +578,8 @@ class LayoutNode {
         return this;
     }
 
-    public addPanelNode(
-        panelNode: PanelNode,
-        mask: MASK_PART,
-        target: string | LayoutNode //panelNodeId or layout
-    ) {
+    private addPanelNode(data: ADD_PANEL_DATA) {
+        const { panelNode, mask, target } = data;
         const direction = directionFromMask(mask);
         const oldLayout =
             target instanceof LayoutNode
@@ -472,7 +588,11 @@ class LayoutNode {
                   this.findLayoutNode((p) => p.id === target);
         if (oldLayout?.direction === LAYOUT_DIRECTION.ROOT) {
             if (oldLayout.layoutNodes.length !== 0) {
-                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0]);
+                this.addPanelNode({
+                    panelNode,
+                    mask,
+                    target: oldLayout.layoutNodes[0],
+                });
             } else {
                 oldLayout.appendLayoutNode(
                     new LayoutNode({
@@ -481,7 +601,11 @@ class LayoutNode {
                         },
                     })
                 );
-                this.addPanelNode(panelNode, mask, oldLayout.layoutNodes[0]);
+                this.addPanelNode({
+                    panelNode,
+                    mask,
+                    target: oldLayout.layoutNodes[0],
+                });
             }
             return this;
         }
@@ -519,8 +643,9 @@ class LayoutNode {
         return this;
     }
 
-    public removePanelNode(searchId: string) {
-        const panelNode = this.findPanelNode((p) => p.id === searchId);
+    private removePanelNode(data: REMOVE_PANEL_DATA) {
+        const { search } = data;
+        const panelNode = this.findPanelNode((p) => p.id === search);
 
         if (panelNode == null) {
             throw new Error("");
@@ -531,11 +656,8 @@ class LayoutNode {
         return panelNode;
     }
 
-    public movePanelNode(
-        search: string,
-        mask: MASK_PART,
-        target: string | LayoutNode //panelNodeId or layout
-    ) {
+    private movePanelNode(data: MOVE_PANEL_DATA) {
+        const { search, mask, target } = data;
         const panelNode = this.findPanelNode((p) => p.id === search);
         const oldLayout =
             target instanceof LayoutNode
@@ -550,7 +672,32 @@ class LayoutNode {
             panelNode.remove();
         }
 
-        this.addPanelNode(panelNode, mask, oldLayout);
+        this.addPanelNode({ panelNode, mask, target: oldLayout });
+    }
+
+    private selectTab(data: SELECT_TAB_DATA) {
+        const panelNode = this.getPanelById(data.search);
+
+        if (
+            panelNode != null &&
+            panelNode.parent != null &&
+            panelNode.selected === false
+        ) {
+            panelNode.parent.panelNodes.forEach((p) => (p.selected = false));
+            panelNode.selected = true;
+        }
+    }
+
+    private moveSplitter(data: MOVE_SPLITTER_DATA) {
+        const primaryNode = this.getLayoutById(data.primary);
+        const secondaryNode = this.getLayoutById(data.secondary);
+
+        if (primaryNode != null && secondaryNode != null) {
+            primaryNode.secondaryOffset =
+                primaryNode.secondaryOffset + data.offset;
+            secondaryNode.primaryOffset =
+                secondaryNode.primaryOffset - data.offset;
+        }
     }
 
     public findNodeByRules(rules: IRule[]): {

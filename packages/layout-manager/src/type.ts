@@ -26,8 +26,6 @@ export interface IWidgetNode {
     children: string[];
 }
 
-
-
 export interface ILayoutNode {
     id: string;
     height: number;
@@ -53,17 +51,16 @@ export interface IPanelNode {
     data?: any;
 }
 
-export type TABCMPT = FC<{ nodeId: string }>
+export type TABCMPT = FC<{ nodeId: string }>;
 
-
-export type TitlebarCMPT = FC<{ nodeId: string }>
+export type TitlebarCMPT = FC<{ nodeId: string }>;
 
 export type SplitterCMPT = FC<{
     id: string;
     parentId: string;
     primaryId: string;
     secondaryId: string;
-}>
+}>;
 
 export interface IRule {
     part: MASK_PART;
@@ -87,32 +84,32 @@ export interface ILayoutJSON {
 }
 
 export type ADD_PANEL_DATA = {
-    panelNode: PanelNode,
-    mask: MASK_PART,
-    target: string | LayoutNode
-}
+    panelNode: PanelNode;
+    mask: MASK_PART;
+    target: string | LayoutNode;
+};
 
 export type MOVE_PANEL_DATA = {
     search: string;
-    target: string;
+    target: string | LayoutNode;
     mask: MASK_PART;
-}
+};
 
 export type MOVE_SPLITTER_DATA = {
     primary: string;
     secondary: string;
     offset: number;
-}
+};
 
 export type REMOVE_PANEL_DATA = {
     search: string;
-}
+};
 
 export type SELECT_TAB_DATA = {
-    selected: string;
-}
+    search: string;
+};
 
 export type UPDATE_HOOK = {
-    before?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void
-    after?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void
-}
+    before?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void;
+    after?: (layoutSymbol: string | number, layoutNode: LayoutNode) => void;
+};

@@ -33,7 +33,7 @@ const DefaultTab: TABCMPT = (props) => {
 
     const onSelect = useCallback(() => {
         sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
-            selected: nodeId,
+            search: nodeId,
         } as SELECT_TAB_DATA);
     }, [layoutSymbol, nodeId, sns]);
 

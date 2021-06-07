@@ -6,8 +6,8 @@ import {
     LayoutNode,
     PanelNode,
     ROOTID,
-    useUpdate,
     MASK_PART,
+    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 import { nanoid } from "nanoid";
 import GrapeLayout from "./components/GrapeLayout";
@@ -130,7 +130,6 @@ const factory: CMPTFactory = (page: string) => {
             return (props) => {
                 const { nodeData } = props;
                 const [counter, setCounter] = useState(0);
-                const update = useUpdate(ROOT);
                 useEffect(() => {
                     const handler = setInterval(() => {
                         setCounter((c) => c + 1);
@@ -151,18 +150,16 @@ const factory: CMPTFactory = (page: string) => {
                                     page: "test",
                                 },
                             });
-
-                            ROOT.addPanelNode(
-                                test,
-                                target.rule.part,
-                                target.layoutNode
-                            );
-                            update();
+                            ROOT.doAction(LayoutNodeActionType.ADD_PANEL, {
+                                panelNode: test,
+                                mask: target.rule.part,
+                                target: target.layoutNode,
+                            });
                         }
                     } catch (error) {
                         console.error(error);
                     }
-                }, [update]);
+                }, []);
 
                 const onShow = useCallback(() => {
                     console.log(JSON.stringify(ROOT.toJSON(), null, 2));

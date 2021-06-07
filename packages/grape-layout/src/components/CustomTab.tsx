@@ -12,12 +12,12 @@ import {
     REMOVE_PANEL_DATA,
     ADD_PANEL_DATA,
     useLayoutNode,
-    useUpdate,
     SELECT_TAB_DATA,
     useTabRef,
     Close,
     Popout,
     Popin,
+    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 
 import { usePortals } from "./PopoutManager";
@@ -57,8 +57,7 @@ const CustomTab: TABCMPT = (props) => {
     const sns = useSns();
     const slot = useSlot(nodeId);
     const panel = usePanel(nodeId);
-    const selected = panel?.selected;
-    const update = useUpdate(layoutNode);
+    // const selected = panel?.selected;
 
     const inPopout = useMemo(
         () => portals.includes(layoutSymbol),
@@ -94,12 +93,12 @@ const CustomTab: TABCMPT = (props) => {
                 panelJSON: panel!,
             });
 
-            layoutNode.removePanelNode(nodeId);
-
+            layoutNode.doAction(LayoutNodeActionType.REMOVE_PANEL, {
+                search: nodeId,
+            });
             sns.send(mainLayoutSymbol, "popin", {
                 panelNode: panelNode,
             });
-            update();
         } else {
             console.debug("[Debug] popout");
             slot.addListener("ready", popoutReady);
@@ -114,7 +113,6 @@ const CustomTab: TABCMPT = (props) => {
         nodeId,
         sns,
         mainLayoutSymbol,
-        update,
         setPortals,
         slot,
         popoutReady,
@@ -122,7 +120,7 @@ const CustomTab: TABCMPT = (props) => {
 
     const onSelect = useCallback(() => {
         sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
-            selected: nodeId,
+            search: nodeId,
         } as SELECT_TAB_DATA);
     }, [layoutSymbol, nodeId, sns]);
 
