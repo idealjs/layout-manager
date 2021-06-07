@@ -9,7 +9,6 @@ import {
     MASK_PART,
     LayoutNodeActionType,
 } from "@idealjs/layout-manager";
-import { Fragment } from "react";
 import { nanoid } from "nanoid";
 import { GrapeLayout } from "@idealjs/grape-layout";
 
