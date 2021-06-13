@@ -23,6 +23,7 @@ commit 以 `type(module): message` 为统一规范，其中 type、module、mess
 
 -   gl(grape-layout)
 -   lm(layout-manager)
+-   dnd(drag-and-drop)
 
 ## message
 
