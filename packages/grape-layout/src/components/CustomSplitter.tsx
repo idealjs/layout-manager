@@ -5,6 +5,7 @@ import {
     createShadowStyle,
     useSplitter,
     useLayout,
+    LAYOUT_DIRECTION,
 } from "@idealjs/layout-manager";
 import { useMemo } from "react";
 
@@ -21,10 +22,17 @@ const DefaultSplitter: SplitterCMPT = (props) => {
     const parent = useLayout(parentId);
 
     const splitterStyle = useMemo(() => {
-        return createSplitterStyle({
-            dragging,
-        });
-    }, [dragging]);
+        const cursor =
+            parent?.direction === LAYOUT_DIRECTION.ROW
+                ? "ew-resize"
+                : "ns-resize";
+        return {
+            ...createSplitterStyle({
+                dragging,
+            }),
+            cursor: cursor,
+        };
+    }, [dragging, parent?.direction]);
 
     const shadowStyle = useMemo(() => {
         return createShadowStyle({ parent, dragging, movingOffset });
