@@ -1,4 +1,5 @@
 import {
+    TitlebarCMPT,
     useCustomTab,
     useLayout,
     useTitlebarHeight,
@@ -18,7 +19,7 @@ const useStyles = createUseStyles({
     },
 });
 
-const Titlebar = (props: { nodeId: string }) => {
+const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
     const classes = useStyles();

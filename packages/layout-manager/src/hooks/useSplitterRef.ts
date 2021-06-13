@@ -3,12 +3,14 @@ import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
 import { useSns } from "components/providers/SnsProvider";
 import { DND_EVENT, useDnd } from "lib/dnd";
 import { IDragData } from "lib/dnd/type";
-import LayoutNode from "lib/LayoutNode";
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import { LAYOUT_DIRECTION, SLOT_EVENT } from "src/enum";
-import { MOVE_SPLITTER_DATA } from "src/type";
+import { ILayoutNode, MOVE_SPLITTER_DATA } from "src/type";
 
-export const createSplitterStyle = (dragging: boolean): CSSProperties => {
+export const createSplitterStyle = (config: {
+    dragging: boolean;
+}): CSSProperties => {
+    const { dragging } = config;
     const hoverBackgroundColor = "#00000085";
     return {
         width: "100%",
@@ -18,9 +20,14 @@ export const createSplitterStyle = (dragging: boolean): CSSProperties => {
         position: "relative",
         zIndex: 1,
     };
-}
+};
 
-export const createShadowStyle = (parent: LayoutNode | undefined, movingOffset: number, dragging: boolean): CSSProperties => {
+export const createShadowStyle = (config: {
+    parent: ILayoutNode | undefined;
+    movingOffset: number;
+    dragging: boolean;
+}): CSSProperties => {
+    const { parent, movingOffset, dragging } = config;
     const parentDirection = parent?.direction;
 
     let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
@@ -35,12 +42,13 @@ export const createShadowStyle = (parent: LayoutNode | undefined, movingOffset: 
         height: "100%",
         backgroundColor: "#00000065",
     } as CSSProperties;
-}
+};
 
 const useSplitterRef = (data: {
-    id: string, parentId: string, primaryId: string, secondaryId: string,
-    createSplitterStyle: (dragging: boolean) => CSSProperties,
-    createShadowStyle: (parent: LayoutNode | undefined, movingOffset: number, dragging: boolean) => CSSProperties
+    id: string;
+    parentId: string;
+    primaryId: string;
+    secondaryId: string;
 }) => {
     const { id, parentId, primaryId, secondaryId } = data;
 
@@ -71,35 +79,6 @@ const useSplitterRef = (data: {
             offsetRef.current = primary.secondaryOffset;
         }
     }, [primary?.secondaryOffset]);
-
-    const splitterStyle: CSSProperties = useMemo(() => {
-        const hoverBackgroundColor = "#00000085";
-        return {
-            width: "100%",
-            height: "100%",
-            backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
-            userSelect: "none",
-            position: "relative",
-            zIndex: 1,
-        };
-    }, [dragging]);
-
-    const shadowStyle = useMemo(() => {
-        const parentDirection = parent?.direction;
-
-        let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
-        let y = parentDirection === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
-        const transform = `translate(${x}px, ${y}px)`;
-        return {
-            display: dragging ? undefined : "none",
-            position: "relative",
-            zIndex: -1,
-            transform,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#00000065",
-        } as CSSProperties;
-    }, [dragging, movingOffset, parent]);
 
     useEffect(() => {
         let offset = 0;
@@ -192,9 +171,11 @@ const useSplitterRef = (data: {
     return {
         ref,
         shadowRef,
-        splitterStyle,
-        shadowStyle
-    }
-}
+        dragging,
+        movingOffset,
+        // splitterStyle,
+        // shadowStyle,
+    };
+};
 
 export default useSplitterRef;

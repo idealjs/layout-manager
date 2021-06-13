@@ -120,24 +120,13 @@ const Layout = () => {
                 })}
             {splitters.map((n) => {
                 return (
-                    <div
+                    <CustomSplitter
                         id={n.id}
                         key={n.id}
-                        style={{
-                            position: "absolute",
-                            height: n.height,
-                            width: n.width,
-                            left: n.left,
-                            top: n.top,
-                        }}
-                    >
-                        <CustomSplitter
-                            id={n.id}
-                            parentId={n.parentId}
-                            primaryId={n.primaryId}
-                            secondaryId={n.secondaryId}
-                        />
-                    </div>
+                        parentId={n.parentId}
+                        primaryId={n.primaryId}
+                        secondaryId={n.secondaryId}
+                    />
                 );
             })}
         </div>

@@ -1,7 +1,8 @@
 import { useCustomTab } from "components/Provider";
 import { useLayout } from "components/providers/LayoutsProvider";
+import { TitlebarCMPT } from "src/type";
 
-const DefaultTitlebar = (props: { nodeId: string }) => {
+const DefaultTitlebar: TitlebarCMPT = (props) => {
     const { nodeId } = props;
     const layout = useLayout(nodeId)!;
     const CustomTab = useCustomTab();

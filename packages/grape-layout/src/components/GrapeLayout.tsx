@@ -13,6 +13,7 @@ import CustomTab from "./CustomTab";
 import FactoryProvider from "./FactoryProvider";
 import CustomTitlebar from "./CustomTitlebar";
 import { JssProvider } from "react-jss";
+import CustomSplitter from "./CustomSplitter";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     const { factory, layout } = props;
@@ -37,7 +38,9 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                             factory={factory}
                             Tab={CustomTab}
                             Titlebar={CustomTitlebar}
+                            Splitter={CustomSplitter}
                             layoutNode={layout}
+                            splitterThickness={5}
                             titlebarHeight={30}
                         >
                             <Layout />

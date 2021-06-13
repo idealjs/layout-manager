@@ -1,12 +1,12 @@
-import { useSplitter } from "components/providers/SplittersProvider";
-import useSplitterRef, {
-    createShadowStyle,
+import {
+    SplitterCMPT,
+    useSplitterRef,
     createSplitterStyle,
-} from "hooks/useSplitterRef";
+    createShadowStyle,
+    useSplitter,
+    useLayout,
+} from "@idealjs/layout-manager";
 import { useMemo } from "react";
-import { SplitterCMPT } from "src/type";
-
-import { useLayout } from "./providers/LayoutsProvider";
 
 const DefaultSplitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
