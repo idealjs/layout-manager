@@ -6,7 +6,7 @@ orbs:
 defaults: &defaults
     docker:
         - image: cimg/node:15.1
-    working_directory: ~/repo
+    working_directory: ~/project
 
 jobs:
     build:
@@ -19,27 +19,27 @@ jobs:
                   name: Lerna Bootstrap
                   command: yarn lerna bootstrap
             - persist_to_workspace:
-                  root: ~/repo
+                  root: ~/project
                   paths: .
     test:
         <<: *defaults
         steps:
             - attach_workspace:
-                  at: ~/repo
+                  at: ~/project
             - checkout
 
     publish:
         <<: *defaults
         steps:
             - attach_workspace:
-                  at: ~/repo
+                  at: ~/project
             - run:
                   name: Authenticate with registry
-                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN\n@idealjs:registry=https://registry.npmjs.org" > ~/project/.npmrc
             - run:
                   name: Lerna Publish
                   command: yarn lerna publish from-package --yes
-                  
+
 workflows:
     main:
         jobs:
