@@ -31,10 +31,13 @@ workflows:
     sample:
         jobs:
             - build
-            - test
+            - test:
+                  requires:
+                      - build
             - publish:
                   requires:
                       - build
+                      - test
                   filters:
                       branches:
                           ignore: /.*/
