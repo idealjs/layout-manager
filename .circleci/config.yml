@@ -35,7 +35,7 @@ jobs:
                   at: ~/project
             - run:
                   name: Authenticate with registry
-                  command: echo -e "//registry.npmjs.org/:_authToken=\$NPM_TOKEN\n@idealjs:registry=https://registry.npmjs.org" > ~/project/.npmrc
+                  command: echo -e "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}\n@idealjs:registry=https://registry.npmjs.org" > ~/project/.npmrc
             - run:
                   name: Lerna Publish
                   command: yarn lerna publish from-package --yes
