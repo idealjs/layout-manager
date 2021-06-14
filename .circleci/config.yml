@@ -41,6 +41,6 @@ workflows:
                       - test
                   filters:
                       branches:
-                          ignore: /.*/
+                          only: /main/
                     #   tags:
                     #       only: /^\d+\.\d+\.\d+(-pre\.\d+)?$/
