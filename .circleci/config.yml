@@ -42,5 +42,5 @@ workflows:
                   filters:
                       branches:
                           only: /main/
-                    #   tags:
-                    #       only: /^\d+\.\d+\.\d+(-pre\.\d+)?$/
+                      tags:
+                          only: /^\d+\.\d+\.\d+(-alpha\.\d+)?$/
