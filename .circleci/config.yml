@@ -17,7 +17,7 @@ jobs:
                   pkg-manager: yarn
             - run:
                   name: Lerna Bootstrap
-                  command: yarn lerna build:webpack
+                  command: yarn lerna run build:webpack
             - run:
                   name: Lerna Bootstrap
                   command: yarn lerna bootstrap
