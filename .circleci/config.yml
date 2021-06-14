@@ -39,8 +39,8 @@ workflows:
                   requires:
                       - build
                       - test
-                  filters:
-                      branches:
-                          ignore: /.*/
-                      tags:
-                          only: /^\d+\.\d+\.\d+(-pre\.\d+)?$/
+                #   filters:
+                    #   branches:
+                    #       ignore: /.*/
+                    #   tags:
+                    #       only: /^\d+\.\d+\.\d+(-pre\.\d+)?$/
