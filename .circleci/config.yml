@@ -33,7 +33,7 @@ jobs:
                   at: ./
             - run:
                   name: Lerna Publish
-                  command: yarn lerna publish from-package
+                  command: yarn lerna publish from-package --yes
 workflows:
     main:
         jobs:
@@ -43,7 +43,6 @@ workflows:
                       - build
             - publish:
                   requires:
-                      - build
                       - test
                   filters:
                       branches:
