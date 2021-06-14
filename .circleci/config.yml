@@ -15,14 +15,14 @@ jobs:
                   name: Lerna Bootstrap
                   command: yarn lerna bootstrap
             - persist_to_workspace:
-                  root: ./repo
+                  root: ./
                   paths: .
     test:
         docker:
             - image: cimg/node:15.1
         steps:
             - attach_workspace:
-                  at: ./repo
+                  at: ./
             - checkout
 
     publish:
@@ -30,7 +30,7 @@ jobs:
             - image: cimg/node:15.1
         steps:
             - attach_workspace:
-                  at: ./repo
+                  at: ./
             - run:
                   name: Lerna Publish
                   command: yarn lerna publish from-package
