@@ -2,12 +2,15 @@ version: 2.1
 
 orbs:
     node: circleci/node@4.1
+
+defaults: &defaults
+    docker:
+        - image: cimg/node:15.1
     working_directory: ~/repo
 
 jobs:
     build:
-        docker:
-            - image: cimg/node:15.1
+        <<: *defaults
         steps:
             - checkout
             - node/install-packages:
@@ -19,16 +22,14 @@ jobs:
                   root: ~/repo
                   paths: .
     test:
-        docker:
-            - image: cimg/node:15.1
+        <<: *defaults
         steps:
             - attach_workspace:
                   at: ~/repo
             - checkout
 
     publish:
-        docker:
-            - image: cimg/node:15.1
+        <<: *defaults
         steps:
             - attach_workspace:
                   at: ~/repo
@@ -38,6 +39,7 @@ jobs:
             - run:
                   name: Lerna Publish
                   command: yarn lerna publish from-package --yes
+                  
 workflows:
     main:
         jobs:
