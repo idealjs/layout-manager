@@ -29,11 +29,8 @@ jobs:
             - node/install-packages:
                   pkg-manager: yarn
             - run:
-                name: Install Dependencies
-                command: yarn install --frozen-lockfile
-            - run:
-                  name: Learn Bootstrap
-                  command: yarn learn bootstrap
+                  name: Lerna Bootstrap
+                  command: yarn lerna bootstrap
 workflows:
     # Below is the definition of your workflow.
     # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
