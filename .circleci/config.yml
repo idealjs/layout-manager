@@ -25,6 +25,8 @@ jobs:
         docker:
             - image: cimg/node:15.1
         steps:
+            - attach_workspace:
+                  at: ./repo
             - run:
                   name: Lerna Publish
                   command: yarn lerna publish from-package
