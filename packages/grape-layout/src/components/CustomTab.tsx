@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback } from "react";
+import { useCallback } from "react";
 import {
     MASK_PART,
     SLOT_EVENT,
@@ -24,26 +24,30 @@ import { usePortals } from "./PopoutManager";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
+import { createUseStyles } from "react-jss";
 
-const root: CSSProperties = {
-    touchAction: "none",
-    backgroundColor: "#00000025",
-    display: "flex",
-    alignItems: "center",
-    borderRadius: "10px 10px 0px 0px",
-    padding: "0px 10px",
-    margin: "2px",
-    userSelect: "none",
-};
-const close = {
-    marginLeft: "4px",
-    marginRight: "2px",
-    "&:hover": {
-        backgroundColor: "#00000025",
+const useStyles = createUseStyles({
+    root: (data: { selected?: boolean }) => ({
+        touchAction: "none",
+        backgroundColor: data.selected ? "#f7f7f7" : "#00000025",
+        display: "flex",
+        alignItems: "center",
+        borderRadius: "10px 10px 0px 0px",
+        padding: "0px 10px",
+        margin: "2px",
+        userSelect: "none",
+    }),
+    button: {
+        marginLeft: "4px",
+        marginRight: "2px",
+        cursor: "pointer",
+        "&:hover": {
+            backgroundColor: "#00000025",
+        },
+        width: "16px",
+        height: "16px",
     },
-    width: "16px",
-    height: "16px",
-};
+});
 
 const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
@@ -57,7 +61,8 @@ const CustomTab: TABCMPT = (props) => {
     const sns = useSns();
     const slot = useSlot(nodeId);
     const panel = usePanel(nodeId);
-    // const selected = panel?.selected;
+    const selected = panel?.selected;
+    const classes = useStyles({ selected });
 
     const inPopout = useMemo(
         () => portals.includes(layoutSymbol),
@@ -131,7 +136,7 @@ const CustomTab: TABCMPT = (props) => {
     }, [layoutSymbol, nodeId, sns]);
 
     return (
-        <div id={nodeId} className={"Tab"} style={root}>
+        <div id={nodeId} className={classes.root}>
             <div
                 ref={ref}
                 style={{
@@ -143,10 +148,10 @@ const CustomTab: TABCMPT = (props) => {
             >
                 {nodeId}
             </div>
-            <div style={close} onClick={onPopClick}>
+            <div className={classes.button} onClick={onPopClick}>
                 {inPopout ? <Popin /> : <Popout />}
             </div>
-            <div style={close} onClick={onClose}>
+            <div className={classes.button} onClick={onClose}>
                 <Close />
             </div>
         </div>

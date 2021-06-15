@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { useCallback, useRef, WheelEvent } from "react";
 
 const useStyles = createUseStyles({
-    test: {
+    scroll: {
         "&::-webkit-scrollbar-thumb": {
             background: "#5464e2",
         },
@@ -35,7 +35,7 @@ const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     return (
         <div
             ref={ref}
-            className={clsx(classes.test)}
+            className={clsx(classes.scroll)}
             style={{
                 position: "absolute",
                 height: `${titlebarHeight}px`,
