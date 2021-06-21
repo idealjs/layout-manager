@@ -9,6 +9,8 @@ import Portal from "./Portal";
 import layoutJSON from "./layout.json";
 import { useMemo } from "react";
 import CustomTab from "./CustomTab";
+import CustomSplitter from "./CustomSplitter";
+import CustomTitlebar from "./CustomTitlebar";
 import { usePortals } from "./PopoutManager";
 import { useFactory } from "./FactoryProvider";
 
@@ -48,9 +50,13 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
         <Provider
             layoutNode={ROOT}
             layoutSymbol={portalId}
-            Tab={CustomTab}
             factory={factory}
+            Tab={CustomTab}
+            Titlebar={CustomTitlebar}
+            Splitter={CustomSplitter}
             updateHook={updateHook}
+            splitterThickness={5}
+            titlebarHeight={30}
         >
             <Portal id={portalId}>
                 <Layout />

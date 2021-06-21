@@ -6,9 +6,9 @@ import {
 } from "@idealjs/layout-manager";
 import { createUseStyles } from "react-jss";
 import clsx from "clsx";
-import { useCallback, useRef, WheelEvent } from "react";
+import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
-const useStyles = createUseStyles({
+export const useStyles = createUseStyles({
     scroll: {
         "&::-webkit-scrollbar-thumb": {
             background: "#5464e2",
@@ -22,8 +22,9 @@ const useStyles = createUseStyles({
 const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
-    const classes = useStyles();
+    const titlebarHeight = useTitlebarHeight();
     const layout = useLayout(nodeId)!;
+    const classes = useStyles();
     const CustomTab = useCustomTab();
     const onWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
         ref.current?.scrollTo({
@@ -31,23 +32,26 @@ const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
             behavior: "smooth",
         });
     }, []);
-    const titlebarHeight = useTitlebarHeight();
+    const style: CSSProperties = useMemo(
+        () => ({
+            position: "absolute",
+            display: "flex",
+            userSelect: "none",
+            backgroundColor: "#c5c3c6",
+            overflowY: "hidden",
+            overflowX: "scroll",
+            height: `${titlebarHeight}px`,
+            width: layout.width,
+            left: layout.left,
+            top: layout.top,
+        }),
+        [layout, titlebarHeight]
+    );
     return (
         <div
             ref={ref}
             className={clsx(classes.scroll)}
-            style={{
-                position: "absolute",
-                height: `${titlebarHeight}px`,
-                width: layout.width,
-                left: layout.left,
-                top: layout.top,
-                display: "flex",
-                userSelect: "none",
-                backgroundColor: "#c5c3c6",
-                overflowY: "hidden",
-                overflowX: "scroll",
-            }}
+            style={style}
             onWheel={onWheel}
         >
             {layout.children.map((id) => (

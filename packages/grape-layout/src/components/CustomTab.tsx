@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { CSSProperties, useCallback } from "react";
 import {
     MASK_PART,
     SLOT_EVENT,
@@ -25,27 +25,17 @@ import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 import { createUseStyles } from "react-jss";
+import clsx from "clsx";
+import customTab from "../styles/customTab.module.css";
 
-const useStyles = createUseStyles({
-    root: (data: { selected?: boolean }) => ({
-        touchAction: "none",
+export const useStyles = createUseStyles({
+    tab: (data: { selected?: boolean }) => ({
         backgroundColor: data.selected ? "#f7f7f7" : "#00000025",
-        display: "flex",
-        alignItems: "center",
-        borderRadius: "10px 10px 0px 0px",
-        padding: "0px 10px",
-        margin: "2px",
-        userSelect: "none",
     }),
     button: {
-        marginLeft: "4px",
-        marginRight: "2px",
-        cursor: "pointer",
         "&:hover": {
             backgroundColor: "#00000025",
         },
-        width: "16px",
-        height: "16px",
     },
 });
 
@@ -135,8 +125,21 @@ const CustomTab: TABCMPT = (props) => {
         } as REMOVE_PANEL_DATA);
     }, [layoutSymbol, nodeId, sns]);
 
+    const tabStyle: CSSProperties = useMemo(
+        () => ({
+            touchAction: "none",
+            display: "flex",
+            alignItems: "center",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "0px 10px",
+            margin: "2px",
+            userSelect: "none",
+        }),
+        []
+    );
+
     return (
-        <div id={nodeId} className={classes.root}>
+        <div id={nodeId} className={classes.tab} style={tabStyle}>
             <div
                 ref={ref}
                 style={{
@@ -148,10 +151,18 @@ const CustomTab: TABCMPT = (props) => {
             >
                 {nodeId}
             </div>
-            <div className={classes.button} onClick={onPopClick}>
+            <div
+                className={clsx(classes.button, "Tab_Button")}
+                // style={buttonStyle}
+                onClick={onPopClick}
+            >
                 {inPopout ? <Popin /> : <Popout />}
             </div>
-            <div className={classes.button} onClick={onClose}>
+            <div
+                className={clsx(classes.button, "Tab_Button")}
+                // style={buttonStyle}
+                onClick={onClose}
+            >
                 <Close />
             </div>
         </div>
