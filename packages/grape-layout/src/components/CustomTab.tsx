@@ -26,7 +26,6 @@ import { useMemo } from "react";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 import { createUseStyles } from "react-jss";
 import clsx from "clsx";
-import customTab from "../styles/customTab.module.css";
 
 export const useStyles = createUseStyles({
     tab: (data: { selected?: boolean }) => ({

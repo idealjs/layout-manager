@@ -1,5 +1,4 @@
 const path = require("path");
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
     mode: "production",
@@ -12,7 +11,6 @@ module.exports = {
                 use: {
                     loader: "ts-loader",
                     options: {
-                        compiler: "ttypescript",
                         configFile: path.resolve(__dirname, "tsconfig.json"),
                     },
                 },
@@ -29,11 +27,6 @@ module.exports = {
         alias: {
             "react/jsx-runtime": "react/jsx-runtime.js",
         },
-        // plugins: [
-        //     new TsconfigPathsPlugin({
-        //         configFile: "./tsconfig.json",
-        //     }),
-        // ],
     },
     output: {
         path: path.resolve(__dirname, "../dist"),
