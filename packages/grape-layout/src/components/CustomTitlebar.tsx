@@ -9,7 +9,7 @@ import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 import jss from "jss";
 import preset from "jss-preset-default";
 
-const sheet = jss
+export const sheet = jss
     .setup(preset())
     .createStyleSheet({
         scroll: {

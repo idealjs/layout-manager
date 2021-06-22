@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import {
     MASK_PART,
     SLOT_EVENT,
@@ -28,7 +28,7 @@ import jss from "jss";
 import preset from "jss-preset-default";
 import clsx from "clsx";
 
-const sheet = jss
+export const sheet = jss
     .setup(preset())
     .createStyleSheet(
         {
@@ -148,10 +148,10 @@ const CustomTab: TABCMPT = (props) => {
     return (
         <div
             id={nodeId}
-            className={clsx(
-                sheet.classes.tab,
-                selected && sheet.classes.tab_selected
-            )}
+            className={clsx({
+                [sheet.classes.tab]: true,
+                [sheet.classes.tab_selected]: selected,
+            })}
         >
             <div
                 ref={ref}

@@ -5,15 +5,13 @@ import { createPortal } from "react-dom";
 import { useStateRef } from "@idealjs/layout-manager";
 import { useCallback } from "react";
 import { usePortals } from "./PopoutManager";
-
+import { sheet as customTitlebarSheet } from "./CustomTitlebar";
+import { sheet as customTabSheet } from "./CustomTab";
 const Portal: FC<{ id: string | number }> = (props) => {
     const { children, id } = props;
     const [container] = useState(document.createElement("div"));
-    const [
-        externalWindowRef,
-        externalWindow,
-        setExternalWindow,
-    ] = useStateRef<Window | null>(null);
+    const [externalWindowRef, externalWindow, setExternalWindow] =
+        useStateRef<Window | null>(null);
     const { setPortals } = usePortals();
 
     const onMainBeforeunload = useCallback(() => {
@@ -36,6 +34,13 @@ const Portal: FC<{ id: string | number }> = (props) => {
         if (externalWindow != null) {
             externalWindow.document.body.style.margin = "0px";
             externalWindow.document.body.style.overflow = "hidden";
+            const style = externalWindow.document.head.appendChild(
+                externalWindow.document.createElement("style")
+            );
+            style.textContent = "".concat(
+                customTitlebarSheet.toString(),
+                customTabSheet.toString()
+            );
         }
         setExternalWindow(externalWindow);
         window.addEventListener("beforeunload", onMainBeforeunload);

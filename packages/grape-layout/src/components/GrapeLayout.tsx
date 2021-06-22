@@ -27,7 +27,7 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                 portals={portals}
                 setPortals={setPortals}
             >
-                <div className="App" style={{ height: "100%", width: "100%" }}>
+                <div style={{ height: "100%", width: "100%" }}>
                     <Provider
                         layoutSymbol={mainLayoutSymbol}
                         factory={factory}
