@@ -12,7 +12,6 @@ import PopinListener from "./PopinListener";
 import CustomTab from "./CustomTab";
 import FactoryProvider from "./FactoryProvider";
 import CustomTitlebar from "./CustomTitlebar";
-import { JssProvider } from "react-jss";
 import CustomSplitter from "./CustomSplitter";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
@@ -22,37 +21,32 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     );
     const [mainLayoutSymbol] = useState("mainLayout");
     return (
-        <JssProvider>
-            <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
-                <PortalsProvider
-                    portalsRef={portalsRef}
-                    portals={portals}
-                    setPortals={setPortals}
-                >
-                    <div
-                        className="App"
-                        style={{ height: "100%", width: "100%" }}
+        <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>
+            <PortalsProvider
+                portalsRef={portalsRef}
+                portals={portals}
+                setPortals={setPortals}
+            >
+                <div className="App" style={{ height: "100%", width: "100%" }}>
+                    <Provider
+                        layoutSymbol={mainLayoutSymbol}
+                        factory={factory}
+                        Tab={CustomTab}
+                        Titlebar={CustomTitlebar}
+                        Splitter={CustomSplitter}
+                        layoutNode={layout}
+                        splitterThickness={5}
+                        titlebarHeight={30}
                     >
-                        <Provider
-                            layoutSymbol={mainLayoutSymbol}
-                            factory={factory}
-                            Tab={CustomTab}
-                            Titlebar={CustomTitlebar}
-                            Splitter={CustomSplitter}
-                            layoutNode={layout}
-                            splitterThickness={5}
-                            titlebarHeight={30}
-                        >
-                            <Layout />
-                            <PopinListener />
-                        </Provider>
-                    </div>
-                    <FactoryProvider factory={factory}>
-                        <PopoutManager />
-                    </FactoryProvider>
-                </PortalsProvider>
-            </MainLayoutSymbolProvider>
-        </JssProvider>
+                        <Layout />
+                        <PopinListener />
+                    </Provider>
+                </div>
+                <FactoryProvider factory={factory}>
+                    <PopoutManager />
+                </FactoryProvider>
+            </PortalsProvider>
+        </MainLayoutSymbolProvider>
     );
 };
 

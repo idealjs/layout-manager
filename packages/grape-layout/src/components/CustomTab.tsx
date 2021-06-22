@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback } from "react";
+import { CSSProperties, useCallback, useEffect } from "react";
 import {
     MASK_PART,
     SLOT_EVENT,
@@ -24,19 +24,41 @@ import { usePortals } from "./PopoutManager";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
-import { createUseStyles } from "react-jss";
+import jss from "jss";
+import preset from "jss-preset-default";
 import clsx from "clsx";
 
-export const useStyles = createUseStyles({
-    tab: (data: { selected?: boolean }) => ({
-        backgroundColor: data.selected ? "#f7f7f7" : "#00000025",
-    }),
-    button: {
-        "&:hover": {
-            backgroundColor: "#00000025",
+const sheet = jss
+    .setup(preset())
+    .createStyleSheet(
+        {
+            tab: {
+                backgroundColor: "#00000025",
+                touchAction: "none",
+                display: "flex",
+                alignItems: "center",
+                borderRadius: "10px 10px 0px 0px",
+                padding: "0px 10px",
+                margin: "2px",
+                userSelect: "none",
+            },
+            tab_selected: {
+                backgroundColor: "#f7f7f7",
+            },
+            button: {
+                marginLeft: "4px",
+                marginRight: "2px",
+                cursor: "pointer",
+                width: "16px",
+                height: "16px",
+                "&:hover": {
+                    backgroundColor: "#00000025",
+                },
+            },
         },
-    },
-});
+        { link: true }
+    )
+    .attach();
 
 const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
@@ -51,7 +73,6 @@ const CustomTab: TABCMPT = (props) => {
     const slot = useSlot(nodeId);
     const panel = usePanel(nodeId);
     const selected = panel?.selected;
-    const classes = useStyles({ selected });
 
     const inPopout = useMemo(
         () => portals.includes(layoutSymbol),
@@ -124,21 +145,14 @@ const CustomTab: TABCMPT = (props) => {
         } as REMOVE_PANEL_DATA);
     }, [layoutSymbol, nodeId, sns]);
 
-    const tabStyle: CSSProperties = useMemo(
-        () => ({
-            touchAction: "none",
-            display: "flex",
-            alignItems: "center",
-            borderRadius: "10px 10px 0px 0px",
-            padding: "0px 10px",
-            margin: "2px",
-            userSelect: "none",
-        }),
-        []
-    );
-
     return (
-        <div id={nodeId} className={classes.tab} style={tabStyle}>
+        <div
+            id={nodeId}
+            className={clsx(
+                sheet.classes.tab,
+                selected && sheet.classes.tab_selected
+            )}
+        >
             <div
                 ref={ref}
                 style={{
@@ -150,18 +164,10 @@ const CustomTab: TABCMPT = (props) => {
             >
                 {nodeId}
             </div>
-            <div
-                className={clsx(classes.button, "Tab_Button")}
-                // style={buttonStyle}
-                onClick={onPopClick}
-            >
+            <div className={sheet.classes.button} onClick={onPopClick}>
                 {inPopout ? <Popin /> : <Popout />}
             </div>
-            <div
-                className={clsx(classes.button, "Tab_Button")}
-                // style={buttonStyle}
-                onClick={onClose}
-            >
+            <div className={sheet.classes.button} onClick={onClose}>
                 <Close />
             </div>
         </div>
