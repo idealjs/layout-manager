@@ -5,9 +5,9 @@ import {
     useTitlebarHeight,
 } from "@idealjs/layout-manager";
 import clsx from "clsx";
-import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 import jss from "jss";
 import preset from "jss-preset-default";
+import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
 export const sheet = jss
     .setup(preset())

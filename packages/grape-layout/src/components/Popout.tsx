@@ -1,18 +1,19 @@
 import {
-    Layout,
-    Provider,
-    LayoutNode,
     ILayoutJSON,
+    Layout,
+    LayoutNode,
+    Provider,
 } from "@idealjs/layout-manager";
 import { FC, useCallback } from "react";
-import Portal from "./Portal";
-import layoutJSON from "./layout.json";
 import { useMemo } from "react";
-import CustomTab from "./CustomTab";
+
 import CustomSplitter from "./CustomSplitter";
+import CustomTab from "./CustomTab";
 import CustomTitlebar from "./CustomTitlebar";
-import { usePortals } from "./PopoutManager";
 import { useFactory } from "./FactoryProvider";
+import layoutJSON from "./layout.json";
+import { usePortals } from "./PopoutManager";
+import Portal from "./Portal";
 
 const Popout: FC<{ portalId: string | number }> = (props) => {
     const { portalId } = props;

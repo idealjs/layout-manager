@@ -1,18 +1,19 @@
-import { useState } from "react";
-import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
-import PopoutManager, { PortalsProvider } from "./PopoutManager";
 import {
+    CMPTFactory,
+    Layout,
+    LayoutNode,
     Provider,
     useStateRef,
-    Layout,
-    CMPTFactory,
-    LayoutNode,
 } from "@idealjs/layout-manager";
-import PopinListener from "./PopinListener";
-import CustomTab from "./CustomTab";
-import FactoryProvider from "./FactoryProvider";
-import CustomTitlebar from "./CustomTitlebar";
+import { useState } from "react";
+
 import CustomSplitter from "./CustomSplitter";
+import CustomTab from "./CustomTab";
+import CustomTitlebar from "./CustomTitlebar";
+import FactoryProvider from "./FactoryProvider";
+import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
+import PopinListener from "./PopinListener";
+import PopoutManager, { PortalsProvider } from "./PopoutManager";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     const { factory, layout } = props;
