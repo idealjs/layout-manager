@@ -19,14 +19,14 @@
         "nanoid": "^3.1.23"
     },
     "scripts": {
-        "build": "ttsc",
         "lint": "eslint src/**/*.{tsx,ts} --fix",
         "build:webpack": "webpack",
         "prepublish": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [
-            "react-app"
+            "react-app",
+            "react-app/jest"
         ],
         "plugins": [
             "simple-import-sort"

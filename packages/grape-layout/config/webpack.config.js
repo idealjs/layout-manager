@@ -11,6 +11,7 @@ module.exports = {
                 use: {
                     loader: "ts-loader",
                     options: {
+                        compiler: "ttypescript",
                         configFile: path.resolve(__dirname, "tsconfig.json"),
                     },
                 },
