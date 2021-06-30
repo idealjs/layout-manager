@@ -1,11 +1,12 @@
 import {
+    LayoutNodeActionType,
     MASK_PART,
     ROOTID,
     useLayoutNode,
     useSlot,
-    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 import { useEffect } from "react";
+
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
 

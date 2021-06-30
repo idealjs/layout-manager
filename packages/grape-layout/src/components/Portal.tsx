@@ -1,12 +1,13 @@
+import { useStateRef } from "@idealjs/layout-manager";
 import { useState } from "react";
 import { useEffect } from "react";
 import { FC } from "react";
-import { createPortal } from "react-dom";
-import { useStateRef } from "@idealjs/layout-manager";
 import { useCallback } from "react";
-import { usePortals } from "./PopoutManager";
-import { sheet as customTitlebarSheet } from "./CustomTitlebar";
+import { createPortal } from "react-dom";
+
 import { sheet as customTabSheet } from "./CustomTab";
+import { sheet as customTitlebarSheet } from "./CustomTitlebar";
+import { usePortals } from "./PopoutManager";
 const Portal: FC<{ id: string | number }> = (props) => {
     const { children, id } = props;
     const [container] = useState(document.createElement("div"));

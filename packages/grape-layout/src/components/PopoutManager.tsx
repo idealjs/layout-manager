@@ -1,11 +1,12 @@
 import { FC } from "react";
 import {
+    createContext,
+    Dispatch,
     Fragment,
     SetStateAction,
     useContext,
-    createContext,
-    Dispatch,
 } from "react";
+
 import Popout from "./Popout";
 
 type ContextType = {

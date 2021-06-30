@@ -1,11 +1,11 @@
 import {
-    SplitterCMPT,
-    useSplitterRef,
-    createSplitterStyle,
     createShadowStyle,
-    useSplitter,
-    useLayout,
+    createSplitterStyle,
     LAYOUT_DIRECTION,
+    SplitterCMPT,
+    useLayout,
+    useSplitter,
+    useSplitterRef,
 } from "@idealjs/layout-manager";
 import { useMemo } from "react";
 
