@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
     node: circleci/node@4.1
+    shellcheck: circleci/shellcheck@2.2.4
 
 defaults: &defaults
     docker:
@@ -9,6 +10,7 @@ defaults: &defaults
     working_directory: ~/project
 
 jobs:
+    
     build:
         <<: *defaults
         steps:
@@ -23,7 +25,8 @@ jobs:
                   command: yarn lerna run build:webpack
             - persist_to_workspace:
                   root: ~/project
-                  paths: .
+                  paths:
+                      - .
     test:
         <<: *defaults
         steps:
@@ -39,9 +42,10 @@ jobs:
             - run:
                   name: Authenticate with registry
                   command: echo -e "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}\n@idealjs:registry=https://registry.npmjs.org" > ~/project/.npmrc
+
             - run:
                   name: Lerna Publish
-                  command: yarn lerna publish from-package --yes
+                  command: sh publish.sh
 
 workflows:
     main:
