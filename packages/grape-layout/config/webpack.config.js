@@ -34,5 +34,5 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["react", "react-dom", "@idealjs/layout-manager"],
+    externals: ["react", "react-dom", "@idealjs/layout-manager", "@idealjs/sns"],
 };
