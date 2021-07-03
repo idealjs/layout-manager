@@ -1,7 +1,7 @@
+import { useSns } from "@idealjs/sns";
 import { useFactory } from "components/Provider";
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
 import { usePanel } from "components/providers/PanelsProvider";
-import { useSns } from "components/providers/SnsProvider";
 import useStateRef from "hooks/useStateRef";
 import { DND_EVENT, useDnd } from "lib/dnd";
 import { IDropData } from "lib/dnd/type";

@@ -1,6 +1,6 @@
+import { useSns } from "@idealjs/sns";
 import { useLayout, useLayouts } from "components/providers/LayoutsProvider";
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import { useSns } from "components/providers/SnsProvider";
 import { DND_EVENT, useDnd } from "lib/dnd";
 import { IDragData } from "lib/dnd/type";
 import { CSSProperties, useEffect, useRef, useState } from "react";

@@ -41,5 +41,6 @@ module.exports = {
         "@reduxjs/toolkit",
         "html2canvas",
         "nanoid",
+        "@idealjs/sns"
     ],
 };

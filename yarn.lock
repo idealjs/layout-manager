@@ -1278,6 +1278,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@idealjs/sns@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@idealjs/sns/-/sns-1.0.0.tgz#8f784944bd3fcdf53074f3dc2c58cbbd0636b1f8"
+  integrity sha512-CVA6VeFZH5eMsu9+NDfgXXNfjK0bUSWt3u4tbNdPpijaMXWRMSRrOmw1hjisY4YsZ9JqSI56EUxEq1tmPM/Q8g==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"

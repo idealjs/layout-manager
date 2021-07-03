@@ -58,6 +58,7 @@
         ]
     },
     "devDependencies": {
+        "@idealjs/sns": "^1.0.0",
         "@svgr/webpack": "^5.5.0",
         "@types/node": "^14.14.22",
         "@types/react": "^17.0.0",
@@ -77,6 +78,7 @@
         "webpack-cli": "^4.4.0"
     },
     "peerDependencies": {
+        "@idealjs/sns": "^1.0.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1"
     }

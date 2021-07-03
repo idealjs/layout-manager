@@ -1,5 +1,5 @@
+import { useSns } from "@idealjs/sns";
 import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import { useSns } from "components/providers/SnsProvider";
 import Close from "components/svg/Close";
 import useTabRef from "hooks/useTabRef";
 import { CSSProperties, useCallback } from "react";
