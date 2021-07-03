@@ -50,6 +50,7 @@ jobs:
 workflows:
     main:
         jobs:
+            - shellcheck/check
             - build
             - test:
                   requires:
