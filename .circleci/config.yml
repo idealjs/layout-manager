@@ -17,10 +17,10 @@ jobs:
                   pkg-manager: yarn
             - run:
                   name: Lerna Bootstrap
-                  command: yarn lerna run build:webpack
-            - run:
-                  name: Lerna Bootstrap
                   command: yarn lerna bootstrap
+            - run:
+                  name: Lerna build
+                  command: yarn lerna run build:webpack
             - persist_to_workspace:
                   root: ~/project
                   paths: .
