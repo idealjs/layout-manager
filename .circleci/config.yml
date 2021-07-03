@@ -45,7 +45,7 @@ jobs:
 
             - run:
                   name: Lerna Publish
-                  command: sh publish.sh
+                  command: sh ./.circleci/publish.sh
 
 workflows:
     main:
