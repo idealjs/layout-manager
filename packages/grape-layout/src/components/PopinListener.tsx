@@ -3,8 +3,8 @@ import {
     MASK_PART,
     ROOTID,
     useLayoutNode,
-    useSlot,
 } from "@idealjs/layout-manager";
+import { useSlot } from "@idealjs/sns";
 import { useEffect } from "react";
 
 import { rules } from "../lib/constant";
@@ -15,7 +15,7 @@ const PopinListener = () => {
     const mainlayoutSymbol = useMainLayoutSymbol();
     const slot = useSlot(mainlayoutSymbol);
     useEffect(() => {
-        slot.addListener("popin", (e) => {
+        slot && slot.addListener("popin", (e) => {
             console.log(e);
             try {
                 const target = layoutNode.findNodeByRules(rules);
