@@ -32,4 +32,4 @@ For more details you can check the [online example][example_online] or [example 
 ## Example
 
 -   [CodeSandbox][example_online]
--   [Example create by CRA][example_folder]
+-   [Example Create by CRA][example_folder]
