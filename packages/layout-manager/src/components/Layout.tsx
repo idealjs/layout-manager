@@ -1,4 +1,4 @@
-import { useSlot, useSns } from "@idealjs/sns";
+import { useSetSlot, useSns } from "@idealjs/sns";
 import Panel from "components/Panel";
 import { useCustomSplitter, useCustomTitlebar } from "components/Provider";
 import { useLayoutNode } from "components/providers/LayoutNodeProvider";
@@ -29,8 +29,9 @@ const Layout = () => {
     const [panels] = usePanels();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
-    const slot = useSlot(layoutSymbol);
+    const slot = useSetSlot(layoutSymbol);
 
+    console.log(layoutSymbol, slot);
     const update = useUpdate(rect);
 
     const addPanel = useCallback(
@@ -71,22 +72,24 @@ const Layout = () => {
     );
 
     useEffect(() => {
-        update();
-        slot && slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
-        slot && slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
-        slot && slot.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
-        slot && slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
-        slot && slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
+        //@ts-ignore
+        console.log("test test send ready", layoutSymbol, sns.slots, slot);
 
+        update();
+        slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
+        slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+        slot.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
+        slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+        slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
         sns.broadcast("ready", { layoutSymbol });
         layoutNode.addListener(LayoutNodeUpdate, update);
 
         return () => {
-            slot && slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
-            slot && slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
-            slot && slot.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
-            slot && slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
-            slot && slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
+            slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
+            slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+            slot.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
+            slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+            slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
 
             layoutNode.removeListener(LayoutNodeUpdate, update);
         };

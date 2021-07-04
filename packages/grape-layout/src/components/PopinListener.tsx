@@ -5,7 +5,7 @@ import {
     useLayoutNode,
 } from "@idealjs/layout-manager";
 import { useSlot } from "@idealjs/sns";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
@@ -14,9 +14,8 @@ const PopinListener = () => {
     const layoutNode = useLayoutNode();
     const mainlayoutSymbol = useMainLayoutSymbol();
     const slot = useSlot(mainlayoutSymbol);
-    useEffect(() => {
-        slot && slot.addListener("popin", (e) => {
-            console.log(e);
+    const popinListener = useCallback(
+        (e) => {
             try {
                 const target = layoutNode.findNodeByRules(rules);
                 console.debug("[Debug] target is", target);
@@ -38,8 +37,16 @@ const PopinListener = () => {
             } catch (error) {
                 console.error(error);
             }
-        });
-    }, [layoutNode, slot]);
+        },
+        [layoutNode]
+    );
+
+    useEffect(() => {
+        slot && slot.addListener("popin", popinListener);
+        return () => {
+            slot && slot.removeListener("popin", popinListener);
+        };
+    }, [layoutNode, popinListener, slot]);
 
     return null;
 };

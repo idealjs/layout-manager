@@ -93,6 +93,7 @@ const useSplitterRef = (data: {
             } as MOVE_SPLITTER_DATA);
             setDragging(false);
             setMovingOffset(0);
+            console.log(sns)
         };
         const onDrag = (data: IDragData) => {
             offset =

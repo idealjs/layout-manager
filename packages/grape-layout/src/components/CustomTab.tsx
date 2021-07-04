@@ -16,7 +16,7 @@ import {
     usePanel,
     useTabRef,
 } from "@idealjs/layout-manager";
-import { useSlot, useSns } from "@idealjs/sns";
+import { useSetSlot, useSns } from "@idealjs/sns";
 import clsx from "clsx";
 import jss from "jss";
 import preset from "jss-preset-default";
@@ -62,14 +62,13 @@ export const sheet = jss
 const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
     const ref = useTabRef(nodeId);
-
     const { portals, setPortals } = usePortals();
 
     const layoutNode = useLayoutNode();
     const layoutSymbol = useLayoutSymbol();
     const mainLayoutSymbol = useMainLayoutSymbol();
     const sns = useSns();
-    const slot = useSlot(nodeId);
+    const slot = useSetSlot(nodeId);
     const panel = usePanel(nodeId);
     const selected = panel?.selected;
 
@@ -84,7 +83,7 @@ const CustomTab: TABCMPT = (props) => {
             const panelNode = new PanelNode({
                 panelJSON: panel!,
             });
-            slot && slot.removeListener("ready", popoutReady);
+            slot.removeListener("ready", popoutReady);
             sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
                 search: panelNode.id,
                 mask: MASK_PART.CENTER,
@@ -101,8 +100,10 @@ const CustomTab: TABCMPT = (props) => {
     );
 
     const onPopClick = useCallback(() => {
+        console.debug("[Debug] inPopout", inPopout);
+
         if (inPopout) {
-            console.debug("[Debug] popint");
+            console.debug("[Debug] popin", mainLayoutSymbol);
             const panelNode = new PanelNode({
                 panelJSON: panel!,
             });
@@ -110,12 +111,13 @@ const CustomTab: TABCMPT = (props) => {
             layoutNode.doAction(LayoutNodeActionType.REMOVE_PANEL, {
                 search: nodeId,
             });
+
             sns.send(mainLayoutSymbol, "popin", {
                 panelNode: panelNode,
             });
         } else {
             console.debug("[Debug] popout");
-            slot && slot.addListener("ready", popoutReady);
+            slot.addListener("ready", popoutReady);
             setPortals((s) => {
                 return [...s, nanoid()];
             });

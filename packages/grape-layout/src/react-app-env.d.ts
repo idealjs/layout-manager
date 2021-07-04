@@ -1,8 +1,8 @@
 /// <reference types="react-scripts" />
 
-import { PanelNode, Slot as ISlot, Sns as ISns } from "@idealjs/layout-manager";
+import { PanelNode, Slot as ISlot, Sns as ISns } from "@idealjs/sns";
 
-declare module "@idealjs/layout-manager" {
+declare module "@idealjs/sns" {
     interface Slot extends ISlot {
         public addListener(
             event: "ready",

@@ -50,7 +50,7 @@
     },
     "devDependencies": {
         "@idealjs/layout-manager": "^1.7.3-alpha.0",
-        "@idealjs/sns": "^1.0.0",
+        "@idealjs/sns": "^1.3.1",
         "@svgr/webpack": "^5.5.0",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.1.0",
@@ -69,6 +69,6 @@
     },
     "peerDependencies": {
         "@idealjs/layout-manager": "^1.7.0",
-        "@idealjs/sns": "^1.0.0"
+        "@idealjs/sns": "^1.3.1"
     }
 }
