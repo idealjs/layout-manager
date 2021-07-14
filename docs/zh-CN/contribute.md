@@ -11,7 +11,7 @@ commit 以 `type(module): message` 为统一规范，其中 type、module、mess
 -   feat：新功能（feature）
 -   fix：修补 bug
 -   docs：更新文档（documentation）
--   style： 格式变动（不影响代码运行的变动）
+-   style： 格式变动，代码清理（不影响代码运行的变动）
 -   refactor：重构（即不是新增功能，也不是修改 bug 的代码变动）
 -   test：增加测试 case
 -   chore：构建过程或辅助工具的变动

@@ -3033,6 +3033,11 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/uniqid@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@types/uniqid/-/uniqid-5.3.1.tgz#a3b39529183b355a9445e18f3cc509ad3a017c29"
+  integrity sha512-XNXc2abchKzhV8278+lxDOLEB6P8lslIczu7TTvY2+uyHWos3EVI6pNejJ5rLyOieZL22X6ZEepCOfXghSQw/w==
+
 "@types/webpack-sources@*":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/webpack-sources/-/webpack-sources-2.1.0.tgz#8882b0bd62d1e0ce62f183d0d01b72e6e82e8c10"
@@ -14630,6 +14635,11 @@ uniq@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
   integrity sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8=
+
+uniqid@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/uniqid/-/uniqid-5.3.0.tgz#4545f8e9c9a5830ef804e512cca6a9331e9761bf"
+  integrity sha512-Jq8EzvAT8/CcLu8tzoSiylnzPkNhJJKpnMT964Dj1jI4pG4sKYP9aFVByNTp8KzMvYlW1Um63PCDqtOoujNzrA==
 
 uniqs@^2.0.0:
   version "2.0.0"

@@ -1,25 +1,31 @@
-import EventEmitter from "events";
 import Slot, { SlotId } from "src/slot";
 
 export const SnsUpdate = Symbol("SnsUpdate");
 
-class Sns extends EventEmitter {
+class Sns {
     private slots: Readonly<Slot>[] = [];
 
+    public setSlot(slotId: SlotId): Slot {
+        let slot = this.slots.find((s) => s.id === slotId);
+        if (slot == null) {
+            slot = new Slot(slotId);
+            this.addSlot(slot);
+        }
+        return slot;
+    }
+
     public addSlot(slot: Slot) {
-        this.slots = this.slots.concat(slot);
-        this.emit(SnsUpdate)
+        this.slots = this.slots.filter((s) => s !== slot).concat(slot);
         return this;
     }
 
     public removeSlot(slot: Slot) {
         this.slots = this.slots.filter((s) => s !== slot);
-        this.emit(SnsUpdate)
         return this;
     }
 
     public find(id: SlotId) {
-        return this.slots.find((slot) => slot.id === id)
+        return this.slots.find((slot) => slot.id === id);
     }
 
     public send(target: SlotId, event: string | symbol, data?: any) {

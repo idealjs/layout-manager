@@ -21,7 +21,7 @@ import {
 } from "src/type";
 
 const Layout = () => {
-    const ref = useRef<HTMLDivElement | null>(null);
+    const ref = useRef<HTMLDivElement>(null);
     const [rect] = useRect(ref);
     const layoutNode = useLayoutNode();
     const [splitters] = useSplitters();

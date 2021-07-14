@@ -1,13 +1,6 @@
-import {
-    createContext,
-    FC,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import { createContext, FC, useContext, useEffect, useState } from "react";
 import Slot, { SlotId } from "src/slot";
-import Sns, { SnsUpdate } from "src/sns";
+import Sns from "src/sns";
 
 const defaultSns = new Sns();
 const context = createContext<Sns>(defaultSns);
@@ -22,35 +15,17 @@ export const useSns = () => {
     return sns;
 };
 
-export const useSlot = (id: SlotId): Slot | undefined => {
+export const useSlot = (slotId: SlotId): Slot | null => {
     const sns = useSns();
 
-    const [slot, setSlot] = useState<Slot | undefined>(sns.find(id));
-
-    const onSnsUpdate = useCallback(() => {
-        setSlot(sns.find(id));
-    }, [id, sns]);
+    const [slot, setSlot] = useState<Slot | null>(null);
 
     useEffect(() => {
-        sns.addListener(SnsUpdate, onSnsUpdate);
+        setSlot(sns.setSlot(slotId));
         return () => {
-            sns.removeListener(SnsUpdate, onSnsUpdate);
+            slot && sns.removeSlot(slot);
         };
-    }, [id, onSnsUpdate, sns]);
-
-    return slot;
-};
-
-export const useSetSlot = (id: SlotId) => {
-    const sns = useSns();
-    const [slot] = useState<Slot>(new Slot(id));
-
-    useEffect(() => {
-        sns.addSlot(slot);
-        return () => {
-            sns.removeSlot(slot);
-        };
-    }, [id, slot, sns]);
+    }, [setSlot, slot, slotId, sns]);
 
     return slot;
 };
