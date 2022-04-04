@@ -1,5 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { IPanelNode } from "src/type";
+
+import { IPanelNode } from "../type";
 
 export const adapter = createEntityAdapter<IPanelNode>();
 

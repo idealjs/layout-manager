@@ -1,13 +1,13 @@
 import { AnyAction, EntityState } from "@reduxjs/toolkit";
 import { createContext, FC, useContext, useReducer } from "react";
-import { selectAll, selectById } from "reducers/panels";
-import reducer, { adapter } from "reducers/panels";
-import { IPanelNode } from "src/type";
 
-const context =
-    createContext<[EntityState<IPanelNode>, React.Dispatch<AnyAction>] | null>(
-        null
-    );
+import { selectAll, selectById } from "../../reducers/panels";
+import reducer, { adapter } from "../../reducers/panels";
+import { IPanelNode } from "../../type";
+
+const context = createContext<
+    [EntityState<IPanelNode>, React.Dispatch<AnyAction>] | null
+>(null);
 const PanelsProvider: FC = (props) => {
     const { children } = props;
     const [panels, dispatch] = useReducer(reducer, adapter.getInitialState());

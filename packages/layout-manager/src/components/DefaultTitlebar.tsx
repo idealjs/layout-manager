@@ -1,6 +1,6 @@
-import { useCustomTab } from "components/Provider";
-import { useLayout } from "components/providers/LayoutsProvider";
-import { TitlebarCMPT } from "src/type";
+import { TitlebarCMPT } from "../type";
+import { useCustomTab } from "./Provider";
+import { useLayout } from "./providers/LayoutsProvider";
 
 const DefaultTitlebar: TitlebarCMPT = (props) => {
     const { nodeId } = props;

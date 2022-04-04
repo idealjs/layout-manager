@@ -1,33 +1,10 @@
 {
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+        "noEmit": true,
         "outDir": "./dist",
-        "declaration": true,
-        "target": "es6",
-        "lib": ["dom", "dom.iterable", "esnext", "ES2015"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "sourceMap": true,
-        "baseUrl": ".",
-        "paths": {
-            "src/*": ["src/*"]
-        },
-        "plugins": [
-            { "transform": "typescript-transform-paths" },
-            {
-                "transform": "typescript-transform-paths",
-                "afterDeclarations": true
-            }
-        ]
+        "jsx": "react-jsx"
     },
-    "include": ["src", "test"],
-    "exclude": ["dist"]
+    "include": ["src", "index.ts"],
+    "exclude": ["node_modules"]
 }

@@ -1,7 +1,8 @@
-import LayoutNode from "lib/LayoutNode";
-import PanelNode from "lib/PanelNode";
 import { FC } from "react";
-import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
+
+import { LAYOUT_DIRECTION, MASK_PART } from "./enum";
+import LayoutNode from "./lib/LayoutNode";
+import PanelNode from "./lib/PanelNode";
 
 export interface ISplitterNode {
     id: string;

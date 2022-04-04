@@ -1,12 +1,12 @@
-import { useSplitter } from "components/providers/SplittersProvider";
+import { useMemo } from "react";
+
 import useSplitterRef, {
     createShadowStyle,
     createSplitterStyle,
-} from "hooks/useSplitterRef";
-import { useMemo } from "react";
-import { SplitterCMPT } from "src/type";
-
+} from "../hooks/useSplitterRef";
+import { SplitterCMPT } from "../type";
 import { useLayout } from "./providers/LayoutsProvider";
+import { useSplitter } from "./providers/SplittersProvider";
 
 const DefaultSplitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;

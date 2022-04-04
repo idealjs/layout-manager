@@ -1,9 +1,8 @@
 import EventEmitter from "events";
-import directionFromMask from "lib/directionFromMask";
-import PanelNode from "lib/PanelNode";
 import { nanoid } from "nanoid";
-import { ROOTID } from "src/constant";
-import { LAYOUT_DIRECTION, MASK_PART } from "src/enum";
+
+import { ROOTID } from "../constant";
+import { LAYOUT_DIRECTION, MASK_PART } from "../enum";
 import {
     ADD_PANEL_DATA,
     ILayoutJSON,
@@ -15,7 +14,9 @@ import {
     MOVE_SPLITTER_DATA,
     REMOVE_PANEL_DATA,
     SELECT_TAB_DATA,
-} from "src/type";
+} from "../type";
+import directionFromMask from "./directionFromMask";
+import PanelNode from "./PanelNode";
 
 const is_ADD_PANEL_DATA = (data: ActionPayload): data is ADD_PANEL_DATA => {
     return (

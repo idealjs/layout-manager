@@ -1,6 +1,7 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import Slot, { SlotId } from "src/slot";
-import Sns from "src/sns";
+
+import Slot, { SlotId } from "./slot";
+import Sns from "./sns";
 
 const defaultSns = new Sns();
 const context = createContext<Sns>(defaultSns);

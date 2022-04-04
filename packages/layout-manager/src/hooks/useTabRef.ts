@@ -1,7 +1,8 @@
-import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import { usePanel } from "components/providers/PanelsProvider";
-import { useDnd } from "lib/dnd";
 import { useEffect, useRef } from "react";
+
+import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
+import { usePanel } from "../components/providers/PanelsProvider";
+import { useDnd } from "../lib/dnd";
 
 const useTabRef = (nodeId: string) => {
 

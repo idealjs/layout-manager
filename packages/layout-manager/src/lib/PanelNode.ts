@@ -1,6 +1,7 @@
-import LayoutNode from "lib/LayoutNode";
 import { nanoid } from "nanoid";
-import { IPanelJSON, IPanelNode } from "src/type";
+
+import { IPanelJSON, IPanelNode } from "../type";
+import LayoutNode from "./LayoutNode";
 
 class PanelNode {
     id: string = nanoid();

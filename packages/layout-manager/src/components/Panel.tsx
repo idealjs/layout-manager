@@ -1,14 +1,15 @@
 import { useSns } from "@idealjs/sns";
-import { useFactory } from "components/Provider";
-import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import { usePanel } from "components/providers/PanelsProvider";
-import useStateRef from "hooks/useStateRef";
-import { DND_EVENT, useDnd } from "lib/dnd";
-import { IDropData } from "lib/dnd/type";
-import PanelNode from "lib/PanelNode";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
-import { MASK_PART, SLOT_EVENT } from "src/enum";
-import { ADD_PANEL_DATA, MOVE_PANEL_DATA, REMOVE_PANEL_DATA } from "src/type";
+
+import { MASK_PART, SLOT_EVENT } from "../enum";
+import useStateRef from "../hooks/useStateRef";
+import { DND_EVENT, useDnd } from "../lib/dnd";
+import { IDropData } from "../lib/dnd/type";
+import PanelNode from "../lib/PanelNode";
+import { ADD_PANEL_DATA, MOVE_PANEL_DATA, REMOVE_PANEL_DATA } from "../type";
+import { useFactory } from "./Provider";
+import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import { usePanel } from "./providers/PanelsProvider";
 
 const top: CSSProperties = {
     zIndex: 1,
@@ -68,8 +69,9 @@ const Panel = (props: { nodeId: string }) => {
     const { nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
     const panel = usePanel(nodeId)!;
-    const [maskPartRef, maskPart, setMaskPart] =
-        useStateRef<MASK_PART | null>(null);
+    const [maskPartRef, maskPart, setMaskPart] = useStateRef<MASK_PART | null>(
+        null
+    );
     const dnd = useDnd();
     const sns = useSns();
     const layoutSymbol = useLayoutSymbol();

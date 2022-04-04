@@ -1,23 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-
 import {
     CMPTFactory,
     LAYOUT_DIRECTION,
     LayoutNode,
+    LayoutNodeActionType,
+    MASK_PART,
     PanelNode,
     ROOTID,
-    MASK_PART,
-    LayoutNodeActionType,
 } from "@idealjs/layout-manager";
 import { nanoid } from "nanoid";
-import { GrapeLayout } from "@idealjs/grape-layout";
+import { useCallback, useEffect, useState } from "react";
 
-const rules = [
-    { part: MASK_PART.BOTTOM, max: 2 },
-    { part: MASK_PART.RIGHT, max: 2 },
-    { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
-    { part: MASK_PART.CENTER, max: 2 },
-];
+import GrapeLayout from "@idealjs/grape-layout/src/components/GrapeLayout";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -104,6 +97,13 @@ const P_B_B_B = new PanelNode({
 });
 
 N_B_B.appendPanelNode(P_B_B_A, P_B_B_B);
+
+const rules = [
+    { part: MASK_PART.BOTTOM, max: 2 },
+    { part: MASK_PART.RIGHT, max: 2 },
+    { part: MASK_PART.TOP, max: 3, limitLevel: 1 },
+    { part: MASK_PART.CENTER, max: 3 },
+];
 
 const factory: CMPTFactory = (page: string) => {
     switch (page) {

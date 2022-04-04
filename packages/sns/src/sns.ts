@@ -1,4 +1,4 @@
-import Slot, { SlotId } from "src/slot";
+import Slot, { SlotId } from "./slot";
 
 export const SnsUpdate = Symbol("SnsUpdate");
 

@@ -1,8 +1,9 @@
 import { AnyAction, EntityState } from "@reduxjs/toolkit";
 import { createContext, FC, useContext, useReducer } from "react";
-import { selectAll, selectById } from "reducers/splitters";
-import reducer, { adapter } from "reducers/splitters";
-import { ISplitterNode } from "src/type";
+
+import { selectAll, selectById } from "../../reducers/splitters";
+import reducer, { adapter } from "../../reducers/splitters";
+import { ISplitterNode } from "../../type";
 
 const context =
     createContext<

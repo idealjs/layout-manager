@@ -16,7 +16,7 @@ import {
     usePanel,
     useTabRef,
 } from "@idealjs/layout-manager";
-import { useSetSlot, useSns } from "@idealjs/sns";
+import { useSlot, useSns } from "@idealjs/sns";
 import clsx from "clsx";
 import jss from "jss";
 import preset from "jss-preset-default";
@@ -68,7 +68,7 @@ const CustomTab: TABCMPT = (props) => {
     const layoutSymbol = useLayoutSymbol();
     const mainLayoutSymbol = useMainLayoutSymbol();
     const sns = useSns();
-    const slot = useSetSlot(nodeId);
+    const slot = useSlot(nodeId);
     const panel = usePanel(nodeId);
     const selected = panel?.selected;
 
@@ -83,7 +83,7 @@ const CustomTab: TABCMPT = (props) => {
             const panelNode = new PanelNode({
                 panelJSON: panel!,
             });
-            slot.removeListener("ready", popoutReady);
+            slot?.removeListener("ready", popoutReady);
             sns.send(layoutSymbol, SLOT_EVENT.REMOVE_PANEL, {
                 search: panelNode.id,
                 mask: MASK_PART.CENTER,
@@ -117,7 +117,7 @@ const CustomTab: TABCMPT = (props) => {
             });
         } else {
             console.debug("[Debug] popout");
-            slot.addListener("ready", popoutReady);
+            slot?.addListener("ready", popoutReady);
             setPortals((s) => {
                 return [...s, nanoid()];
             });

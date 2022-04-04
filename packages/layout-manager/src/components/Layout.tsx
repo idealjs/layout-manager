@@ -1,24 +1,25 @@
-import { useSetSlot, useSns } from "@idealjs/sns";
-import Panel from "components/Panel";
-import { useCustomSplitter, useCustomTitlebar } from "components/Provider";
-import { useLayoutNode } from "components/providers/LayoutNodeProvider";
-import { useLayouts } from "components/providers/LayoutsProvider";
-import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import { usePanels } from "components/providers/PanelsProvider";
-import { useSplitters } from "components/providers/SplittersProvider";
-import useRect from "hooks/useRect";
-import useUpdate from "hooks/useUpdate";
-import { LayoutNodeUpdate } from "lib/LayoutNode";
-import { LayoutNodeActionType } from "lib/LayoutNode";
+import { useSlot, useSns } from "@idealjs/sns";
 import { useCallback, useEffect, useRef } from "react";
-import { LAYOUT_DIRECTION, SLOT_EVENT } from "src/enum";
+
+import { LAYOUT_DIRECTION, SLOT_EVENT } from "../enum";
+import useRect from "../hooks/useRect";
+import useUpdate from "../hooks/useUpdate";
+import { LayoutNodeUpdate } from "../lib/LayoutNode";
+import { LayoutNodeActionType } from "../lib/LayoutNode";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
     MOVE_SPLITTER_DATA,
     REMOVE_PANEL_DATA,
     SELECT_TAB_DATA,
-} from "src/type";
+} from "../type";
+import Panel from "./Panel";
+import { useCustomSplitter, useCustomTitlebar } from "./Provider";
+import { useLayoutNode } from "./providers/LayoutNodeProvider";
+import { useLayouts } from "./providers/LayoutsProvider";
+import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import { usePanels } from "./providers/PanelsProvider";
+import { useSplitters } from "./providers/SplittersProvider";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
@@ -29,7 +30,7 @@ const Layout = () => {
     const [panels] = usePanels();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
-    const slot = useSetSlot(layoutSymbol);
+    const slot = useSlot(layoutSymbol);
 
     console.log(layoutSymbol, slot);
     const update = useUpdate(rect);
@@ -76,20 +77,20 @@ const Layout = () => {
         console.log("test test send ready", layoutSymbol, sns.slots, slot);
 
         update();
-        slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
-        slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
-        slot.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
-        slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
-        slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
+        slot?.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
+        slot?.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+        slot?.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
+        slot?.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+        slot?.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
         sns.broadcast("ready", { layoutSymbol });
         layoutNode.addListener(LayoutNodeUpdate, update);
 
         return () => {
-            slot.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
-            slot.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
-            slot.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
-            slot.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
-            slot.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
+            slot?.removeListener(SLOT_EVENT.ADD_PANEL, addPanel);
+            slot?.removeListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+            slot?.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
+            slot?.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+            slot?.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
 
             layoutNode.removeListener(LayoutNodeUpdate, update);
         };

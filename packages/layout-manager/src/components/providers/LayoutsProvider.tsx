@@ -1,8 +1,9 @@
 import { AnyAction, EntityState } from "@reduxjs/toolkit";
 import { createContext, FC, useContext, useReducer } from "react";
-import { selectAll, selectById } from "reducers/layouts";
-import reducer, { adapter } from "reducers/layouts";
-import { ILayoutNode } from "src/type";
+
+import { selectAll, selectById } from "../../reducers/layouts";
+import reducer, { adapter } from "../../reducers/layouts";
+import { ILayoutNode } from "../../type";
 
 const context =
     createContext<[EntityState<ILayoutNode>, React.Dispatch<AnyAction>] | null>(

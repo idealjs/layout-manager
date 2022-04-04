@@ -1,30 +1,30 @@
-import DefaultSplitter from "components/DefaultSplitter";
-import DefaultTab from "components/DefaultTab";
-import DefaultTitlebar from "components/DefaultTitlebar";
-import LayoutNodeProvider from "components/providers/LayoutNodeProvider";
-import LayoutsProvider from "components/providers/LayoutsProvider";
-import LayoutSymbolProvider from "components/providers/LayoutSymbolProvider";
-import PanelsProvider from "components/providers/PanelsProvider";
-import SplittersProvider from "components/providers/SplittersProvider";
-import UpdateHookProvider from "components/providers/UpdateHookProvider";
-import LayoutNode from "lib/LayoutNode";
 import { createContext, FC, FunctionComponent, useContext } from "react";
-import { SplitterCMPT, TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "src/type";
+
+import LayoutNode from "../lib/LayoutNode";
+import { SplitterCMPT, TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "../type";
+import DefaultSplitter from "./DefaultSplitter";
+import DefaultTab from "./DefaultTab";
+import DefaultTitlebar from "./DefaultTitlebar";
+import LayoutNodeProvider from "./providers/LayoutNodeProvider";
+import LayoutsProvider from "./providers/LayoutsProvider";
+import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
+import PanelsProvider from "./providers/PanelsProvider";
+import SplittersProvider from "./providers/SplittersProvider";
+import UpdateHookProvider from "./providers/UpdateHookProvider";
 
 export type CMPTFactory = (
     page: string,
     data?: any
 ) => FunctionComponent<{ nodeData: any }>;
 
-const CMPTContext =
-    createContext<{
-        factory: CMPTFactory;
-        Tab: TABCMPT;
-        Titlebar: TitlebarCMPT;
-        Splitter: SplitterCMPT;
-        titlebarHeight: number;
-        splitterThickness: number;
-    } | null>(null);
+const CMPTContext = createContext<{
+    factory: CMPTFactory;
+    Tab: TABCMPT;
+    Titlebar: TitlebarCMPT;
+    Splitter: SplitterCMPT;
+    titlebarHeight: number;
+    splitterThickness: number;
+} | null>(null);
 
 const RIDContext = createContext("RID");
 

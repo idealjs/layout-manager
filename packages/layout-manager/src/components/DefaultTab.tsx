@@ -1,10 +1,11 @@
 import { useSns } from "@idealjs/sns";
-import { useLayoutSymbol } from "components/providers/LayoutSymbolProvider";
-import Close from "components/svg/Close";
-import useTabRef from "hooks/useTabRef";
 import { CSSProperties, useCallback } from "react";
-import { SLOT_EVENT } from "src/enum";
-import { REMOVE_PANEL_DATA, SELECT_TAB_DATA, TABCMPT } from "src/type";
+
+import { SLOT_EVENT } from "../enum";
+import useTabRef from "../hooks/useTabRef";
+import { REMOVE_PANEL_DATA, SELECT_TAB_DATA, TABCMPT } from "../type";
+import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import Close from "./svg/Close";
 
 const root: CSSProperties = {
     touchAction: "none",
