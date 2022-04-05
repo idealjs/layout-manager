@@ -1,18 +1,22 @@
-import { useStateRef } from "@idealjs/layout-manager";
-import { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { useEffect } from "react";
-import { FC } from "react";
 import { useCallback } from "react";
 import { createPortal } from "react-dom";
 
 import { sheet as customTabSheet } from "./CustomTab";
 import { sheet as customTitlebarSheet } from "./CustomTitlebar";
 import { usePortals } from "./PopoutManager";
-const Portal: FC<{ id: string | number }> = (props) => {
+
+const Portal = forwardRef<
+    { close: () => void },
+    { id: string | number; children: React.ReactNode }
+>((props, ref) => {
     const { children, id } = props;
-    const [container] = useState(document.createElement("div"));
-    const [externalWindowRef, externalWindow, setExternalWindow] =
-        useStateRef<Window | null>(null);
+
+    const containerRef = useRef<HTMLDivElement>(document.createElement("div"));
+
+    const externalWindowRef = useRef<Window | null>();
+
     const { setPortals } = usePortals();
 
     const onMainBeforeunload = useCallback(() => {
@@ -23,32 +27,53 @@ const Portal: FC<{ id: string | number }> = (props) => {
         setPortals((state) => state.filter((d) => d !== id));
     }, [id, setPortals]);
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            close: () => {
+                externalWindowRef.current?.close();
+            },
+        }),
+        []
+    );
+
     useEffect(() => {
-        container.style.height = "100%";
-        container.style.width = "100%";
-        const externalWindow = window.open(
-            "",
-            "",
-            "width=600,height=400,left=200,top=200"
-        );
-        externalWindow?.document.body.appendChild(container);
-        if (externalWindow != null) {
-            externalWindow.document.body.style.margin = "0px";
-            externalWindow.document.body.style.overflow = "hidden";
-            const style = externalWindow.document.head.appendChild(
-                externalWindow.document.createElement("style")
+        if (externalWindowRef.current == null) {
+            externalWindowRef.current = window.open(
+                "",
+                "",
+                "width=600,height=400,left=200,top=200"
+            );
+        }
+        if (externalWindowRef.current != null) {
+            externalWindowRef.current.document.body.style.margin = "0px";
+            externalWindowRef.current.document.body.style.overflow = "hidden";
+            const style = externalWindowRef.current.document.head.appendChild(
+                externalWindowRef.current.document.createElement("style")
             );
             style.textContent = "".concat(
                 customTitlebarSheet.toString(),
                 customTabSheet.toString()
             );
+            externalWindowRef.current?.document.body.appendChild(
+                containerRef.current
+            );
         }
-        setExternalWindow(externalWindow);
-        window.addEventListener("beforeunload", onMainBeforeunload);
-    }, [container, onMainBeforeunload, setExternalWindow]);
+        return () => {
+            // externalWindowRef.current?.close();
+        };
+    }, []);
 
     useEffect(() => {
-        externalWindow?.addEventListener(
+        window.addEventListener("beforeunload", onMainBeforeunload);
+        return () => {
+            window.removeEventListener("beforeunload", onMainBeforeunload);
+        };
+    }, [onMainBeforeunload]);
+
+    useEffect(() => {
+        const externalWindow = externalWindowRef.current;
+        externalWindowRef.current?.addEventListener(
             "beforeunload",
             onExternalBeforeunload
         );
@@ -58,15 +83,9 @@ const Portal: FC<{ id: string | number }> = (props) => {
                 onExternalBeforeunload
             );
         };
-    }, [externalWindow, onExternalBeforeunload]);
+    }, [onExternalBeforeunload]);
 
-    useEffect(() => {
-        return () => {
-            externalWindow?.close();
-        };
-    }, [externalWindow]);
-
-    return createPortal(children, container);
-};
+    return createPortal(children, containerRef.current!);
+});
 
 export default Portal;

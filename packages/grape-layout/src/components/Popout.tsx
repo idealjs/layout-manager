@@ -4,7 +4,7 @@ import {
     LayoutNode,
     Provider,
 } from "@idealjs/layout-manager";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useRef } from "react";
 import { useMemo } from "react";
 
 import CustomSplitter from "./CustomSplitter";
@@ -17,8 +17,8 @@ import Portal from "./Portal";
 
 const Popout: FC<{ portalId: string | number }> = (props) => {
     const { portalId } = props;
-
-    const { portalsRef, setPortals } = usePortals();
+    const portalRef = useRef<{ close: () => void }>(null);
+    const { portalsRef } = usePortals();
 
     const ROOT = useMemo(
         () =>
@@ -32,13 +32,18 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
         (layoutSymbol: string | number, layoutNode: LayoutNode) => {
             const inPopout = portalsRef.current.includes(layoutSymbol);
             if (inPopout) {
+                console.log(
+                    "[Debug] closing popout",
+                    layoutNode.layoutNodes.length
+                );
+
                 if (layoutNode.layoutNodes.length === 0) {
                     console.log("[Debug] closing popout", layoutSymbol);
-                    setPortals((s) => s.filter((s) => s !== layoutSymbol));
+                    portalRef.current?.close();
                 }
             }
         },
-        [portalsRef, setPortals]
+        [portalsRef]
     );
     const updateHook = useMemo(
         () => ({
@@ -59,7 +64,7 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
             splitterThickness={5}
             titlebarHeight={30}
         >
-            <Portal id={portalId}>
+            <Portal ref={portalRef} id={portalId}>
                 <Layout />
             </Portal>
         </Provider>

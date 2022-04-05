@@ -72,13 +72,16 @@ const Layout = () => {
     );
 
     useEffect(() => {
-        update();
-        slot?.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
-        slot?.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
-        slot?.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
-        slot?.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
-        slot?.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
-        sns.broadcast("ready", { layoutSymbol });
+        if (slot) {
+            slot.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
+            slot.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
+            slot.addListener(SLOT_EVENT.MOVE_PANEL, movePanel);
+            slot.addListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
+            slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
+            sns.broadcast("ready", { layoutSymbol });
+
+            update();
+        }
         layoutNode.addListener(LayoutNodeUpdate, update);
 
         return () => {
@@ -87,7 +90,6 @@ const Layout = () => {
             slot?.removeListener(SLOT_EVENT.MOVE_PANEL, movePanel);
             slot?.removeListener(SLOT_EVENT.MOVE_SPLITTER, moveSplitter);
             slot?.removeListener(SLOT_EVENT.SELECT_TAB, selectTab);
-
             layoutNode.removeListener(LayoutNodeUpdate, update);
         };
     }, [
