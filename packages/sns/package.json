@@ -7,7 +7,7 @@
     "scripts": {
         "build:webpack": "webpack -c webpack.config.js",
         "test": "jest",
-        "prepublish": "rm -rf dist&yarn build:webpack"
+        "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [

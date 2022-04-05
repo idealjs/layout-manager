@@ -14,14 +14,14 @@
         "README.md"
     ],
     "dependencies": {
-        "@reduxjs/toolkit": "^1.5.0",
+        "@reduxjs/toolkit": "^1.8.1",
         "html2canvas": "^1.0.0-rc.7",
         "nanoid": "^3.1.23"
     },
     "scripts": {
         "lint": "eslint src/**/*.{tsx,ts} --fix",
         "build:webpack": "webpack",
-        "prepublish": "rm -rf dist&yarn build:webpack"
+        "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [

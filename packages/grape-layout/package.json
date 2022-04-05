@@ -20,7 +20,7 @@
         "start": "react-scripts start",
         "lint": "eslint src/**/*.{tsx,ts} --fix",
         "build:webpack": "webpack -c config/webpack.config.js",
-        "prepublish": "rm -rf dist&yarn build:webpack"
+        "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "eslintConfig": {
         "extends": [
