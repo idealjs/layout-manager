@@ -73,9 +73,6 @@ const Layout = () => {
     );
 
     useEffect(() => {
-        //@ts-ignore
-        console.log("test test send ready", layoutSymbol, sns.slots, slot);
-
         update();
         slot?.addListener(SLOT_EVENT.ADD_PANEL, addPanel);
         slot?.addListener(SLOT_EVENT.REMOVE_PANEL, removePanel);
