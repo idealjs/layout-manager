@@ -4,17 +4,18 @@
     "main": "dist/index.js",
     "types": "dist/components/index.d.ts",
     "dependencies": {
-        "@idealjs/portal-window": "^1.0.0",
         "clsx": "^1.1.1",
         "jss": "^10.6.0",
         "jss-preset-default": "^10.6.0"
     },
     "devDependencies": {
         "@idealjs/layout-manager": "^1.7.3",
+        "@idealjs/portal-window": "^1.0.0",
         "@idealjs/sns": "^1.7.3"
     },
     "peerDependencies": {
         "@idealjs/layout-manager": "^1.7.0",
+        "@idealjs/portal-window": "^1.0.0",
         "@idealjs/sns": "^1.7.3"
     },
     "scripts": {
