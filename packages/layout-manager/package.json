@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/layout-manager",
-    "version": "1.7.3",
+    "version": "1.7.4",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -58,7 +58,7 @@
         ]
     },
     "devDependencies": {
-        "@idealjs/sns": "^1.7.3"
+        "@idealjs/sns": "^1.7.4"
     },
     "peerDependencies": {
         "@idealjs/sns": "^1.7.3",

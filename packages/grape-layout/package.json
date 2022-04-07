@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/grape-layout",
-    "version": "1.7.3",
+    "version": "1.7.4",
     "main": "dist/index.js",
     "types": "dist/components/index.d.ts",
     "dependencies": {
@@ -9,9 +9,9 @@
         "jss-preset-default": "^10.6.0"
     },
     "devDependencies": {
-        "@idealjs/layout-manager": "^1.7.3",
-        "@idealjs/portal-window": "^1.0.0",
-        "@idealjs/sns": "^1.7.3"
+        "@idealjs/layout-manager": "^1.7.4",
+        "@idealjs/portal-window": "^1.7.4",
+        "@idealjs/sns": "^1.7.4"
     },
     "peerDependencies": {
         "@idealjs/layout-manager": "^1.7.0",
