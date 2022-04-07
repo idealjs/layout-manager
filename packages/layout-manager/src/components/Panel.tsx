@@ -1,10 +1,9 @@
+import { DND_EVENT, IDropData, useDnd } from "@idealjs/drag-drop";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { MASK_PART, SLOT_EVENT } from "../enum";
 import useStateRef from "../hooks/useStateRef";
-import { DND_EVENT, useDnd } from "../lib/dnd";
-import { IDropData } from "../lib/dnd/type";
 import PanelNode from "../lib/PanelNode";
 import { ADD_PANEL_DATA, MOVE_PANEL_DATA, REMOVE_PANEL_DATA } from "../type";
 import { useFactory } from "./Provider";
@@ -150,6 +149,7 @@ const Panel = (props: { nodeId: string }) => {
 
     const onDragOver = useCallback(
         (data: IDropData<{ type: string }>) => {
+            console.log("test test", data);
             if (data.item?.type === "Tab") {
                 const rect = ref.current?.getBoundingClientRect();
                 if (rect) {
@@ -203,7 +203,9 @@ const Panel = (props: { nodeId: string }) => {
     useEffect(() => {
         try {
             const listenable = dnd
-                .droppable(ref.current!, true)
+                .droppable(ref.current!, {
+                    crossWindow: true,
+                })
                 .addListener(DND_EVENT.DROP, onDrop)
                 .addListener(DND_EVENT.DRAG_LEAVE, onDragLeave)
                 .addListener(DND_EVENT.DRAG_OVER, onDragOver);

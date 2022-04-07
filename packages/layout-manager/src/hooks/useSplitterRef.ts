@@ -1,11 +1,10 @@
+import { DND_EVENT, IDragData, useDnd } from "@idealjs/drag-drop";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
 import { useLayout, useLayouts } from "../components/providers/LayoutsProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { LAYOUT_DIRECTION, SLOT_EVENT } from "../enum";
-import { DND_EVENT, useDnd } from "../lib/dnd";
-import { IDragData } from "../lib/dnd/type";
 import { ILayoutNode, MOVE_SPLITTER_DATA } from "../type";
 
 export const createSplitterStyle = (config: {
@@ -94,7 +93,7 @@ const useSplitterRef = (data: {
             } as MOVE_SPLITTER_DATA);
             setDragging(false);
             setMovingOffset(0);
-            console.log(sns)
+            console.log(sns);
         };
         const onDrag = (data: IDragData) => {
             offset =
@@ -141,7 +140,8 @@ const useSplitterRef = (data: {
             }
         };
         const listenable = dnd
-            .draggable(ref.current!, true, {
+            .draggable(ref.current!, {
+                crossWindow: true,
                 item: {
                     id: id,
                 },

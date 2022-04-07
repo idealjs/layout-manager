@@ -1,15 +1,12 @@
-import EventEmitter from "events";
+import { EventEmitter } from "events";
 import html2canvas from "html2canvas";
 
 import Dnd, { DND_EVENT } from "./Dnd";
 import isHTMLElement from "./isHTMLElement";
 import offsetFromEvent from "./offsetFromEvent";
+import { IDragItem } from "./type";
 import { IDragData, IPoint, VECTOR } from "./type";
 import vectorFromEvent from "./vectorFromEvent";
-
-export interface IDragItem {
-    id: string;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface DragListenable<E extends Element, I extends IDragItem> {
@@ -20,8 +17,8 @@ declare interface DragListenable<E extends Element, I extends IDragItem> {
 }
 
 class DragListenable<
-    E extends Element,
-    I extends IDragItem
+    E extends Element = Element,
+    I extends IDragItem = IDragItem
 > extends EventEmitter {
     private dnd: Dnd;
     private dragStartEmitted = false;
@@ -40,11 +37,11 @@ class DragListenable<
         y: VECTOR;
     } | null = null;
 
-    constructor(dnd: Dnd, el: E, crossWindow: boolean, options?: { item?: I }) {
+    constructor(dnd: Dnd, el: E, crossWindow: boolean = false, item?: I) {
         super();
         this.dnd = dnd;
         this.el = el;
-        this.item = options?.item != null ? options.item : null;
+        this.item = item != null ? item : null;
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
@@ -53,8 +50,13 @@ class DragListenable<
         this.onDragEnd = this.onDragEnd.bind(this);
 
         if (crossWindow) {
-            if (isHTMLElement(this.el)) {
-                this.el.addEventListener("dragstart", this.onDragStart, true);
+            if (
+                isHTMLElement(
+                    this.el,
+                    this.el.ownerDocument.defaultView || window
+                )
+            ) {
+                this.el.addEventListener("dragstart", this.onDragStart);
                 this.el.draggable = true;
             } else {
                 throw new Error(`Can't add drag to ${this.el}`);
@@ -62,8 +64,7 @@ class DragListenable<
         } else {
             this.el.addEventListener(
                 "mousedown",
-                this.onMouseDown as EventListener,
-                true
+                this.onMouseDown as EventListener
             );
         }
 
@@ -73,10 +74,7 @@ class DragListenable<
     }
 
     private onMouseDown(event: MouseEvent) {
-        this.clean();
-        this.dragStartEmitted = false;
-        this.dnd.setDragging(false);
-        this.dnd.setDraggingItem(this.item);
+        this.dnd.activeDrag(this);
         this.source = {
             x: event.screenX,
             y: event.screenY,
@@ -105,13 +103,15 @@ class DragListenable<
             vector: this.vector,
         });
 
-        this.dragStartEmitted = false;
-
+        this.clean();
         window.removeEventListener("mousemove", this.onMouseMove);
         window.removeEventListener("mouseup", this.onMouseUp);
     }
 
     private onMouseMove(event: MouseEvent) {
+        if (!this.dnd.isActiveDrag(this)) {
+            return;
+        }
         if (this.dragStartEmitted === false) {
             this.emit(DND_EVENT.DRAG_START, {
                 source: this.source,
@@ -147,10 +147,8 @@ class DragListenable<
     }
 
     private onDragStart(event: DragEvent) {
-        this.clean();
-        this.dragStartEmitted = false;
-        this.dnd.setDragging(false);
-        this.dnd.setDraggingItem(this.item);
+        this.dnd.activeDrag(this);
+
         this.source = {
             x: event.screenX,
             y: event.screenY,
@@ -190,7 +188,9 @@ class DragListenable<
             vector: this.vector,
         });
 
-        if (isHTMLElement(this.el)) {
+        if (
+            isHTMLElement(this.el, this.el.ownerDocument.defaultView || window)
+        ) {
             this.el.addEventListener("drag", this.onDrag);
             this.el.addEventListener("dragend", this.onDragEnd);
         } else {
@@ -217,14 +217,16 @@ class DragListenable<
 
     private onDragEnd() {
         console.debug("[Debug] drag onDragEnd", this.dnd.getDraggingItem());
-
+        this.clean();
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
         });
 
-        if (isHTMLElement(this.el)) {
+        if (
+            isHTMLElement(this.el, this.el.ownerDocument.defaultView || window)
+        ) {
             this.el.removeEventListener("drag", this.onDrag);
             this.el.removeEventListener("dragend", this.onDragEnd);
         } else {
@@ -239,25 +241,31 @@ class DragListenable<
     private clean() {
         console.debug("[Debug] dnd clean");
         this.dnd.setDragging(false);
-        this.dnd.setDraggingItem(null);
         this.dnd.setPreviewCanvas(null);
+        this.dragStartEmitted = false;
+        this.dnd.cleanDrags();
+        this.dnd.cleanDrops();
         this.source = null;
         this.offset = null;
         this.vector = null;
     }
 
     public removeEleListeners() {
-        ((this.el as any) as HTMLElement).removeEventListener(
+        (this.el as any as HTMLElement).removeEventListener(
             "dragstart",
             this.onDragStart,
             true
         );
-        ((this.el as any) as HTMLElement).removeEventListener(
+        (this.el as any as HTMLElement).removeEventListener(
             "mousedown",
             this.onMouseDown,
             true
         );
         return this;
+    }
+
+    public getDraggingItem() {
+        return this.item;
     }
 }
 

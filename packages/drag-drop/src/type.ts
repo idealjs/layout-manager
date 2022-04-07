@@ -1,3 +1,5 @@
+export interface IDragItem {}
+
 export type VECTOR = 1 | -1 | 0;
 
 export interface IDragData {
@@ -6,9 +8,7 @@ export interface IDragData {
     vector: IPoint;
 }
 
-interface IItem {}
-
-export interface IDropData<I extends IItem> {
+export interface IDropData<I extends IDragItem> {
     item: I | null;
     clientPosition: IPoint;
 }
