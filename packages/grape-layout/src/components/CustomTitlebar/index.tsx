@@ -4,24 +4,9 @@ import {
     useLayout,
     useTitlebarHeight,
 } from "@idealjs/layout-manager";
-import clsx from "clsx";
-import jss from "jss";
-import preset from "jss-preset-default";
 import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
-export const sheet = jss
-    .setup(preset())
-    .createStyleSheet({
-        scroll: {
-            "&::-webkit-scrollbar-thumb": {
-                background: "#5464e2",
-            },
-            "&::-webkit-scrollbar": {
-                height: "1px",
-            },
-        },
-    })
-    .attach();
+import styles from "./index.module.css";
 
 const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     const { nodeId } = props;
@@ -53,7 +38,7 @@ const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     return (
         <div
             ref={ref}
-            className={clsx(sheet.classes.scroll)}
+            className={styles.titlebar}
             style={style}
             onWheel={onWheel}
         >

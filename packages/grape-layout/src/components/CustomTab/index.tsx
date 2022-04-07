@@ -18,46 +18,13 @@ import {
 } from "@idealjs/layout-manager";
 import { useSlot, useSns } from "@idealjs/sns";
 import clsx from "clsx";
-import jss from "jss";
-import preset from "jss-preset-default";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { useMemo } from "react";
 
-import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
-import { usePortals } from "./PopoutManager";
-
-export const sheet = jss
-    .setup(preset())
-    .createStyleSheet(
-        {
-            tab: {
-                backgroundColor: "#00000025",
-                touchAction: "none",
-                display: "flex",
-                alignItems: "center",
-                borderRadius: "10px 10px 0px 0px",
-                padding: "0px 10px",
-                margin: "2px",
-                userSelect: "none",
-            },
-            tab_selected: {
-                backgroundColor: "#f7f7f7",
-            },
-            button: {
-                marginLeft: "4px",
-                marginRight: "2px",
-                cursor: "pointer",
-                width: "16px",
-                height: "16px",
-                "&:hover": {
-                    backgroundColor: "#00000025",
-                },
-            },
-        },
-        { link: true }
-    )
-    .attach();
+import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
+import { usePortals } from "../PopoutManager";
+import styles from "./index.module.css";
 
 const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
@@ -150,8 +117,8 @@ const CustomTab: TABCMPT = (props) => {
         <div
             id={nodeId}
             className={clsx({
-                [sheet.classes.tab]: true,
-                [sheet.classes.tab_selected]: selected,
+                [styles.tab]: true,
+                [styles.tab_selected]: selected,
             })}
         >
             <div
@@ -165,10 +132,10 @@ const CustomTab: TABCMPT = (props) => {
             >
                 {nodeId}
             </div>
-            <div className={sheet.classes.button} onClick={onPopClick}>
+            <div className={styles.button} onClick={onPopClick}>
                 {inPopout ? <Popin /> : <Popout />}
             </div>
-            <div className={sheet.classes.button} onClick={onClose}>
+            <div className={styles.button} onClick={onClose}>
                 <Close />
             </div>
         </div>

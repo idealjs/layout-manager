@@ -1,0 +1,7 @@
+.titlebar::-webkit-scrollbar-thumb {
+    background: #5464e2;
+}
+
+.titlebar::-webkit-scrollbar {
+    height: 1px;
+}
