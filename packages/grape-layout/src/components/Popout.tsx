@@ -10,9 +10,7 @@ import { useMemo } from "react";
 
 import CustomSplitter from "./CustomSplitter";
 import CustomTab from "./CustomTab";
-import { sheet as customTabSheet } from "./CustomTab";
 import CustomTitlebar from "./CustomTitlebar";
-import { sheet as customTitlebarSheet } from "./CustomTitlebar";
 import { useFactory } from "./FactoryProvider";
 import layoutJSON from "./layout.json";
 import { usePortals } from "./PopoutManager";
@@ -65,17 +63,6 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
         portalRef.current?.close();
     }, []);
 
-    const injectCSS = useCallback((extWindow: Window) => {
-        console.log("test test injectCSS", extWindow);
-        const style = extWindow.document.head.appendChild(
-            extWindow.document.createElement("style")
-        );
-        style.textContent = "".concat(
-            customTitlebarSheet.toString(),
-            customTabSheet.toString()
-        );
-    }, []);
-
     return (
         <Provider
             layoutNode={ROOT}
@@ -92,7 +79,6 @@ const Popout: FC<{ portalId: string | number }> = (props) => {
                 ref={portalRef}
                 onExtBeforeUnload={onExtBeforeUnload}
                 onMainBeforeUnload={onMainBeforeunload}
-                afterHook={injectCSS}
             >
                 <Layout />
             </PortalWindow>

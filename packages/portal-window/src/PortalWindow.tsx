@@ -6,6 +6,7 @@ import {
     useRef,
 } from "react";
 import { createPortal } from "react-dom";
+import copyStyles from "./copyStyles";
 
 interface IProps {
     children?: ReactNode;
@@ -14,7 +15,7 @@ interface IProps {
     afterHook?: (extWindow: Window) => void;
 }
 
-const PortalWindow = forwardRef<{}, IProps>((props, ref) => {
+const PortalWindow = forwardRef<{ close: () => void }, IProps>((props, ref) => {
     const { children, onExtBeforeUnload, onMainBeforeUnload, afterHook } =
         props;
 
@@ -46,6 +47,7 @@ const PortalWindow = forwardRef<{}, IProps>((props, ref) => {
                 externalWindowRef.current.document.body.appendChild(
                     containerRef.current
                 );
+                copyStyles(window.document, externalWindowRef.current.document);
                 afterHook && afterHook(externalWindowRef.current);
             }
         }
