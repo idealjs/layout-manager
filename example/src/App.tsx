@@ -10,7 +10,7 @@ import {
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
-import GrapeLayout from "@idealjs/grape-layout/src/components/GrapeLayout";
+import GrapeLayout from "@idealjs/grape-layout";
 
 const ROOT = new LayoutNode({
     layoutJSON: {

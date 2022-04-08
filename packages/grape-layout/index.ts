@@ -1,1 +1,1 @@
-export { default as GrapeLayout } from "./src/components/GrapeLayout";
+export { default } from "./src/components/GrapeLayout";
