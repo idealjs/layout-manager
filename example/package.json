@@ -1,6 +1,6 @@
 {
     "name": "example",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "private": true,
     "scripts": {
         "start": "craco start",
@@ -28,8 +28,8 @@
     },
     "devDependencies": {
         "@craco/craco": "^6.4.3",
-        "@idealjs/grape-layout": "^1.7.5",
-        "@idealjs/layout-manager": "^1.7.5",
+        "@idealjs/grape-layout": "^1.7.6",
+        "@idealjs/layout-manager": "^1.7.6",
         "@testing-library/jest-dom": "^5.16.3",
         "@testing-library/react": "^13.0.0",
         "@testing-library/user-event": "^14.0.4",

@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/drag-drop",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
@@ -10,7 +10,6 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "devDependencies": {},
     "peerDependencies": {
         "events": "^3.3.0",
         "html2canvas": "^1.4.1",
