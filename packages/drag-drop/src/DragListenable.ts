@@ -74,6 +74,7 @@ class DragListenable<
     }
 
     private onMouseDown(event: MouseEvent) {
+        this.clean();
         this.dnd.activeDrag(this);
         this.source = {
             x: event.screenX,
@@ -103,13 +104,11 @@ class DragListenable<
             vector: this.vector,
         });
 
-        this.clean();
         this.getWindow().removeEventListener("mousemove", this.onMouseMove);
         this.getWindow().removeEventListener("mouseup", this.onMouseUp);
     }
 
     private onMouseMove(event: MouseEvent) {
-        console.log("test test", this.dnd.isActiveDrag(this));
         if (!this.dnd.isActiveDrag(this)) {
             return;
         }
@@ -148,6 +147,7 @@ class DragListenable<
     }
 
     private onDragStart(event: DragEvent) {
+        this.clean();
         this.dnd.activeDrag(this);
 
         this.source = {
@@ -218,7 +218,6 @@ class DragListenable<
 
     private onDragEnd() {
         console.debug("[Debug] drag onDragEnd", this.dnd.getDraggingItem());
-        this.clean();
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
