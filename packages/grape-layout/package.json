@@ -16,11 +16,11 @@
         "@idealjs/sns": "^1.7.5",
         "clsx": "^1.1.1"
     },
-    "peerDependencies": {
-        "react": "^18.0.0"
-    },
     "devDependencies": {
         "css-loader": "^6.7.1",
         "style-loader": "^3.3.1"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0"
     }
 }

@@ -12,15 +12,10 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "devDependencies": {
-        "events": "^3.3.0",
-        "nanoid": "^3.3.2",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
-    },
+    "devDependencies": {},
     "peerDependencies": {
         "events": "^3.3.0",
         "nanoid": "^3.3.2",
-        "react": "^17.0.1"
+        "react": "^18.0.0"
     }
 }

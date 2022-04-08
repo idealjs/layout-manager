@@ -10,11 +10,7 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "devDependencies": {
-        "events": "^3.3.0",
-        "html2canvas": "^1.4.1",
-        "react": "^18.0.0"
-    },
+    "devDependencies": {},
     "peerDependencies": {
         "events": "^3.3.0",
         "html2canvas": "^1.4.1",
