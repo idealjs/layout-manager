@@ -1,6 +1,6 @@
 {
     "name": "example",
-    "version": "1.7.6",
+    "version": "1.7.7",
     "private": true,
     "scripts": {
         "start": "craco start",
@@ -29,8 +29,8 @@
     "dependencies": {
         "@craco/craco": "^6.4.3",
         "@idealjs/drag-drop": "^1.7.6",
-        "@idealjs/grape-layout": "^1.7.6",
-        "@idealjs/layout-manager": "^1.7.6",
+        "@idealjs/grape-layout": "^1.7.7",
+        "@idealjs/layout-manager": "^1.7.7",
         "@idealjs/portal-window": "^1.7.6",
         "@idealjs/sns": "^1.7.6",
         "@testing-library/jest-dom": "^5.16.3",
