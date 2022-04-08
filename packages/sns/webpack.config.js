@@ -34,6 +34,6 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["events", "nanoid", "react"],
+    externals: ["events", "nanoid", "react", "react/jsx-runtime"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };
