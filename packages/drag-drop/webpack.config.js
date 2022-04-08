@@ -21,31 +21,16 @@ module.exports = {
                 },
                 exclude: /node_modules/,
             },
-            {
-                test: /\.svg$/,
-                use: ["@svgr/webpack", "url-loader"],
-            },
         ],
     },
     resolve: {
-        extensions: [".tsx", ".ts", ".js"],
-        alias: {
-            "react/jsx-runtime": "react/jsx-runtime.js",
-        },
+        extensions: [".ts", ".js"],
     },
     output: {
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: [
-        "@idealjs/drag-drop",
-        "@idealjs/sns",
-        "@reduxjs/toolkit",
-        "events",
-        "nanoid",
-        "react",
-        "react/jsx-runtime",
-    ],
+    externals: ["events", "html2canvas", "react"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

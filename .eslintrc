@@ -1,0 +1,15 @@
+{
+  "extends": ["react-app", "react-app/jest"],
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "quotes": "warn",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
+    "react-hooks/exhaustive-deps": [
+      1,
+      {
+        "enableDangerousAutofixThisMayCauseInfiniteLoops": true
+      }
+    ]
+  }
+}

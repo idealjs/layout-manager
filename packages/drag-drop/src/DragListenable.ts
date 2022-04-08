@@ -1,4 +1,4 @@
-import { EventEmitter, getEventListeners } from "events";
+import { EventEmitter } from "events";
 import html2canvas from "html2canvas";
 
 import Dnd, { DND_EVENT } from "./Dnd";

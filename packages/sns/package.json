@@ -4,35 +4,19 @@
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "scripts": {
-        "build:webpack": "webpack -c webpack.config.js",
-        "test": "jest",
-        "prepublishOnly": "rm -rf dist&yarn build:webpack"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ],
-        "plugins": [
-            "simple-import-sort"
-        ],
-        "rules": {
-            "simple-import-sort/imports": "warn",
-            "simple-import-sort/exports": "warn",
-            "react-hooks/exhaustive-deps": [
-                1,
-                {
-                    "enableDangerousAutofixThisMayCauseInfiniteLoops": true
-                }
-            ]
-        }
-    },
     "author": "",
     "license": "ISC",
+    "scripts": {
+        "test": "jest",
+        "build": "tsc -p tsconfig.build.json",
+        "build:webpack": "webpack -c webpack.config.js",
+        "prepublishOnly": "rm -rf dist&yarn build:webpack"
+    },
     "devDependencies": {
         "events": "^3.3.0",
-        "nanoid": "^3.3.2"
+        "nanoid": "^3.3.2",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
     },
     "peerDependencies": {
         "events": "^3.3.0",

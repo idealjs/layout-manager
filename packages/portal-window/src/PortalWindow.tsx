@@ -6,6 +6,7 @@ import {
     useRef,
 } from "react";
 import { createPortal } from "react-dom";
+
 import copyStyles from "./copyStyles";
 
 interface IProps {
@@ -51,7 +52,7 @@ const PortalWindow = forwardRef<{ close: () => void }, IProps>((props, ref) => {
                 afterHook && afterHook(externalWindowRef.current);
             }
         }
-    }, []);
+    }, [afterHook]);
 
     useEffect(() => {
         if (onMainBeforeUnload) {

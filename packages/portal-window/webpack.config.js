@@ -21,10 +21,6 @@ module.exports = {
                 },
                 exclude: /node_modules/,
             },
-            {
-                test: /\.svg$/,
-                use: ["@svgr/webpack", "url-loader"],
-            },
         ],
     },
     resolve: {
@@ -38,14 +34,6 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: [
-        "@idealjs/drag-drop",
-        "@idealjs/sns",
-        "@reduxjs/toolkit",
-        "events",
-        "nanoid",
-        "react",
-        "react/jsx-runtime",
-    ],
+    externals: ["react", "react-dom"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

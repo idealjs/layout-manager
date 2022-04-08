@@ -2,58 +2,25 @@
     "name": "@idealjs/grape-layout",
     "version": "1.7.4",
     "main": "dist/index.js",
-    "types": "dist/components/index.d.ts",
-    "dependencies": {
-        "clsx": "^1.1.1"
-    },
-    "devDependencies": {
-        "@idealjs/layout-manager": "^1.7.4",
-        "@idealjs/portal-window": "^1.7.4",
-        "@idealjs/sns": "^1.7.4"
-    },
-    "peerDependencies": {
-        "@idealjs/layout-manager": "^1.7.0",
-        "@idealjs/portal-window": "^1.0.0",
-        "@idealjs/sns": "^1.7.3"
-    },
+    "types": "dist/index.d.ts",
     "scripts": {
-        "start": "react-scripts start",
         "lint": "eslint src/**/*.{tsx,ts} --fix",
-        "build:webpack": "webpack -c config/webpack.config.js",
+        "test": "jest",
+        "build": "tsc -p tsconfig.build.json",
+        "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ],
-        "plugins": [
-            "simple-import-sort"
-        ],
-        "rules": {
-            "simple-import-sort/imports": "warn",
-            "simple-import-sort/exports": "warn",
-            "react-hooks/exhaustive-deps": [
-                1,
-                {
-                    "enableDangerousAutofixThisMayCauseInfiniteLoops": true
-                }
-            ]
-        }
+    "dependencies": {
+        "@idealjs/layout-manager": "^1.7.4",
+        "@idealjs/portal-window": "^1.7.4",
+        "@idealjs/sns": "^1.7.4",
+        "clsx": "^1.1.1"
     },
-    "eslintIgnore": [
-        "dist"
-    ],
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+    "peerDependencies": {
+        "react": "^18.0.0"
+    },
+    "devDependencies": {
+        "css-loader": "^6.7.1",
+        "style-loader": "^3.3.1"
     }
 }

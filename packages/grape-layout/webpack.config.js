@@ -1,8 +1,10 @@
 const path = require("path");
 
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+
 module.exports = {
     mode: "production",
-    entry: "./src/components/index.ts",
+    entry: "./index.ts",
     devtool: "source-map",
     module: {
         rules: [
@@ -11,15 +13,17 @@ module.exports = {
                 use: {
                     loader: "ts-loader",
                     options: {
-                        compiler: "ttypescript",
-                        configFile: path.resolve(__dirname, "tsconfig.json"),
+                        configFile: path.resolve(
+                            __dirname,
+                            "tsconfig.build.json"
+                        ),
                     },
                 },
                 exclude: /node_modules/,
             },
             {
-                test: /\.svg$/,
-                use: ["@svgr/webpack", "url-loader"],
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"],
             },
         ],
     },
@@ -30,9 +34,10 @@ module.exports = {
         },
     },
     output: {
-        path: path.resolve(__dirname, "../dist"),
+        path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["react", "react-dom", "@idealjs/layout-manager", "@idealjs/sns"],
+    externals: ["react", "react/jsx-runtime", "react-dom"],
+    plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

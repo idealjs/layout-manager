@@ -2,8 +2,7 @@
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "noEmit": true,
-        "outDir": "./dist",
-        "jsx": "react-jsx"
+        "outDir": "./dist"
     },
     "include": ["src", "index.ts"],
     "exclude": ["node_modules"]
