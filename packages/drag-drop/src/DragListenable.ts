@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter, getEventListeners } from "events";
 import html2canvas from "html2canvas";
 
 import Dnd, { DND_EVENT } from "./Dnd";
@@ -48,14 +48,10 @@ class DragListenable<
         this.onDragStart = this.onDragStart.bind(this);
         this.onDrag = this.onDrag.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
+        this.getWindow = this.getWindow.bind(this);
 
         if (crossWindow) {
-            if (
-                isHTMLElement(
-                    this.el,
-                    this.el.ownerDocument.defaultView || window
-                )
-            ) {
+            if (isHTMLElement(this.el, this.getWindow())) {
                 this.el.addEventListener("dragstart", this.onDragStart);
                 this.el.draggable = true;
             } else {
@@ -71,6 +67,10 @@ class DragListenable<
         if (el instanceof HTMLElement) {
             el.style.userSelect = "none";
         }
+    }
+
+    private getWindow() {
+        return this.el.ownerDocument.defaultView || window;
     }
 
     private onMouseDown(event: MouseEvent) {
@@ -91,8 +91,8 @@ class DragListenable<
             x: 0,
             y: 0,
         };
-        window.addEventListener("mousemove", this.onMouseMove);
-        window.addEventListener("mouseup", this.onMouseUp);
+        this.getWindow().addEventListener("mousemove", this.onMouseMove);
+        this.getWindow().addEventListener("mouseup", this.onMouseUp);
     }
 
     private onMouseUp(event: MouseEvent) {
@@ -104,11 +104,12 @@ class DragListenable<
         });
 
         this.clean();
-        window.removeEventListener("mousemove", this.onMouseMove);
-        window.removeEventListener("mouseup", this.onMouseUp);
+        this.getWindow().removeEventListener("mousemove", this.onMouseMove);
+        this.getWindow().removeEventListener("mouseup", this.onMouseUp);
     }
 
     private onMouseMove(event: MouseEvent) {
+        console.log("test test", this.dnd.isActiveDrag(this));
         if (!this.dnd.isActiveDrag(this)) {
             return;
         }
@@ -251,16 +252,13 @@ class DragListenable<
     }
 
     public removeEleListeners() {
-        (this.el as any as HTMLElement).removeEventListener(
-            "dragstart",
-            this.onDragStart,
-            true
-        );
-        (this.el as any as HTMLElement).removeEventListener(
-            "mousedown",
-            this.onMouseDown,
-            true
-        );
+        if (
+            isHTMLElement(this.el, this.el.ownerDocument.defaultView || window)
+        ) {
+            this.el.removeEventListener("dragstart", this.onDragStart);
+            this.el.removeEventListener("mousedown", this.onMouseDown);
+        }
+
         return this;
     }
 

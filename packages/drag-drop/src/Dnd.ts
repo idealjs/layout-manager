@@ -72,19 +72,10 @@ class Dnd extends EventEmitter {
     }
 
     public activeDrag(drag: DragListenable) {
-        console.log("test test activeDrag");
         this.activeDrags.push(drag);
     }
 
-    // public deactiveDrag(drag: DragListenable) {
-    //     console.log("test test deactiveDrag");
-
-    //     this.activeDrags = this.activeDrags.filter((d) => d !== drag);
-    // }
-
     public cleanDrags() {
-        console.log("test test cleanDrags");
-
         this.activeDrags = [];
     }
 
