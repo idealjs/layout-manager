@@ -38,6 +38,13 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["react", "react/jsx-runtime", "react-dom"],
+    externals: [
+        "@idealjs/layout-manager",
+        "@idealjs/portal-window",
+        "@idealjs/sns",
+        "react",
+        "react/jsx-runtime",
+        "react-dom",
+    ],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

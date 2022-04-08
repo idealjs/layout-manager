@@ -38,6 +38,14 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["events", "nanoid", "react", "react/jsx-runtime"],
+    externals: [
+        "@idealjs/drag-drop",
+        "@idealjs/sns",
+        "@reduxjs/toolkit",
+        "events",
+        "nanoid",
+        "react",
+        "react/jsx-runtime",
+    ],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

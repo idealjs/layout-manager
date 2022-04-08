@@ -31,6 +31,6 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["events", "react"],
+    externals: ["events", "html2canvas", "react"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };
