@@ -4,28 +4,39 @@ import { useEffect, useRef } from "react";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { usePanel } from "../components/providers/PanelsProvider";
 
-const useTabRef = (nodeId: string) => {
+const useTabRef = <T extends HTMLElement>(nodeId: string) => {
     const ref = useRef(null);
     const node = usePanel(nodeId);
     const dnd = useDnd();
     const layoutSymbol = useLayoutSymbol();
     useEffect(() => {
         try {
-            const listenable = dnd.draggable(ref.current!, {
+            const listenable = dnd.draggable<
+                T,
+                {
+                    layoutSymbol: string | number;
+                    id?: string;
+                    page?: string;
+                    data?: any;
+                    type: string;
+                }
+            >(ref.current!, {
                 crossWindow: true,
                 item: {
                     layoutSymbol,
-                    ...node!,
+                    id: node?.id,
+                    page: node?.page,
+                    data: node?.data,
                     type: "Tab",
                 },
             });
             return () => {
-                listenable.removeAllListeners().removeEleListeners();
+                listenable.removeEleListeners();
             };
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, layoutSymbol, node, nodeId]);
+    }, [dnd, layoutSymbol, node?.data, node?.id, node?.page, nodeId]);
     return ref;
 };
 

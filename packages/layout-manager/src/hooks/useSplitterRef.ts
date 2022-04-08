@@ -2,7 +2,7 @@ import { DND_EVENT, IDragData, useDnd } from "@idealjs/drag-drop";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
-import { useLayout, useLayouts } from "../components/providers/LayoutsProvider";
+import { useLayout } from "../components/providers/LayoutsProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { LAYOUT_DIRECTION, SLOT_EVENT } from "../enum";
 import { ILayoutNode, MOVE_SPLITTER_DATA } from "../type";
@@ -51,8 +51,6 @@ const useSplitterRef = (data: {
     secondaryId: string;
 }) => {
     const { id, parentId, primaryId, secondaryId } = data;
-
-    const [, , dispatch] = useLayouts();
 
     const [movingOffset, setMovingOffset] = useState(0);
     const [dragging, setDragging] = useState(false);
@@ -141,7 +139,7 @@ const useSplitterRef = (data: {
         };
         const listenable = dnd
             .draggable(ref.current!, {
-                crossWindow: true,
+                crossWindow: false,
                 item: {
                     id: id,
                 },
@@ -157,15 +155,15 @@ const useSplitterRef = (data: {
                 .removeEleListeners();
         };
     }, [
-        dispatch,
         dnd,
         id,
         layoutSymbol,
-        parent,
-        parentId,
-        primary,
+        parent?.direction,
+        primary?.height,
+        primary?.width,
         primaryId,
-        secondary,
+        secondary?.height,
+        secondary?.width,
         secondaryId,
         sns,
     ]);
@@ -175,8 +173,6 @@ const useSplitterRef = (data: {
         shadowRef,
         dragging,
         movingOffset,
-        // splitterStyle,
-        // shadowStyle,
     };
 };
 
