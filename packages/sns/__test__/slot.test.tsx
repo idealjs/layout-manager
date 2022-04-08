@@ -1,7 +1,8 @@
 import { act, renderHook } from "@testing-library/react-hooks";
+import { nanoid } from "nanoid";
 import { FC, StrictMode, useCallback, useState } from "react";
-import SnsProvider, { useSlot, useSns } from "src/SnsProvider";
-import uniqid from "uniqid";
+
+import SnsProvider, { useSlot, useSns } from "../src/SnsProvider";
 
 describe("useSlot useSlot StrictMode", () => {
     test("should has one slot", () => {
@@ -15,7 +16,7 @@ describe("useSlot useSlot StrictMode", () => {
         };
         const { result } = renderHook(
             () => {
-                const [testId] = useState(uniqid());
+                const [testId] = useState(nanoid());
                 const slot = useSlot(testId);
                 const sns = useSns();
                 return { slot, sns };
@@ -25,8 +26,7 @@ describe("useSlot useSlot StrictMode", () => {
             }
         );
 
-        // @ts-ignore
-        expect(result.current.sns.slots.length).toBe(1);
+        expect(result.current.sns["slots"].length).toBe(1);
     });
 
     test("should has one slot after changeTestId", () => {
@@ -40,7 +40,7 @@ describe("useSlot useSlot StrictMode", () => {
         };
         const { result } = renderHook(
             () => {
-                const [testId, setTestId] = useState(uniqid());
+                const [testId, setTestId] = useState(nanoid());
                 const slot = useSlot(testId);
                 const sns = useSns();
                 const changeTestId = useCallback(() => {
@@ -56,8 +56,7 @@ describe("useSlot useSlot StrictMode", () => {
             result.current.changeTestId();
         });
 
-        // @ts-ignore
-        expect(result.current.sns.slots.length).toBe(1);
+        expect(result.current.sns["slots"].length).toBe(1);
     });
 
     test("should has one slot if id is same", () => {
@@ -92,15 +91,9 @@ describe("useSlot useSlot StrictMode", () => {
             }
         );
 
-        // @ts-ignore
-        expect(result.current.sns.slots.length).toBe(1);
-        // @ts-ignore
-        expect(result2.current.sns.slots.length).toBe(1);
-        // @ts-ignore
-        expect(result.current.slot).toEqual(
-            // @ts-ignore
-            result2.current.slot
-        );
+        expect(result.current.sns["slots"].length).toBe(1);
+        expect(result2.current.sns["slots"].length).toBe(1);
+        expect(result.current.slot).toEqual(result2.current.slot);
     });
     test("first useSlot,then useSlot", () => {
         const wrapper: FC = (props) => {
