@@ -1,6 +1,6 @@
 {
     "name": "example",
-    "version": "1.7.8",
+    "version": "1.7.9",
     "private": true,
     "scripts": {
         "start": "craco start",
@@ -28,9 +28,9 @@
     },
     "dependencies": {
         "@craco/craco": "^6.4.3",
-        "@idealjs/drag-drop": "^1.7.6",
+        "@idealjs/drag-drop": "^1.7.9",
         "@idealjs/grape-layout": "^1.7.8",
-        "@idealjs/layout-manager": "^1.7.8",
+        "@idealjs/layout-manager": "^1.7.9",
         "@idealjs/portal-window": "^1.7.6",
         "@idealjs/sns": "^1.7.6",
         "@reduxjs/toolkit": "^1.8.1",

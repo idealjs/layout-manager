@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/drag-drop",
-    "version": "1.7.6",
+    "version": "1.7.9",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
