@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/layout-manager",
-    "version": "1.7.4",
+    "version": "1.7.5",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -21,8 +21,8 @@
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "devDependencies": {
-        "@idealjs/drag-drop": "^1.0.0",
-        "@idealjs/sns": "^1.7.4",
+        "@idealjs/drag-drop": "^1.7.5",
+        "@idealjs/sns": "^1.7.5",
         "@reduxjs/toolkit": "^1.8.1",
         "@svgr/webpack": "^6.2.1",
         "events": "^3.3.0",
