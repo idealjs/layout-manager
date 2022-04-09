@@ -11,6 +11,10 @@
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "dependencies": {
+        "@idealjs/layout-manager": "^1.7.7",
+        "@idealjs/portal-window": "^1.7.6",
+        "@idealjs/sns": "^1.7.6",
+        "@types/redux": "^3.6.0",
         "clsx": "^1.1.1"
     },
     "devDependencies": {
@@ -18,9 +22,6 @@
         "style-loader": "^3.3.1"
     },
     "peerDependencies": {
-        "@idealjs/layout-manager": "^1.7.7",
-        "@idealjs/portal-window": "^1.7.6",
-        "@idealjs/sns": "^1.7.6",
         "react": "^18.0.0"
     }
 }

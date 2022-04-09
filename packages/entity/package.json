@@ -1,0 +1,17 @@
+{
+    "name": "@idealjs/entity",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "devDependencies": {
+        "immer": "^9.0.12",
+        "reselect": "^4.1.5"
+    },
+    "peerDependencies": {
+        "immer": "^9.0.12"
+    },
+    "dependencies": {
+        "@types/redux": "^3.6.0"
+    }
+}

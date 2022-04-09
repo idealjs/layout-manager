@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice } from "@idealjs/entity";
 
 import { ILayoutNode } from "../type";
 

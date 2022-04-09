@@ -41,7 +41,7 @@ module.exports = {
     externals: [
         "@idealjs/drag-drop",
         "@idealjs/sns",
-        "@reduxjs/toolkit",
+        "@idealjs/entity",
         "events",
         "nanoid",
         "react",

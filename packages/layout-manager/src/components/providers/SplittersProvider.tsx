@@ -1,14 +1,13 @@
-import { AnyAction, EntityState } from "@reduxjs/toolkit";
+import { AnyAction, EntityState } from "@idealjs/entity";
 import { createContext, FC, useContext, useReducer } from "react";
 
 import { selectAll, selectById } from "../../reducers/splitters";
 import reducer, { adapter } from "../../reducers/splitters";
 import { ISplitterNode } from "../../type";
 
-const context =
-    createContext<
-        [EntityState<ISplitterNode>, React.Dispatch<AnyAction>] | null
-    >(null);
+const context = createContext<
+    [EntityState<ISplitterNode>, React.Dispatch<AnyAction>] | null
+>(null);
 const SplittersProvider: FC = (props) => {
     const { children } = props;
 

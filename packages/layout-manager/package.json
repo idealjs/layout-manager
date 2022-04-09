@@ -22,8 +22,8 @@
     },
     "dependencies": {
         "@idealjs/drag-drop": "^1.7.9",
-        "@idealjs/sns": "^1.7.6",
-        "@reduxjs/toolkit": "^1.8.1"
+        "@idealjs/entity": "^1.0.0",
+        "@idealjs/sns": "^1.7.6"
     },
     "devDependencies": {
         "@svgr/webpack": "^6.2.1",
