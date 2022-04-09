@@ -4,6 +4,11 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "build:webpack": "webpack -c webpack.config.js",
+        "prepublishOnly": "rm -rf dist&yarn build:webpack"
+    },
     "devDependencies": {
         "@types/redux": "^3.6.0",
         "immer": "^9.0.12",

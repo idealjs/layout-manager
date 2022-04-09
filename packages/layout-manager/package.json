@@ -25,10 +25,6 @@
         "@idealjs/entity": "^1.7.10",
         "@idealjs/sns": "^1.7.6"
     },
-    "devDependencies": {
-        "@svgr/webpack": "^6.2.1",
-        "url-loader": "^4.1.1"
-    },
     "peerDependencies": {
         "events": "^3.3.0",
         "nanoid": "^3.3.2",

@@ -29,6 +29,7 @@
     "dependencies": {
         "@craco/craco": "^6.4.3",
         "@idealjs/drag-drop": "^1.7.9",
+        "@idealjs/entity": "^1.7.10",
         "@idealjs/grape-layout": "^1.7.10",
         "@idealjs/layout-manager": "^1.7.10",
         "@idealjs/portal-window": "^1.7.6",
