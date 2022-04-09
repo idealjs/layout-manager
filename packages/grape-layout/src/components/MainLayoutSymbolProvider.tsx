@@ -4,9 +4,9 @@ import { createContext } from "react";
 
 const context = createContext<string | number | null>(null);
 
-const MainLayoutSymbolProvider: FC<{
+const MainLayoutSymbolProvider: FC<React.PropsWithChildren<{
     mainLayoutSymbol: string | number;
-}> = (props) => {
+}>> = (props) => {
     const { children, mainLayoutSymbol } = props;
     return (
         <context.Provider value={mainLayoutSymbol}>{children}</context.Provider>

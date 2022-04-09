@@ -3,7 +3,7 @@ import { createContext, FC, useContext, useState } from "react";
 
 const context = createContext<string | number | null>(null);
 
-const Provider: FC<{ uniqueSymbol?: string | number }> = (props) => {
+const Provider: FC<React.PropsWithChildren<{ uniqueSymbol?: string | number }>> = (props) => {
     const { children, uniqueSymbol } = props;
     const [layoutSymbol] = useState(() =>
         uniqueSymbol ? uniqueSymbol : nanoid()

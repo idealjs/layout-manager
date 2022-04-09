@@ -8,7 +8,7 @@ import { ILayoutNode } from "../../type";
 const context = createContext<
     [EntityState<ILayoutNode>, React.Dispatch<AnyAction>] | null
 >(null);
-const LayoutsProvider: FC = (props) => {
+const LayoutsProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     const { children } = props;
     const [layouts, dispatch] = useReducer(reducer, adapter.getInitialState());
     return (

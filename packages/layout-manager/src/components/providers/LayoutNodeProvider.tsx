@@ -4,7 +4,7 @@ import LayoutNode from "../../lib/LayoutNode";
 
 const context = createContext<LayoutNode | null>(null);
 
-const LayoutNodeProvider: FC<{ layoutNode: LayoutNode }> = (props) => {
+const LayoutNodeProvider: FC<React.PropsWithChildren<{ layoutNode: LayoutNode }>> = (props) => {
     const { children, layoutNode } = props;
     return <context.Provider value={layoutNode}>{children}</context.Provider>;
 };

@@ -15,7 +15,7 @@ import { useFactory } from "./FactoryProvider";
 import layoutJSON from "./layout.json";
 import { usePortals } from "./PopoutManager";
 
-const Popout: FC<{ portalId: string | number }> = (props) => {
+const Popout: FC<React.PropsWithChildren<{ portalId: string | number }>> = (props) => {
     const { portalId } = props;
     const portalRef = useRef<{ close: () => void }>(null);
     const { portalsRef, setPortals } = usePortals();

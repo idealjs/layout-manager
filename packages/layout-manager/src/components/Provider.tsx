@@ -15,7 +15,7 @@ import UpdateHookProvider from "./providers/UpdateHookProvider";
 export type CMPTFactory = (
     page: string,
     data?: any
-) => FunctionComponent<{ nodeData: any }>;
+) => FunctionComponent<React.PropsWithChildren<{ nodeData: any }>>;
 
 const CMPTContext = createContext<{
     factory: CMPTFactory;
@@ -28,7 +28,7 @@ const CMPTContext = createContext<{
 
 const RIDContext = createContext("RID");
 
-const Provider: FC<{
+const Provider: FC<React.PropsWithChildren<{
     factory: CMPTFactory;
     Tab?: TABCMPT;
     Titlebar?: TitlebarCMPT;
@@ -39,7 +39,7 @@ const Provider: FC<{
     updateHook?: UPDATE_HOOK;
     titlebarHeight?: number;
     splitterThickness?: number;
-}> = (props) => {
+}>> = (props) => {
     const {
         children,
         factory,

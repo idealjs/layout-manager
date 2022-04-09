@@ -52,16 +52,16 @@ export interface IPanelNode {
     data?: any;
 }
 
-export type TABCMPT = FC<{ nodeId: string }>;
+export type TABCMPT = FC<React.PropsWithChildren<{ nodeId: string }>>;
 
-export type TitlebarCMPT = FC<{ nodeId: string }>;
+export type TitlebarCMPT = FC<React.PropsWithChildren<{ nodeId: string }>>;
 
-export type SplitterCMPT = FC<{
+export type SplitterCMPT = FC<React.PropsWithChildren<{
     id: string;
     parentId: string;
     primaryId: string;
     secondaryId: string;
-}>;
+}>>;
 
 export interface IRule {
     part: MASK_PART;

@@ -8,7 +8,7 @@ import { IPanelNode } from "../../type";
 const context = createContext<
     [EntityState<IPanelNode>, React.Dispatch<AnyAction>] | null
 >(null);
-const PanelsProvider: FC = (props) => {
+const PanelsProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     const { children } = props;
     const [panels, dispatch] = useReducer(reducer, adapter.getInitialState());
     return (

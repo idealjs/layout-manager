@@ -8,7 +8,7 @@ import { ISplitterNode } from "../../type";
 const context = createContext<
     [EntityState<ISplitterNode>, React.Dispatch<AnyAction>] | null
 >(null);
-const SplittersProvider: FC = (props) => {
+const SplittersProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     const { children } = props;
 
     const [splitters, dispatch] = useReducer(

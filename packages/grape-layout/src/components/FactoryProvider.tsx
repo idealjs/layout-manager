@@ -3,7 +3,7 @@ import { createContext, FC, useContext } from "react";
 
 const context = createContext<CMPTFactory | null>(null);
 
-const FactoryProvider: FC<{ factory: CMPTFactory }> = (props) => {
+const FactoryProvider: FC<React.PropsWithChildren<{ factory: CMPTFactory }>> = (props) => {
     const { children, factory } = props;
     return <context.Provider value={factory}>{children}</context.Provider>;
 };

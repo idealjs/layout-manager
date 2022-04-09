@@ -1,4 +1,11 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import {
+    createContext,
+    FC,
+    PropsWithChildren,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 
 import Slot, { SlotId } from "./slot";
 import Sns from "./sns";
@@ -6,7 +13,7 @@ import Sns from "./sns";
 const defaultSns = new Sns();
 const context = createContext<Sns>(defaultSns);
 
-const SnsProvider: FC<{ sns?: Sns }> = (props) => {
+const SnsProvider: FC<React.PropsWithChildren<PropsWithChildren<{ sns?: Sns }>>> = (props) => {
     const { children, sns = defaultSns } = props;
     return <context.Provider value={sns}>{children}</context.Provider>;
 };

@@ -1,6 +1,7 @@
 import {
     LayoutNodeActionType,
     MASK_PART,
+    PanelNode,
     ROOTID,
     useLayoutNode,
 } from "@idealjs/layout-manager";
@@ -15,7 +16,7 @@ const PopinListener = () => {
     const mainlayoutSymbol = useMainLayoutSymbol();
     const slot = useSlot(mainlayoutSymbol);
     const popinListener = useCallback(
-        (e) => {
+        (e: { panelNode: PanelNode }) => {
             try {
                 const target = layoutNode.findNodeByRules(rules);
                 console.debug("[Debug] target is", target);

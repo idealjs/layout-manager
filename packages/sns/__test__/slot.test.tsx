@@ -6,7 +6,7 @@ import SnsProvider, { useSlot, useSns } from "../src/SnsProvider";
 
 describe("useSlot useSlot StrictMode", () => {
     test("should has one slot", () => {
-        const wrapper: FC = (props) => {
+        const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
             return (
                 <StrictMode>
@@ -30,7 +30,7 @@ describe("useSlot useSlot StrictMode", () => {
     });
 
     test("should has one slot after changeTestId", () => {
-        const wrapper: FC = (props) => {
+        const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
             return (
                 <StrictMode>
@@ -60,7 +60,7 @@ describe("useSlot useSlot StrictMode", () => {
     });
 
     test("should has one slot if id is same", () => {
-        const wrapper: FC = (props) => {
+        const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
             return (
                 <StrictMode>
@@ -96,7 +96,7 @@ describe("useSlot useSlot StrictMode", () => {
         expect(result.current.slot).toEqual(result2.current.slot);
     });
     test("first useSlot,then useSlot", () => {
-        const wrapper: FC = (props) => {
+        const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
             return (
                 <StrictMode>

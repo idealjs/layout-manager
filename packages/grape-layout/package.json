@@ -14,7 +14,6 @@
         "@idealjs/layout-manager": "^1.7.10",
         "@idealjs/portal-window": "^1.7.6",
         "@idealjs/sns": "^1.7.6",
-        "@types/redux": "^3.6.0",
         "clsx": "^1.1.1"
     },
     "devDependencies": {
