@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/grape-layout",
-    "version": "1.7.11",
+    "version": "1.8.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -11,12 +11,13 @@
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "dependencies": {
-        "@idealjs/layout-manager": "^1.7.11",
-        "@idealjs/portal-window": "^1.7.6",
-        "@idealjs/sns": "^1.7.11",
+        "@idealjs/layout-manager": "^1.8.0",
+        "@idealjs/portal-window": "^1.8.0",
+        "@idealjs/sns": "^1.8.0",
         "clsx": "^1.1.1"
     },
     "peerDependencies": {
         "react": "^18.0.0"
-    }
+    },
+    "gitHead": "e3093bc9de939263245447176516aa827c73f3ea"
 }

@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/sns",
-    "version": "1.7.11",
+    "version": "1.8.0",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -16,5 +16,6 @@
         "events": "^3.3.0",
         "nanoid": "^3.3.2",
         "react": "^18.0.0"
-    }
+    },
+    "gitHead": "e3093bc9de939263245447176516aa827c73f3ea"
 }
