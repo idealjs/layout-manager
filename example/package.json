@@ -28,12 +28,7 @@
     },
     "dependencies": {
         "@craco/craco": "^6.4.3",
-        "@idealjs/drag-drop": "^1.8.0",
-        "@idealjs/entity": "^1.8.0",
         "@idealjs/grape-layout": "^1.8.0",
-        "@idealjs/layout-manager": "^1.8.0",
-        "@idealjs/portal-window": "^1.8.0",
-        "@idealjs/sns": "^1.8.0",
         "@testing-library/jest-dom": "^5.16.3",
         "@testing-library/react": "^13.0.0",
         "@testing-library/user-event": "^14.0.4",
