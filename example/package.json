@@ -43,9 +43,12 @@
         "@types/react-dom": "^18.0.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
         "html2canvas": "^1.4.1",
+        "immer": "^9.0.12",
+        "nanoid": "^3.3.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-scripts": "^5.0.0",
+        "reselect": "^4.1.5",
         "typescript": "^4.6.3",
         "web-vitals": "^2.1.4"
     }
