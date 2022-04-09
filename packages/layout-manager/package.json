@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/layout-manager",
-    "version": "1.7.9",
+    "version": "1.7.10",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@idealjs/drag-drop": "^1.7.9",
-        "@idealjs/entity": "^1.0.0",
+        "@idealjs/entity": "^1.7.10",
         "@idealjs/sns": "^1.7.6"
     },
     "devDependencies": {
