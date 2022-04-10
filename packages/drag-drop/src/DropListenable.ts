@@ -127,7 +127,6 @@ class DropListenable<E extends Element = Element> extends EventEmitter {
             x: event.clientX,
             y: event.clientY,
         };
-        console.log("test test mouse move", this.dnd["activeDrags"]);
 
         this.emit(DND_EVENT.DRAG_OVER, {
             clientPosition: this.clientPosition,

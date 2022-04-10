@@ -149,7 +149,6 @@ const Panel = (props: { nodeId: string }) => {
 
     const onDragOver = useCallback(
         (data: IDropData<{ type: string }>) => {
-            console.log("test test", data);
             if (data.item?.type === "Tab") {
                 const rect = ref.current?.getBoundingClientRect();
                 if (rect) {
