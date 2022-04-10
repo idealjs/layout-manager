@@ -17,29 +17,29 @@ export type CMPTFactory = (
     data?: any
 ) => FunctionComponent<React.PropsWithChildren<{ nodeData: any }>>;
 
-const CMPTContext = createContext<{
+interface IProps {
     factory: CMPTFactory;
     Tab: TABCMPT;
     Titlebar: TitlebarCMPT;
     Splitter: SplitterCMPT;
     titlebarHeight: number;
     splitterThickness: number;
-} | null>(null);
+}
+
+const CMPTContext = createContext<IProps | null>(null);
 
 const RIDContext = createContext("RID");
 
-const Provider: FC<React.PropsWithChildren<{
-    factory: CMPTFactory;
-    Tab?: TABCMPT;
-    Titlebar?: TitlebarCMPT;
-    Splitter?: SplitterCMPT;
-    RID?: string;
-    layoutSymbol?: string | number;
-    layoutNode: LayoutNode;
-    updateHook?: UPDATE_HOOK;
-    titlebarHeight?: number;
-    splitterThickness?: number;
-}>> = (props) => {
+const Provider: FC<
+    React.PropsWithChildren<
+        {
+            RID?: string;
+            layoutSymbol?: string | number;
+            layoutNode: LayoutNode;
+            updateHook?: UPDATE_HOOK;
+        } & Partial<IProps>
+    >
+> = (props) => {
     const {
         children,
         factory,
@@ -59,7 +59,7 @@ const Provider: FC<React.PropsWithChildren<{
             <LayoutNodeProvider layoutNode={layoutNode}>
                 <CMPTContext.Provider
                     value={{
-                        factory,
+                        factory: factory ?? (() => () => null),
                         Tab: Tab ? Tab : DefaultTab,
                         Titlebar: Titlebar ? Titlebar : DefaultTitlebar,
                         Splitter: Splitter ? Splitter : DefaultSplitter,
