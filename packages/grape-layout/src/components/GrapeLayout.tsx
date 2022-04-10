@@ -30,11 +30,11 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                 <div style={{ height: "100%", width: "100%" }}>
                     <Provider
                         layoutSymbol={mainLayoutSymbol}
+                        layoutNode={layout}
                         factory={factory}
                         Tab={CustomTab}
                         Titlebar={CustomTitlebar}
                         Splitter={CustomSplitter}
-                        layoutNode={layout}
                         splitterThickness={4}
                         titlebarHeight={24}
                     >

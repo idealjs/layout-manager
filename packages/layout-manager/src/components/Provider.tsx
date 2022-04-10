@@ -35,12 +35,9 @@ export interface ILayoutProviderProps {
 
 const CMPTContext = createContext<ILayoutProviderProps | null>(null);
 
-const RIDContext = createContext("RID");
-
 const Provider: FC<
     React.PropsWithChildren<
         {
-            RID?: string;
             layoutSymbol?: string | number;
             layoutNode: LayoutNode;
             updateHook?: UPDATE_HOOK;
@@ -49,14 +46,13 @@ const Provider: FC<
 > = (props) => {
     const {
         children,
+        layoutSymbol,
+        layoutNode,
+        updateHook,
         factory,
         Tab,
         Titlebar,
         Splitter,
-        RID,
-        layoutSymbol,
-        layoutNode,
-        updateHook,
         titlebarHeight,
         titlebarStyle,
         splitterThickness,
@@ -80,13 +76,9 @@ const Provider: FC<
                         <LayoutsProvider>
                             <PanelsProvider>
                                 <SplittersProvider>
-                                    <RIDContext.Provider
-                                        value={RID ? RID : "RID"}
-                                    >
-                                        <LayoutsProvider>
-                                            {children}
-                                        </LayoutsProvider>
-                                    </RIDContext.Provider>
+                                    <LayoutsProvider>
+                                        {children}
+                                    </LayoutsProvider>
                                 </SplittersProvider>
                             </PanelsProvider>
                         </LayoutsProvider>
