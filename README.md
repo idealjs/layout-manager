@@ -6,25 +6,25 @@
 ## Install
 
 ```
-npm install @idealjs/layout-manager @idealjs/sns
+npm install @idealjs/layout-manager @idealjs/portal-window @idealjs/sns nanoid
 ```
 
 or
 
 ```
-yarn add @idealjs/layout-manager @idealjs/sns
+yarn add @idealjs/layout-manager @idealjs/portal-window @idealjs/sns nanoid
 ```
 
-## Use directly
+## Use directly wit popout window
 
 ```
-npm install @idealjs/grape-layout @idealjs/layout-manager @idealjs/sns
+npm install @idealjs/grape-layout html2canvas immer nanoid
 ```
 
 or
 
 ```
-yarn add @idealjs/grape-layout @idealjs/layout-manager @idealjs/sns
+yarn add @idealjs/grape-layout html2canvas immer nanoid
 ```
 
 For more details you can check the [online example][example_online] or [example folder][example_folder]
