@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/layout-manager",
-    "version": "1.8.0",
+    "version": "1.8.1",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -21,9 +21,9 @@
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "dependencies": {
-        "@idealjs/drag-drop": "^1.8.0",
-        "@idealjs/entity": "^1.8.0",
-        "@idealjs/sns": "^1.8.0"
+        "@idealjs/drag-drop": "^1.8.1",
+        "@idealjs/entity": "^1.8.1",
+        "@idealjs/sns": "^1.8.1"
     },
     "peerDependencies": {
         "events": "^3.3.0",
