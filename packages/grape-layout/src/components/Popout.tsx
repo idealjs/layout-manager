@@ -1,5 +1,6 @@
 import {
     ILayoutJSON,
+    ILayoutProviderProps,
     Layout,
     LayoutNode,
     Provider,
@@ -8,15 +9,15 @@ import PortalWindow from "@idealjs/portal-window";
 import { FC, useCallback, useRef } from "react";
 import { useMemo } from "react";
 
-import CustomSplitter from "./CustomSplitter";
-import CustomTab from "./CustomTab";
-import CustomTitlebar from "./CustomTitlebar";
-import { useFactory } from "./FactoryProvider";
 import layoutJSON from "./layout.json";
 import { usePortals } from "./PopoutManager";
 
-const Popout: FC<React.PropsWithChildren<{ portalId: string | number }>> = (props) => {
-    const { portalId } = props;
+interface IProps extends Partial<ILayoutProviderProps> {
+    portalId: string | number;
+}
+
+const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
+    const { portalId, ...layoutProviderProps } = props;
     const portalRef = useRef<{ close: () => void }>(null);
     const { portalsRef, setPortals } = usePortals();
 
@@ -53,8 +54,6 @@ const Popout: FC<React.PropsWithChildren<{ portalId: string | number }>> = (prop
         [afterUpdate]
     );
 
-    const factory = useFactory();
-
     const onExtBeforeUnload = useCallback(() => {
         setPortals((state) => state.filter((d) => d !== portalId));
     }, [portalId, setPortals]);
@@ -67,13 +66,8 @@ const Popout: FC<React.PropsWithChildren<{ portalId: string | number }>> = (prop
         <Provider
             layoutNode={ROOT}
             layoutSymbol={portalId}
-            factory={factory}
-            Tab={CustomTab}
-            Titlebar={CustomTitlebar}
-            Splitter={CustomSplitter}
             updateHook={updateHook}
-            splitterThickness={5}
-            titlebarHeight={30}
+            {...layoutProviderProps}
         >
             <PortalWindow
                 ref={portalRef}

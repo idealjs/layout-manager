@@ -23,7 +23,7 @@ export type CMPTFactory = (
     data?: any
 ) => FunctionComponent<React.PropsWithChildren<{ nodeData: any }>>;
 
-interface IProps {
+export interface ILayoutProviderProps {
     factory: CMPTFactory;
     Tab: TABCMPT;
     Titlebar: TitlebarCMPT;
@@ -33,7 +33,7 @@ interface IProps {
     splitterThickness: number;
 }
 
-const CMPTContext = createContext<IProps | null>(null);
+const CMPTContext = createContext<ILayoutProviderProps | null>(null);
 
 const RIDContext = createContext("RID");
 
@@ -44,7 +44,7 @@ const Provider: FC<
             layoutSymbol?: string | number;
             layoutNode: LayoutNode;
             updateHook?: UPDATE_HOOK;
-        } & Partial<IProps>
+        } & Partial<ILayoutProviderProps>
     >
 > = (props) => {
     const {

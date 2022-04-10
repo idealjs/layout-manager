@@ -1,3 +1,4 @@
+import { ILayoutProviderProps } from "@idealjs/layout-manager";
 import { FC } from "react";
 import {
     createContext,
@@ -17,12 +18,15 @@ type ContextType = {
 
 const PortalsContext = createContext<ContextType>(null);
 
-const PopoutManager = () => {
+interface IProps extends Partial<ILayoutProviderProps> {}
+
+const PopoutManager = (props: IProps) => {
+    const { ...layoutProviderProps } = props;
     const { portals } = usePortals();
     return (
         <Fragment>
             {portals.map((d) => {
-                return <Popout key={d} portalId={d} />;
+                return <Popout key={d} portalId={d} {...layoutProviderProps} />;
             })}
         </Fragment>
     );
@@ -30,7 +34,9 @@ const PopoutManager = () => {
 
 export default PopoutManager;
 
-export const PortalsProvider: FC<React.PropsWithChildren<NonNullable<ContextType>>> = (props) => {
+export const PortalsProvider: FC<
+    React.PropsWithChildren<NonNullable<ContextType>>
+> = (props) => {
     const { children, portalsRef, portals, setPortals } = props;
     return (
         <PortalsContext.Provider value={{ portalsRef, portals, setPortals }}>

@@ -10,7 +10,6 @@ import { useState } from "react";
 import CustomSplitter from "./CustomSplitter";
 import CustomTab from "./CustomTab";
 import CustomTitlebar from "./CustomTitlebar";
-import FactoryProvider from "./FactoryProvider";
 import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
 import PopoutManager, { PortalsProvider } from "./PopoutManager";
@@ -36,14 +35,21 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                         Titlebar={CustomTitlebar}
                         Splitter={CustomSplitter}
                         layoutNode={layout}
+                        splitterThickness={4}
+                        titlebarHeight={24}
                     >
                         <Layout />
                         <PopinListener />
                     </Provider>
                 </div>
-                <FactoryProvider factory={factory}>
-                    <PopoutManager />
-                </FactoryProvider>
+                <PopoutManager
+                    factory={factory}
+                    Tab={CustomTab}
+                    Titlebar={CustomTitlebar}
+                    Splitter={CustomSplitter}
+                    splitterThickness={4}
+                    titlebarHeight={24}
+                />
             </PortalsProvider>
         </MainLayoutSymbolProvider>
     );
