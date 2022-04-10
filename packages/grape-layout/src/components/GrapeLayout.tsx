@@ -36,8 +36,6 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                         Titlebar={CustomTitlebar}
                         Splitter={CustomSplitter}
                         layoutNode={layout}
-                        splitterThickness={5}
-                        titlebarHeight={30}
                     >
                         <Layout />
                         <PopinListener />

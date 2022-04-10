@@ -1,4 +1,10 @@
-import { createContext, FC, FunctionComponent, useContext } from "react";
+import {
+    createContext,
+    CSSProperties,
+    FC,
+    FunctionComponent,
+    useContext,
+} from "react";
 
 import LayoutNode from "../lib/LayoutNode";
 import { SplitterCMPT, TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "../type";
@@ -23,6 +29,7 @@ interface IProps {
     Titlebar: TitlebarCMPT;
     Splitter: SplitterCMPT;
     titlebarHeight: number;
+    titlebarStyle: CSSProperties;
     splitterThickness: number;
 }
 
@@ -51,6 +58,7 @@ const Provider: FC<
         layoutNode,
         updateHook,
         titlebarHeight,
+        titlebarStyle,
         splitterThickness,
     } = props;
 
@@ -60,13 +68,12 @@ const Provider: FC<
                 <CMPTContext.Provider
                     value={{
                         factory: factory ?? (() => () => null),
-                        Tab: Tab ? Tab : DefaultTab,
-                        Titlebar: Titlebar ? Titlebar : DefaultTitlebar,
-                        Splitter: Splitter ? Splitter : DefaultSplitter,
-                        titlebarHeight: titlebarHeight ? titlebarHeight : 25,
-                        splitterThickness: splitterThickness
-                            ? splitterThickness
-                            : 10,
+                        Tab: Tab ?? DefaultTab,
+                        Titlebar: Titlebar ?? DefaultTitlebar,
+                        Splitter: Splitter ?? DefaultSplitter,
+                        titlebarHeight: titlebarHeight ?? 24,
+                        titlebarStyle: titlebarStyle ?? {},
+                        splitterThickness: splitterThickness ?? 4,
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
