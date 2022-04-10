@@ -15,7 +15,7 @@ or
 yarn add @idealjs/layout-manager @idealjs/portal-window @idealjs/sns nanoid
 ```
 
-## Use directly wit popout window
+## Use directly with popout window
 
 ```
 npm install @idealjs/grape-layout html2canvas immer nanoid
