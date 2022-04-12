@@ -216,12 +216,16 @@ class DragListenable<
         });
     }
 
-    private onDragEnd() {
+    private onDragEnd(event: DragEvent) {
         console.debug("[Debug] drag onDragEnd", this.dnd.getDraggingItem());
+        this.vector = vectorFromEvent(event, this.prevPoint);
+        this.offset = offsetFromEvent(event, this.source);
+
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            dropOut: event.clientX < 0 || event.clientY < 0,
         });
 
         if (

@@ -28,7 +28,6 @@ import styles from "./index.module.css";
 
 const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
-    const ref = useTabRef(nodeId);
     const { portals, setPortals } = usePortals();
 
     const layoutNode = useLayoutNode();
@@ -100,6 +99,8 @@ const CustomTab: TABCMPT = (props) => {
         slot,
         popoutReady,
     ]);
+
+    const ref = useTabRef(nodeId, onPopClick);
 
     const onSelect = useCallback(() => {
         sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {

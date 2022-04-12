@@ -1,42 +1,59 @@
-import { useDnd } from "@idealjs/drag-drop";
+import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
 import { useEffect, useRef } from "react";
 
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { usePanel } from "../components/providers/PanelsProvider";
 
-const useTabRef = <T extends HTMLElement>(nodeId: string) => {
+const useTabRef = <T extends HTMLElement>(
+    nodeId: string,
+    onDropOut?: () => void
+) => {
     const ref = useRef(null);
     const node = usePanel(nodeId);
     const dnd = useDnd();
     const layoutSymbol = useLayoutSymbol();
     useEffect(() => {
         try {
-            const listenable = dnd.draggable<
-                T,
-                {
-                    layoutSymbol: string | number;
-                    id?: string;
-                    page?: string;
-                    data?: any;
-                    type: string;
-                }
-            >(ref.current!, {
-                crossWindow: true,
-                item: {
-                    layoutSymbol,
-                    id: node?.id,
-                    page: node?.page,
-                    data: node?.data,
-                    type: "Tab",
-                },
-            });
+            const listenable = dnd
+                .draggable<
+                    T,
+                    {
+                        layoutSymbol: string | number;
+                        id?: string;
+                        page?: string;
+                        data?: any;
+                        type: string;
+                    }
+                >(ref.current!, {
+                    crossWindow: true,
+                    item: {
+                        layoutSymbol,
+                        id: node?.id,
+                        page: node?.page,
+                        data: node?.data,
+                        type: "Tab",
+                    },
+                })
+                .addListener(DND_EVENT.DRAG_END, (payload) => {
+                    if (payload.dropOut) {
+                        onDropOut && onDropOut();
+                    }
+                });
             return () => {
                 listenable.removeEleListeners();
             };
         } catch (error) {
             console.error(error);
         }
-    }, [dnd, layoutSymbol, node?.data, node?.id, node?.page, nodeId]);
+    }, [
+        dnd,
+        layoutSymbol,
+        node?.data,
+        node?.id,
+        node?.page,
+        nodeId,
+        onDropOut,
+    ]);
     return ref;
 };
 
