@@ -12,13 +12,11 @@ import CustomTab from "./CustomTab";
 import CustomTitlebar from "./CustomTitlebar";
 import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
-import PopoutManager, { PortalsProvider } from "./PopoutManager";
+import PopoutManager, { IPortal, PortalsProvider } from "./PopoutManager";
 
 const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
     const { factory, layout } = props;
-    const [portalsRef, portals, setPortals] = useStateRef<(string | number)[]>(
-        []
-    );
+    const [portalsRef, portals, setPortals] = useStateRef<IPortal[]>([]);
     const [mainLayoutSymbol] = useState("mainLayout");
     return (
         <MainLayoutSymbolProvider mainLayoutSymbol={mainLayoutSymbol}>

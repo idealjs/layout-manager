@@ -6,6 +6,7 @@ export interface IDragData {
     source: IPoint;
     offset: IPoint;
     vector: IPoint;
+    screen: IPoint;
     dropOut?: boolean;
 }
 

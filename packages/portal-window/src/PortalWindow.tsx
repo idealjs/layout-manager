@@ -14,11 +14,19 @@ interface IProps {
     onExtBeforeUnload?: () => void;
     onMainBeforeUnload?: () => void;
     afterHook?: (extWindow: Window) => void;
+    left?: number;
+    top?: number;
 }
 
 const PortalWindow = forwardRef<{ close: () => void }, IProps>((props, ref) => {
-    const { children, onExtBeforeUnload, onMainBeforeUnload, afterHook } =
-        props;
+    const {
+        children,
+        onExtBeforeUnload,
+        onMainBeforeUnload,
+        afterHook,
+        left,
+        top,
+    } = props;
 
     const containerRef = useRef<HTMLDivElement>(document.createElement("div"));
     const externalWindowRef = useRef<Window | null>();
@@ -38,7 +46,7 @@ const PortalWindow = forwardRef<{ close: () => void }, IProps>((props, ref) => {
             externalWindowRef.current = window.open(
                 "",
                 "",
-                "width=600,height=400,left=200,top=200"
+                `width=600,height=400,left=${left},top=${top}`
             );
             if (externalWindowRef.current) {
                 externalWindowRef.current.document.body.style.margin = "0px";
@@ -52,7 +60,7 @@ const PortalWindow = forwardRef<{ close: () => void }, IProps>((props, ref) => {
                 afterHook && afterHook(externalWindowRef.current);
             }
         }
-    }, [afterHook]);
+    }, [afterHook, left, top]);
 
     useEffect(() => {
         if (onMainBeforeUnload) {

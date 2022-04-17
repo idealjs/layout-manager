@@ -102,6 +102,10 @@ class DragListenable<
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            screen: {
+                x: event.screenX,
+                y: event.screenY,
+            },
         });
 
         this.getWindow().removeEventListener("mousemove", this.onMouseMove);
@@ -117,6 +121,10 @@ class DragListenable<
                 source: this.source,
                 offset: this.offset,
                 vector: this.vector,
+                screen: {
+                    x: event.screenX,
+                    y: event.screenY,
+                },
             });
             this.dnd.setDragging(true);
             this.dragStartEmitted = true;
@@ -143,6 +151,10 @@ class DragListenable<
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            screen: {
+                x: event.screenX,
+                y: event.screenY,
+            },
         });
     }
 
@@ -187,6 +199,10 @@ class DragListenable<
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            screen: {
+                x: event.screenX,
+                y: event.screenY,
+            },
         });
 
         if (
@@ -213,11 +229,19 @@ class DragListenable<
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            screen: {
+                x: event.screenX,
+                y: event.screenY,
+            },
         });
     }
 
     private onDragEnd(event: DragEvent) {
-        console.debug("[Debug] drag onDragEnd", this.dnd.getDraggingItem());
+        console.debug(
+            "[Debug] drag onDragEnd",
+            event,
+            this.dnd.getDraggingItem()
+        );
         this.vector = vectorFromEvent(event, this.prevPoint);
         this.offset = offsetFromEvent(event, this.source);
 
@@ -231,6 +255,10 @@ class DragListenable<
             source: this.source,
             offset: this.offset,
             vector: this.vector,
+            screen: {
+                x: event.screenX,
+                y: event.screenY,
+            },
             dropOut: dropOut,
         });
 

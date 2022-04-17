@@ -10,10 +10,18 @@ import {
 
 import Popout from "./Popout";
 
+export interface IPortal {
+    id: string | number;
+    top?: number;
+    left?: number;
+    height?: number;
+    width?: number;
+}
+
 type ContextType = {
-    portalsRef: React.MutableRefObject<(string | number)[]>;
-    portals: (string | number)[];
-    setPortals: Dispatch<SetStateAction<(string | number)[]>>;
+    portalsRef: React.MutableRefObject<IPortal[]>;
+    portals: IPortal[];
+    setPortals: Dispatch<SetStateAction<IPortal[]>>;
 } | null;
 
 const PortalsContext = createContext<ContextType>(null);
@@ -25,8 +33,16 @@ const PopoutManager = (props: IProps) => {
     const { portals } = usePortals();
     return (
         <Fragment>
-            {portals.map((d) => {
-                return <Popout key={d} portalId={d} {...layoutProviderProps} />;
+            {portals.map((p) => {
+                return (
+                    <Popout
+                        key={p.id}
+                        portalId={p.id}
+                        left={p.left}
+                        top={p.top}
+                        {...layoutProviderProps}
+                    />
+                );
             })}
         </Fragment>
     );

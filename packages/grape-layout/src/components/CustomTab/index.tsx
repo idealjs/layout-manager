@@ -1,3 +1,4 @@
+import { IPoint } from "@idealjs/drag-drop";
 import {
     ADD_PANEL_DATA,
     Close,
@@ -39,7 +40,7 @@ const CustomTab: TABCMPT = (props) => {
     const selected = panel?.selected;
 
     const inPopout = useMemo(
-        () => portals.includes(layoutSymbol),
+        () => portals.map((p) => p.id).includes(layoutSymbol),
         [layoutSymbol, portals]
     );
 
@@ -65,42 +66,48 @@ const CustomTab: TABCMPT = (props) => {
         [layoutSymbol, panel, slot, sns]
     );
 
-    const onPopClick = useCallback(() => {
-        console.debug("[Debug] inPopout", inPopout);
+    const popout = useCallback(
+        (screen?: IPoint) => {
+            console.debug("[Debug] inPopout", inPopout);
 
-        if (inPopout) {
-            console.debug("[Debug] popin", mainLayoutSymbol);
-            const panelNode = new PanelNode({
-                panelJSON: panel!,
-            });
+            if (inPopout) {
+                console.debug("[Debug] popin", mainLayoutSymbol);
+                const panelNode = new PanelNode({
+                    panelJSON: panel!,
+                });
 
-            layoutNode.doAction(LayoutNodeActionType.REMOVE_PANEL, {
-                search: nodeId,
-            });
+                layoutNode.doAction(LayoutNodeActionType.REMOVE_PANEL, {
+                    search: nodeId,
+                });
 
-            sns.send(mainLayoutSymbol, "popin", {
-                panelNode: panelNode,
-            });
-        } else {
-            console.debug("[Debug] popout");
-            slot?.addListener("ready", popoutReady);
-            setPortals((s) => {
-                return [...s, nanoid()];
-            });
-        }
-    }, [
-        inPopout,
-        panel,
-        layoutNode,
-        nodeId,
-        sns,
-        mainLayoutSymbol,
-        setPortals,
-        slot,
-        popoutReady,
-    ]);
+                sns.send(mainLayoutSymbol, "popin", {
+                    panelNode: panelNode,
+                });
+            } else {
+                console.debug("[Debug] popout");
+                slot?.addListener("ready", popoutReady);
+                setPortals((s) => {
+                    return [
+                        ...s,
+                        { id: nanoid(), left: screen?.x, top: screen?.y },
+                    ];
+                });
+            }
+        },
+        [
+            inPopout,
+            panel,
+            layoutNode,
+            nodeId,
+            sns,
+            mainLayoutSymbol,
+            setPortals,
+            slot,
+            popoutReady,
+        ]
+    );
 
-    const ref = useTabRef(nodeId, onPopClick);
+    const ref = useTabRef(nodeId, popout);
 
     const onSelect = useCallback(() => {
         sns.send(layoutSymbol, SLOT_EVENT.SELECT_TAB, {
@@ -133,7 +140,7 @@ const CustomTab: TABCMPT = (props) => {
             >
                 {nodeId}
             </div>
-            <div className={styles.button} onClick={onPopClick}>
+            <div className={styles.button} onClick={() => popout()}>
                 {inPopout ? <Popin /> : <Popout />}
             </div>
             <div className={styles.button} onClick={onClose}>

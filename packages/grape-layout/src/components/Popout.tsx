@@ -14,10 +14,12 @@ import { usePortals } from "./PopoutManager";
 
 interface IProps extends Partial<ILayoutProviderProps> {
     portalId: string | number;
+    left?: number;
+    top?: number;
 }
 
 const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
-    const { portalId, ...layoutProviderProps } = props;
+    const { portalId, left, top, ...layoutProviderProps } = props;
     const portalRef = useRef<{ close: () => void }>(null);
     const { portalsRef, setPortals } = usePortals();
 
@@ -31,7 +33,9 @@ const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
 
     const afterUpdate = useCallback(
         (layoutSymbol: string | number, layoutNode: LayoutNode) => {
-            const inPopout = portalsRef.current.includes(layoutSymbol);
+            const inPopout = portalsRef.current
+                .map((p) => p.id)
+                .includes(layoutSymbol);
             if (inPopout) {
                 console.log(
                     "[Debug] closing popout",
@@ -55,7 +59,7 @@ const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
     );
 
     const onExtBeforeUnload = useCallback(() => {
-        setPortals((state) => state.filter((d) => d !== portalId));
+        setPortals((state) => state.filter((p) => p.id !== portalId));
     }, [portalId, setPortals]);
 
     const onMainBeforeunload = useCallback(() => {
@@ -73,6 +77,8 @@ const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
                 ref={portalRef}
                 onExtBeforeUnload={onExtBeforeUnload}
                 onMainBeforeUnload={onMainBeforeunload}
+                left={left}
+                top={top}
             >
                 <Layout />
             </PortalWindow>

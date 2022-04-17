@@ -1,4 +1,4 @@
-import { DND_EVENT, useDnd } from "@idealjs/drag-drop";
+import { DND_EVENT, IPoint, useDnd } from "@idealjs/drag-drop";
 import { useEffect, useRef } from "react";
 
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
@@ -6,7 +6,7 @@ import { usePanel } from "../components/providers/PanelsProvider";
 
 const useTabRef = <T extends HTMLElement>(
     nodeId: string,
-    onDropOut?: () => void
+    popout?: (screen?: IPoint) => void
 ) => {
     const ref = useRef(null);
     const node = usePanel(nodeId);
@@ -35,8 +35,10 @@ const useTabRef = <T extends HTMLElement>(
                     },
                 })
                 .addListener(DND_EVENT.DRAG_END, (payload) => {
+                    console.log("test test", payload);
+
                     if (payload.dropOut) {
-                        onDropOut && onDropOut();
+                        popout && popout(payload.screen);
                     }
                 });
             return () => {
@@ -45,15 +47,7 @@ const useTabRef = <T extends HTMLElement>(
         } catch (error) {
             console.error(error);
         }
-    }, [
-        dnd,
-        layoutSymbol,
-        node?.data,
-        node?.id,
-        node?.page,
-        nodeId,
-        onDropOut,
-    ]);
+    }, [dnd, layoutSymbol, node?.data, node?.id, node?.page, nodeId, popout]);
     return ref;
 };
 
