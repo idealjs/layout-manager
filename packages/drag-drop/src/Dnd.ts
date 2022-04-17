@@ -21,6 +21,7 @@ class Dnd extends EventEmitter {
     }
 
     private dragging = false;
+    private _dropped = false;
     private previewCanvas: HTMLCanvasElement | null = null;
     private activeDrags: DragListenable[] = [];
     private activeDrops: DropListenable[] = [];
@@ -61,6 +62,18 @@ class Dnd extends EventEmitter {
     ) {
         const listenable = new DropListenable(this, ele, options?.crossWindow);
         return listenable;
+    }
+
+    public setDropped() {
+        this._dropped = true;
+    }
+
+    public resetDropped() {
+        this._dropped = false;
+    }
+
+    public get dropped() {
+        return this._dropped;
     }
 
     public setDragging(dragging: boolean) {

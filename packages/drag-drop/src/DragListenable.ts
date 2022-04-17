@@ -221,11 +221,17 @@ class DragListenable<
         this.vector = vectorFromEvent(event, this.prevPoint);
         this.offset = offsetFromEvent(event, this.source);
 
+        const dropOut =
+            !this.dnd.dropped &&
+            (event.clientX < 0 ||
+                event.clientY < 0 ||
+                event.clientX > document.body.clientWidth ||
+                event.clientY > document.body.clientHeight);
         this.emit(DND_EVENT.DRAG_END, {
             source: this.source,
             offset: this.offset,
             vector: this.vector,
-            dropOut: event.clientX < 0 || event.clientY < 0,
+            dropOut: dropOut,
         });
 
         if (
@@ -236,6 +242,7 @@ class DragListenable<
         } else {
             throw new Error(`Can't add drag to ${this.el}`);
         }
+        this.dnd.resetDropped();
     }
 
     public setPreviewEle(el: HTMLElement) {

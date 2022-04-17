@@ -160,6 +160,7 @@ class DropListenable<E extends Element = Element> extends EventEmitter {
 
     private onDrop(event: DragEvent) {
         console.debug("[Debug] dnd onDrop", this.dnd.getDraggingItem());
+        this.dnd.setDropped();
         this.clientPosition = {
             x: event.clientX,
             y: event.clientY,
