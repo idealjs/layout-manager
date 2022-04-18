@@ -1,11 +1,10 @@
 import {
     CMPTFactory,
-    Layout,
     LayoutNode,
     Provider,
     useStateRef,
 } from "@idealjs/layout-manager";
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 
 import CustomSplitter from "./CustomSplitter";
 import CustomTab from "./CustomTab";
@@ -14,8 +13,13 @@ import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
 import PopoutManager, { IPortal, PortalsProvider } from "./PopoutManager";
 
-const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
-    const { factory, layout } = props;
+interface IProps {
+    factory: CMPTFactory;
+    layout: LayoutNode;
+}
+
+const GrapeLayout = (props: PropsWithChildren<IProps>) => {
+    const { children, factory, layout } = props;
     const [portalsRef, portals, setPortals] = useStateRef<IPortal[]>([]);
     const [mainLayoutSymbol] = useState("mainLayout");
     return (
@@ -36,7 +40,7 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                         splitterThickness={4}
                         titlebarHeight={24}
                     >
-                        <Layout />
+                        {children}
                         <PopinListener />
                     </Provider>
                 </div>
@@ -47,7 +51,9 @@ const GrapeLayout = (props: { factory: CMPTFactory; layout: LayoutNode }) => {
                     Splitter={CustomSplitter}
                     splitterThickness={4}
                     titlebarHeight={24}
-                />
+                >
+                    {children}
+                </PopoutManager>
             </PortalsProvider>
         </MainLayoutSymbolProvider>
     );

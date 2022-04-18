@@ -6,6 +6,7 @@ import {
     MASK_PART,
     PanelNode,
     ROOTID,
+    Layout,
 } from "@idealjs/layout-manager";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
@@ -185,7 +186,9 @@ const factory: CMPTFactory = (page: string) => {
 function App() {
     return (
         <div className="App" style={{ height: "100vh", width: "100vw" }}>
-            <GrapeLayout factory={factory} layout={ROOT} />
+            <GrapeLayout factory={factory} layout={ROOT}>
+                <Layout />
+            </GrapeLayout>
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import {
     ILayoutJSON,
     ILayoutProviderProps,
-    Layout,
     LayoutNode,
     Provider,
 } from "@idealjs/layout-manager";
@@ -19,7 +18,7 @@ interface IProps extends Partial<ILayoutProviderProps> {
 }
 
 const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
-    const { portalId, left, top, ...layoutProviderProps } = props;
+    const { children, portalId, left, top, ...layoutProviderProps } = props;
     const portalRef = useRef<{ close: () => void }>(null);
     const { portalsRef, setPortals } = usePortals();
 
@@ -80,7 +79,7 @@ const Popout: FC<React.PropsWithChildren<IProps>> = (props) => {
                 left={left}
                 top={top}
             >
-                <Layout />
+                {children}
             </PortalWindow>
         </Provider>
     );

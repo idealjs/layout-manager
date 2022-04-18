@@ -1,5 +1,5 @@
 import { ILayoutProviderProps } from "@idealjs/layout-manager";
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 import {
     createContext,
     Dispatch,
@@ -28,8 +28,8 @@ const PortalsContext = createContext<ContextType>(null);
 
 interface IProps extends Partial<ILayoutProviderProps> {}
 
-const PopoutManager = (props: IProps) => {
-    const { ...layoutProviderProps } = props;
+const PopoutManager = (props: PropsWithChildren<IProps>) => {
+    const { children, ...layoutProviderProps } = props;
     const { portals } = usePortals();
     return (
         <Fragment>
@@ -41,7 +41,9 @@ const PopoutManager = (props: IProps) => {
                         left={p.left}
                         top={p.top}
                         {...layoutProviderProps}
-                    />
+                    >
+                        {children}
+                    </Popout>
                 );
             })}
         </Fragment>
