@@ -17,6 +17,5 @@
     "peerDependencies": {
         "immer": "^9.0.12",
         "reselect": "^4.1.5"
-    },
-    "gitHead": "e3093bc9de939263245447176516aa827c73f3ea"
+    }
 }
