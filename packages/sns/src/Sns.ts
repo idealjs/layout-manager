@@ -1,4 +1,4 @@
-import Slot, { SlotId } from "./slot";
+import Slot, { SlotId } from "./Slot";
 
 class Sns {
     private slots: { [slotId: SlotId]: Slot | undefined } = {};
@@ -35,3 +35,5 @@ class Sns {
 }
 
 export default Sns;
+
+export const sns = new Sns();

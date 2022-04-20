@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Slot, { SlotId } from "./slot";
+import Slot, { SlotId } from "./Slot";
 import useSns from "./useSns";
 
 const useSlot = (slotId: SlotId): Slot | null => {
@@ -20,3 +20,5 @@ const useSlot = (slotId: SlotId): Slot | null => {
 };
 
 export default useSlot;
+
+export const sns = 0;

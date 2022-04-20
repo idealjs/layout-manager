@@ -1,8 +1,7 @@
 import { createContext } from "react";
 
-import Sns from "./sns";
+import Sns, { sns } from "./Sns";
 
-const sns = new Sns();
 const snsContext = createContext<Sns>(sns);
 
 export default snsContext;
