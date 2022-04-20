@@ -1,5 +1,5 @@
 export { default as Slot } from "./src/slot";
-export * from "./src/slot";
 export { default as Sns } from "./src/sns";
-export { default as SnsProvider } from "./src/SnsProvider";
-export * from "./src/SnsProvider";
+export { default as snsContext } from "./src/snsContext";
+export { default as useSlot } from "./src/useSlot";
+export { default as useSns } from "./src/useSns";

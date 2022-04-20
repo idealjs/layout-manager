@@ -2,17 +2,14 @@ import { act, renderHook } from "@testing-library/react-hooks";
 import { nanoid } from "nanoid";
 import { FC, StrictMode, useCallback, useState } from "react";
 
-import SnsProvider, { useSlot, useSns } from "../src/SnsProvider";
+import useSlot from "../src/useSlot";
+import useSns from "../src/useSns";
 
 describe("useSlot useSlot StrictMode", () => {
     test("should has one slot", () => {
         const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
-            return (
-                <StrictMode>
-                    <SnsProvider>{children}</SnsProvider>
-                </StrictMode>
-            );
+            return <StrictMode>{children}</StrictMode>;
         };
         const { result } = renderHook(
             () => {
@@ -32,11 +29,7 @@ describe("useSlot useSlot StrictMode", () => {
     test("should has one slot after changeTestId", () => {
         const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
-            return (
-                <StrictMode>
-                    <SnsProvider>{children}</SnsProvider>
-                </StrictMode>
-            );
+            return <StrictMode>{children}</StrictMode>;
         };
         const { result } = renderHook(
             () => {
@@ -63,11 +56,7 @@ describe("useSlot useSlot StrictMode", () => {
     test("should has one slot if id is same", () => {
         const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
-            return (
-                <StrictMode>
-                    <SnsProvider>{children}</SnsProvider>
-                </StrictMode>
-            );
+            return <StrictMode>{children}</StrictMode>;
         };
         const { result } = renderHook(
             () => {
@@ -101,11 +90,7 @@ describe("useSlot useSlot StrictMode", () => {
     test("first useSlot,then useSlot", () => {
         const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;
-            return (
-                <StrictMode>
-                    <SnsProvider>{children}</SnsProvider>
-                </StrictMode>
-            );
+            return <StrictMode>{children}</StrictMode>;
         };
         const { result } = renderHook(
             () => {
