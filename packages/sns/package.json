@@ -16,5 +16,8 @@
         "events": "^3.3.0",
         "nanoid": "^3.3.2",
         "react": "^18.0.0"
+    },
+    "devDependencies": {
+        "@testing-library/react-hooks": "^8.0.0"
     }
 }

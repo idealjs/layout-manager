@@ -26,7 +26,7 @@ describe("useSlot useSlot StrictMode", () => {
             }
         );
 
-        expect(result.current.sns["slots"].length).toBe(1);
+        expect(Object.values(result.current.sns["slots"]).length).toBe(1);
     });
 
     test("should has one slot after changeTestId", () => {
@@ -56,7 +56,8 @@ describe("useSlot useSlot StrictMode", () => {
             result.current.changeTestId();
         });
 
-        expect(result.current.sns["slots"].length).toBe(1);
+        expect(Object.values(result.current.sns["slots"]).length).toBe(1);
+        expect(result.current.slot?.id).toBe("B");
     });
 
     test("should has one slot if id is same", () => {
@@ -91,10 +92,12 @@ describe("useSlot useSlot StrictMode", () => {
             }
         );
 
-        expect(result.current.sns["slots"].length).toBe(1);
-        expect(result2.current.sns["slots"].length).toBe(1);
+        expect(Object.values(result.current.sns["slots"]).length).toBe(1);
+        expect(Object.values(result2.current.sns["slots"]).length).toBe(1);
+
         expect(result.current.slot).toEqual(result2.current.slot);
     });
+
     test("first useSlot,then useSlot", () => {
         const wrapper: FC<React.PropsWithChildren<unknown>> = (props) => {
             const { children } = props;

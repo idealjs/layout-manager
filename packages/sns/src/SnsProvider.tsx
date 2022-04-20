@@ -13,7 +13,9 @@ import Sns from "./sns";
 const defaultSns = new Sns();
 const context = createContext<Sns>(defaultSns);
 
-const SnsProvider: FC<React.PropsWithChildren<PropsWithChildren<{ sns?: Sns }>>> = (props) => {
+const SnsProvider: FC<
+    React.PropsWithChildren<PropsWithChildren<{ sns?: Sns }>>
+> = (props) => {
     const { children, sns = defaultSns } = props;
     return <context.Provider value={sns}>{children}</context.Provider>;
 };
@@ -31,9 +33,10 @@ export const useSlot = (slotId: SlotId): Slot | null => {
     useEffect(() => {
         setSlot(sns.setSlot(slotId));
         return () => {
-            slot && sns.removeSlot(slot);
+            setSlot(null);
+            sns.removeSlot(slotId);
         };
-    }, [setSlot, slot, slotId, sns]);
+    }, [setSlot, slotId, sns]);
 
     return slot;
 };
