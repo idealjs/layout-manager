@@ -28,12 +28,8 @@ class Store<State> {
         unit: Store<Payload> | IEvent<unknown[], Payload, unknown>,
         listener: (state: State, payload: Payload) => State
     ) {
-        const _listener = (payload: Payload) => {
-            this.state = listener(this.state, payload);
-            this.scope.sns.send(this.slot.id, updateSymbol, this.state);
-        };
-        unit.slot.addListener(updateSymbol, _listener);
-        this.listeners.set(this.slot, _listener);
+        unit.slot.addListener(updateSymbol, listener);
+        this.listeners.set(this.slot, listener);
         this.scope.graph.addEdge(this, createNode(this, listener));
         return this;
     }
