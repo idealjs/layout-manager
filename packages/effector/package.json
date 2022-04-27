@@ -1,0 +1,16 @@
+{
+    "name": "@idealjs/effector",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "@idealjs/sns": "^1.11.0"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0"
+    }
+}
