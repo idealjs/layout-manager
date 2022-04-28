@@ -17,7 +17,7 @@ export interface IStore<State> {
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
-        listener: (payload?: TDone | TFaild) => State
+        listener: (state: State, payload?: TDone | TFaild) => State
     ): IStore<State>;
 
     off<
@@ -45,10 +45,10 @@ const createStore = <State>(initialState: State) => {
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
-        listener: (payload?: TDone | TFaild) => State
+        listener: (state: State, payload?: TDone | TFaild) => State
     ) => {
         unit.on(target, (payload) => {
-            state = listener(payload);
+            state = listener(state, payload);
             unit(state);
         });
 
