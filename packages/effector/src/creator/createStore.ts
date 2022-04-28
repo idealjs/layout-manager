@@ -42,6 +42,8 @@ const createStore = <State>(initialState: State) => {
     let state = initialState;
 
     const unit = createEvent<State>();
+    const originOn = unit.on;
+    const originOff = unit.off;
 
     const on = <
         TParams extends TDone[],
@@ -52,7 +54,7 @@ const createStore = <State>(initialState: State) => {
         target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
         listener: (state: State, payload?: TDone | TFaild) => State
     ) => {
-        unit.on(target, (payload) => {
+        originOn(target, (payload) => {
             state = listener(state, payload);
             unit(state);
         });
@@ -68,7 +70,7 @@ const createStore = <State>(initialState: State) => {
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect>
     ) => {
-        unit.off(target);
+        originOff(target);
         return store;
     };
 
