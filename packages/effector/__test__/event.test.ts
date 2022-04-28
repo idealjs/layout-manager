@@ -15,9 +15,9 @@ describe("event test", () => {
         $plus(1);
     });
 
-    test("should trigger event", (done) => {
+    test("should trigger unit", (done) => {
         const $plus = createEvent<number>();
-        const $event = createEvent();
+        const $unit = createEvent();
 
         const listener = jest.fn((state: number) => {
             expect(state).toBe(1);
@@ -25,7 +25,7 @@ describe("event test", () => {
             done();
         });
 
-        $event.on($plus, listener);
+        $unit.on($plus, listener);
         $plus(1);
     });
 });
