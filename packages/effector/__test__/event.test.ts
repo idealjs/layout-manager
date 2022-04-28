@@ -1,5 +1,5 @@
-import { updateSymbol } from "../src/creator/createAction";
 import createEvent from "../src/creator/createEvent";
+import { updateSymbol } from "../src/creator/createUnit";
 
 describe("event test", () => {
     test("should be triggered", (done) => {

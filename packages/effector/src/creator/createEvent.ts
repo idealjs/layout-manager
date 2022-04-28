@@ -1,7 +1,7 @@
 import { Slot } from "@idealjs/sns";
 
 import createNode from "../graph/createNode";
-import createAction, {
+import createUnit, {
     doneSymbol,
     Effect,
     faildSymbol,
@@ -9,8 +9,7 @@ import createAction, {
     IUnit,
     startSymbol,
     updateSymbol,
-} from "./createAction";
-import { defaultScope } from "./createScope";
+} from "./createUnit";
 
 export interface IEvent<OutParams extends unknown[], OutDone, OutFaild>
     extends IAction<
@@ -79,8 +78,8 @@ export interface IEvent<OutParams extends unknown[], OutDone, OutFaild>
 }
 
 const createEvent = <Payload = void>(): IEvent<[Payload], Payload, void> => {
-    const scope = defaultScope;
-    const slot = scope.createSlot();
+    const action = createUnit((payload) => payload);
+
     const listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
 
     const on = <
@@ -95,12 +94,15 @@ const createEvent = <Payload = void>(): IEvent<[Payload], Payload, void> => {
     ) => {
         if (typeof listenerOrEvent === "function") {
             unit.slot.addListener(updateSymbol, listenerOrEvent);
-            listeners.set(slot, listenerOrEvent);
-            scope.graph.addEdge(event, createNode(event, listenerOrEvent));
+            listeners.set(action.slot, listenerOrEvent);
+            action.scope.graph.addEdge(
+                event,
+                createNode(event, listenerOrEvent)
+            );
         } else if (listener) {
             unit.slot.addListener(listenerOrEvent, listener);
-            listeners.set(slot, listener);
-            scope.graph.addEdge(event, createNode(event, listener));
+            listeners.set(action.slot, listener);
+            action.scope.graph.addEdge(event, createNode(event, listener));
         } else {
             throw new Error("listener is required");
         }
@@ -113,12 +115,11 @@ const createEvent = <Payload = void>(): IEvent<[Payload], Payload, void> => {
         if (_listener) {
             unit.slot.removeListener(updateSymbol, _listener);
             listeners.delete(unit.slot);
-            scope.graph.removeEdge(event, unit);
+            action.scope.graph.removeEdge(event, unit);
         }
         return event;
     };
 
-    const action = createAction((payload) => payload);
     const event = Object.assign(action, {
         on,
         off,

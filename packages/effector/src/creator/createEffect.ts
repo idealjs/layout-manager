@@ -1,11 +1,11 @@
-import createAction, {
+import createEvent, { IEvent } from "./createEvent";
+import createStore from "./createStore";
+import createUnit, {
     doneSymbol,
     Effect,
     faildSymbol,
     startSymbol,
-} from "./createAction";
-import createEvent, { IEvent } from "./createEvent";
-import createStore from "./createStore";
+} from "./createUnit";
 import Store from "./Store";
 
 export interface IEffect<Params extends unknown[], Done, Faild> {
@@ -22,7 +22,7 @@ const createEffect = <
 >(
     effect: Effect<Params, Done, Faild>
 ): IEffect<Params, Done, Faild> => {
-    const effectAction = createAction(effect);
+    const effectAction = createUnit(effect);
     const done = createEvent<Done>();
     const faild = createEvent<Faild>();
     const start = createEvent();

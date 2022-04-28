@@ -22,12 +22,12 @@ export type Effect<Params extends unknown[], Done, Faild> = (
     ...params: Params
 ) => Done | Promise<Done> | Faild;
 
-function createAction<
+function createUnit<
     Params extends unknown[] = unknown[],
     Done = unknown,
     Faild = unknown
 >(
-    effect: Effect<Params, Done, Faild>
+    effect: Effect<Params, Done, Faild>,
 ): IAction<Params, Done, Faild, Effect<Params, Done, Faild>> {
     const scope = defaultScope;
     const slot = scope.createSlot();
@@ -50,7 +50,7 @@ function createAction<
     );
 }
 
-export default createAction;
+export default createUnit;
 
 export interface IUnit {
     slot: Slot;

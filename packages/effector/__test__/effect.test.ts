@@ -1,5 +1,5 @@
-import { updateSymbol } from "../src/creator/createAction";
 import createEffect from "../src/creator/createEffect";
+import { updateSymbol } from "../src/creator/createUnit";
 
 jest.useFakeTimers();
 

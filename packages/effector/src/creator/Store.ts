@@ -1,9 +1,9 @@
 import { Slot } from "@idealjs/sns";
 
 import createNode from "../graph/createNode";
-import { updateSymbol } from "./createAction";
 import { IEvent } from "./createEvent";
 import { defaultScope, Scope } from "./createScope";
+import { updateSymbol } from "./createUnit";
 
 interface ISubscribeListener<State> {
     (state: State): void;

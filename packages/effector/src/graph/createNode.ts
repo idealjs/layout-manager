@@ -1,4 +1,4 @@
-import { IUnit } from "../creator/createAction";
+import { IUnit } from "../creator/createUnit";
 
 export interface INode<Weight> {
     unit: IUnit;

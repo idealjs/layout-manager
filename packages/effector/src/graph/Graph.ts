@@ -1,4 +1,4 @@
-import { IUnit } from "../creator/createAction";
+import { IUnit } from "../creator/createUnit";
 import { INode } from "./createNode";
 
 enum SEARCH_STATUS {
