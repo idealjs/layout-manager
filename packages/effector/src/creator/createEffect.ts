@@ -9,8 +9,8 @@ import createUnit, {
 
 export interface IEffect<Params extends unknown[], Done, Faild> {
     (...params: Params): void;
-    done: IEvent<Done, Faild>;
-    faild: IEvent<Faild, void>;
+    done: IEvent<Done>;
+    faild: IEvent<Faild>;
     pending: IStore<boolean>;
 }
 

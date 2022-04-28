@@ -6,12 +6,12 @@ import createUnit, {
     startSymbol,
 } from "./createUnit";
 
-export interface IEvent<OutDone, OutFaild>
+export interface IEvent<OutDone>
     extends IUnit<
         OutDone[],
         OutDone,
-        OutFaild,
-        Effect<OutDone[], OutDone, OutFaild>
+        never,
+        Effect<OutDone[], OutDone, never>
     > {
     on<
         TParams extends unknown[],
@@ -19,10 +19,10 @@ export interface IEvent<OutDone, OutFaild>
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
         eventName: typeof startSymbol,
         listener: () => void
-    ): IEvent<OutDone, OutFaild>;
+    ): IEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -30,10 +30,10 @@ export interface IEvent<OutDone, OutFaild>
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
         eventName: typeof doneSymbol,
         listener: (payload: TDone) => void
-    ): IEvent<OutDone, OutFaild>;
+    ): IEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -41,10 +41,10 @@ export interface IEvent<OutDone, OutFaild>
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
         eventName: typeof faildSymbol,
         listener: (payload: TFaild) => void
-    ): IEvent<OutDone, OutFaild>;
+    ): IEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -52,9 +52,9 @@ export interface IEvent<OutDone, OutFaild>
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
         listener: (payload: TDone) => void
-    ): IEvent<OutDone, OutFaild>;
+    ): IEvent<OutDone>;
 
     off<
         TParams extends unknown[],
@@ -63,7 +63,7 @@ export interface IEvent<OutDone, OutFaild>
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect>
-    ): IEvent<OutDone, OutFaild>;
+    ): IEvent<OutDone>;
 }
 
 const createEvent = <Payload = void>() => {
@@ -98,7 +98,7 @@ const createEvent = <Payload = void>() => {
         return event;
     };
 
-    const event: IEvent<Payload, void> = Object.assign(unit, {
+    const event: IEvent<Payload> = Object.assign(unit, {
         on,
         off,
     });
