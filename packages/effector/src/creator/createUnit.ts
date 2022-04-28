@@ -1,5 +1,6 @@
 import { Slot } from "@idealjs/sns";
 
+import createNode from "../graph/createNode";
 import { defaultScope, Scope } from "./createScope";
 
 export const startSymbol = Symbol("start");
@@ -7,15 +8,36 @@ export const doneSymbol = Symbol("done");
 export const faildSymbol = Symbol("faild");
 export const updateSymbol = Symbol("update");
 
-export interface IAction<
-    Params extends unknown[],
-    Done,
-    Faild,
-    E extends Effect<Params, Done, Faild>
+export interface IUnit<
+    OutParams extends unknown[],
+    OutDone,
+    OutFaild,
+    OutEffect extends Effect<OutParams, OutDone, OutFaild>
 > {
-    (...params: Parameters<E>): Promise<void>;
+    (...params: Parameters<OutEffect>): Promise<void>;
     scope: Scope;
     slot: Slot;
+    on<
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>,
+        listenerOrEvent:
+            | ((payload?: TDone | TFaild) => void)
+            | (string | symbol),
+        listener?: (payload?: TDone | TFaild) => void
+    ): IUnit<OutParams, OutDone, OutFaild, OutEffect>;
+
+    off<
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>
+    ): IUnit<OutParams, OutDone, OutFaild, OutEffect>;
 }
 
 export type Effect<Params extends unknown[], Done, Faild> = (
@@ -26,13 +48,62 @@ function createUnit<
     Params extends unknown[] = unknown[],
     Done = unknown,
     Faild = unknown
->(
-    effect: Effect<Params, Done, Faild>,
-): IAction<Params, Done, Faild, Effect<Params, Done, Faild>> {
+>(effect: Effect<Params, Done, Faild>) {
     const scope = defaultScope;
     const slot = scope.createSlot();
 
-    return Object.assign(
+    const listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
+
+    const on = <
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>,
+        listenerOrEvent:
+            | ((payload?: TDone | TFaild) => void)
+            | (string | symbol),
+        listener?: (payload?: TDone | TFaild) => void
+    ) => {
+        if (typeof listenerOrEvent === "function") {
+            target.slot.addListener(updateSymbol, listenerOrEvent);
+            listeners.set(target.slot, listenerOrEvent);
+            scope.graph.addEdge(unit, createNode(target, listenerOrEvent));
+        } else if (listener) {
+            target.slot.addListener(listenerOrEvent, listener);
+            listeners.set(target.slot, listener);
+            scope.graph.addEdge(unit, createNode(target, listener));
+        } else {
+            throw new Error("listener is required");
+        }
+
+        return unit;
+    };
+
+    const off = <
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>
+    ) => {
+        const _listener = listeners.get(target.slot);
+        if (_listener) {
+            target.slot.removeListener(updateSymbol, _listener);
+            listeners.delete(target.slot);
+            scope.graph.removeEdge(unit, target);
+        }
+        return unit;
+    };
+
+    const unit: IUnit<
+        Params,
+        Done,
+        Faild,
+        Effect<Params, Done, Faild>
+    > = Object.assign(
         async (...params: Params) => {
             try {
                 scope.sns.send(slot.id, startSymbol);
@@ -46,12 +117,12 @@ function createUnit<
         {
             scope,
             slot,
+            on,
+            off,
         }
     );
+
+    return unit;
 }
 
 export default createUnit;
-
-export interface IUnit {
-    slot: Slot;
-}

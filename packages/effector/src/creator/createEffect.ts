@@ -1,18 +1,17 @@
 import createEvent, { IEvent } from "./createEvent";
-import createStore from "./createStore";
+import createStore, { IStore } from "./createStore";
 import createUnit, {
     doneSymbol,
     Effect,
     faildSymbol,
     startSymbol,
 } from "./createUnit";
-import Store from "./Store";
 
 export interface IEffect<Params extends unknown[], Done, Faild> {
     (...params: Params): void;
-    done: IEvent<[Done], Done, Faild>;
-    faild: IEvent<[Faild], Faild, void>;
-    pending: Store<boolean>;
+    done: IEvent<Done, Faild>;
+    faild: IEvent<Faild, void>;
+    pending: IStore<boolean>;
 }
 
 const createEffect = <
@@ -22,21 +21,21 @@ const createEffect = <
 >(
     effect: Effect<Params, Done, Faild>
 ): IEffect<Params, Done, Faild> => {
-    const effectAction = createUnit(effect);
+    const effectUnit = createUnit(effect);
     const done = createEvent<Done>();
     const faild = createEvent<Faild>();
     const start = createEvent();
     const pending = createStore(true);
 
-    done.on(effectAction, doneSymbol, (payload) => {
+    done.on(effectUnit, doneSymbol, (payload) => {
         done(payload);
     });
 
-    faild.on(effectAction, faildSymbol, (payload) => {
+    faild.on(effectUnit, faildSymbol, (payload) => {
         faild(payload);
     });
 
-    start.on(effectAction, startSymbol, () => {
+    start.on(effectUnit, startSymbol, () => {
         start();
     });
 
@@ -45,7 +44,7 @@ const createEffect = <
         .on(done, () => false)
         .on(faild, () => false);
 
-    return Object.assign(effectAction, {
+    return Object.assign(effectUnit, {
         done,
         faild,
         pending,

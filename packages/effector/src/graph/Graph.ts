@@ -6,10 +6,12 @@ enum SEARCH_STATUS {
     DONE,
 }
 
-class Graph {
-    public adjacency: Readonly<Map<IUnit, INode<any>[]>> = new Map();
+type Unit = IUnit<any, any, any, any>;
 
-    public addEdge<To>(unit: IUnit, to?: INode<To>) {
+class Graph {
+    public adjacency: Readonly<Map<Unit, INode<any>[]>> = new Map();
+
+    public addEdge<To>(unit: Unit, to?: INode<To>) {
         this.adjacency.set(
             unit,
             to == null
@@ -18,7 +20,7 @@ class Graph {
         );
     }
 
-    public removeEdge(unit: IUnit, to: IUnit) {
+    public removeEdge(unit: Unit, to: Unit) {
         this.adjacency.set(
             unit,
             (this.adjacency.get(unit) ?? []).filter((node) => node.unit !== to)
@@ -26,9 +28,9 @@ class Graph {
     }
 
     private dfs(
-        unit: IUnit,
-        search: (node: IUnit) => void,
-        done: (node: IUnit) => void
+        unit: Unit,
+        search: (node: Unit) => void,
+        done: (node: Unit) => void
     ) {
         search(unit);
         this.adjacency.get(unit)?.forEach((node) => {
@@ -39,9 +41,9 @@ class Graph {
 
     public hasCircle() {
         try {
-            const searchStatus = new WeakMap<IUnit, SEARCH_STATUS>();
-            let searchStack: IUnit[] = [];
-            const search = (unit: IUnit) => {
+            const searchStatus = new WeakMap<Unit, SEARCH_STATUS>();
+            let searchStack: Unit[] = [];
+            const search = (unit: Unit) => {
                 searchStack.push(unit);
                 // if has visist;
                 if (searchStatus.get(unit) === SEARCH_STATUS.DOING) {

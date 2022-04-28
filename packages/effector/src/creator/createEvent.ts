@@ -1,129 +1,108 @@
-import { Slot } from "@idealjs/sns";
-
-import createNode from "../graph/createNode";
 import createUnit, {
     doneSymbol,
     Effect,
     faildSymbol,
-    IAction,
     IUnit,
     startSymbol,
-    updateSymbol,
 } from "./createUnit";
 
-export interface IEvent<OutParams extends unknown[], OutDone, OutFaild>
-    extends IAction<
-        OutParams,
+export interface IEvent<OutDone, OutFaild>
+    extends IUnit<
+        OutDone[],
         OutDone,
         OutFaild,
-        Effect<OutParams, OutDone, OutFaild>
+        Effect<OutDone[], OutDone, OutFaild>
     > {
     on<
-        Params extends unknown[],
-        Done,
-        Faild,
-        E extends Effect<Params, Done, Faild>
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        unit: IAction<Params, Done, Faild, E>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
         eventName: typeof startSymbol,
         listener: () => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
+    ): IEvent<OutDone, OutFaild>;
 
     on<
-        Params extends unknown[],
-        Done,
-        Faild,
-        E extends Effect<Params, Done, Faild>
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        unit: IAction<Params, Done, Faild, E>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
         eventName: typeof doneSymbol,
-        listener: (payload: Done) => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
+        listener: (payload: TDone) => void
+    ): IEvent<OutDone, OutFaild>;
 
     on<
-        Params extends unknown[],
-        Done,
-        Faild,
-        E extends Effect<Params, Done, Faild>
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        unit: IAction<Params, Done, Faild, E>,
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
         eventName: typeof faildSymbol,
-        listener: (payload: Faild) => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
+        listener: (payload: TFaild) => void
+    ): IEvent<OutDone, OutFaild>;
 
-    on<Done, Faild>(
-        unit: IEvent<[Done], Done, Faild>,
-        eventName: typeof startSymbol,
-        listener: () => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
+    on<
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone, TFaild>,
+        listener: (payload: TDone) => void
+    ): IEvent<OutDone, OutFaild>;
 
-    on<Done, Faild>(
-        unit: IEvent<[Done], Done, Faild>,
-        eventName: typeof doneSymbol,
-        listener: (payload: Done) => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
-
-    on<Done, Faild>(
-        unit: IEvent<[Done], Done, Faild>,
-        eventName: typeof faildSymbol,
-        listener: (payload: Done) => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
-
-    on<Done, Faild>(
-        unit: IEvent<[Done], Done, Faild>,
-        listener: (payload: Done) => void
-    ): IEvent<OutParams, OutDone, OutFaild>;
-
-    off: (unit: { slot: Slot }) => IEvent<OutParams, OutDone, OutFaild>;
+    off<
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>
+    ): IEvent<OutDone, OutFaild>;
 }
 
-const createEvent = <Payload = void>(): IEvent<[Payload], Payload, void> => {
-    const action = createUnit((payload) => payload);
-
-    const listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
+const createEvent = <Payload = void>() => {
+    const unit = createUnit((payload) => payload);
 
     const on = <
-        Params extends unknown[],
-        Done,
-        Faild,
-        E extends Effect<Params, Done, Faild>
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        unit: IAction<Params, Done, Faild, E>,
-        listenerOrEvent: ((payload: ReturnType<E>) => void) | (string | symbol),
-        listener?: (payload: ReturnType<E>) => void
+        target: IUnit<TParams, TDone, TFaild, TEffect>,
+        listenerOrEvent:
+            | ((payload?: TDone | TFaild) => void)
+            | (string | symbol),
+        listener?: (payload?: TDone | TFaild) => void
     ) => {
-        if (typeof listenerOrEvent === "function") {
-            unit.slot.addListener(updateSymbol, listenerOrEvent);
-            listeners.set(action.slot, listenerOrEvent);
-            action.scope.graph.addEdge(
-                event,
-                createNode(event, listenerOrEvent)
-            );
-        } else if (listener) {
-            unit.slot.addListener(listenerOrEvent, listener);
-            listeners.set(action.slot, listener);
-            action.scope.graph.addEdge(event, createNode(event, listener));
-        } else {
-            throw new Error("listener is required");
-        }
+        unit.on(target, listenerOrEvent, listener);
+        return event;
+    };
+
+    const off = <
+        TParams extends unknown[],
+        TDone,
+        TFaild,
+        TEffect extends Effect<TParams, TDone, TFaild>
+    >(
+        target: IUnit<TParams, TDone, TFaild, TEffect>
+    ) => {
+        unit.off(target);
 
         return event;
     };
 
-    const off = (unit: IUnit) => {
-        const _listener = listeners.get(unit.slot);
-        if (_listener) {
-            unit.slot.removeListener(updateSymbol, _listener);
-            listeners.delete(unit.slot);
-            action.scope.graph.removeEdge(event, unit);
-        }
-        return event;
-    };
-
-    const event = Object.assign(action, {
+    const event: IEvent<Payload, void> = Object.assign(unit, {
         on,
         off,
     });
+
     return event;
 };
 

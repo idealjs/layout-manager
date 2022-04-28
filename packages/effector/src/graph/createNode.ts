@@ -1,15 +1,18 @@
 import { IUnit } from "../creator/createUnit";
 
 export interface INode<Weight> {
-    unit: IUnit;
+    unit: IUnit<any[], any, any, any>;
     weight: Weight;
 }
 
-function createNode<Weight>(unit: IUnit, weight: Weight): INode<Weight>;
+function createNode<Weight>(
+    unit: IUnit<any[], any, any, any>,
+    weight: Weight
+): INode<Weight>;
 
-function createNode(unit: IUnit): INode<unknown>;
+function createNode(unit: IUnit<any, any, any, any>): INode<unknown>;
 
-function createNode<Weight>(unit: IUnit, weight?: Weight) {
+function createNode<Weight>(unit: IUnit<any, any, any, any>, weight?: Weight) {
     return {
         unit,
         weight,
