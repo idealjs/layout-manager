@@ -66,12 +66,8 @@ export interface IEvent<OutDone>
     ): IEvent<OutDone>;
 }
 
-const createEvent = <Payload = void>() => {
-    const unit = createUnit((payload) => payload);
-
-    const event: IEvent<Payload> = Object.assign(unit);
-
-    return event;
+const createEvent = <Payload = void>(): IEvent<Payload> => {
+    return createUnit((payload) => payload);
 };
 
 export default createEvent;
