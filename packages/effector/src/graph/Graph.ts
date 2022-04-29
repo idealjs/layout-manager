@@ -44,12 +44,6 @@ class Graph {
             const searchStatus = new WeakMap<Unit, SEARCH_STATUS>();
             let searchStack: Unit[] = [];
             const searchStoreUnit = (unit: Unit) => {
-                console.log(
-                    "test test status",
-                    unit.type,
-                    searchStatus.get(unit)
-                );
-
                 searchStack.push(unit);
                 if (unit.type !== UNIT_TYPE.STORE) {
                     searchStatus.set(unit, SEARCH_STATUS.DONE);
@@ -77,7 +71,6 @@ class Graph {
 
             this.adjacency.forEach((nodes, node, map) => {
                 this.dfs(node, searchStoreUnit, (node) => {
-                    console.log("test test done");
                     searchStatus.set(node, SEARCH_STATUS.DONE);
                 });
                 searchStack = [];
