@@ -1,73 +1,23 @@
 import createUnit, {
-    doneSymbol,
     Effect,
-    faildSymbol,
     IUnit,
-    startSymbol,
+    IUnitOptions,
+    UNIT_TYPE,
 } from "./createUnit";
 
 export interface IEvent<OutDone>
-    extends IUnit<
-        OutDone[],
-        OutDone,
-        never,
-        Effect<OutDone[], OutDone, never>
-    > {
-    on<
-        TParams extends unknown[],
-        TDone,
-        TFaild,
-        TEffect extends Effect<TParams, TDone, TFaild>
-    >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
-        eventName: typeof startSymbol,
-        listener: () => void
-    ): IEvent<OutDone>;
+    extends Omit<
+        IUnit<OutDone[], OutDone, never, Effect<OutDone[], OutDone, never>>,
+        "on" | "off"
+    > {}
 
-    on<
-        TParams extends unknown[],
-        TDone,
-        TFaild,
-        TEffect extends Effect<TParams, TDone, TFaild>
-    >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
-        eventName: typeof doneSymbol,
-        listener: (payload: TDone) => void
-    ): IEvent<OutDone>;
-
-    on<
-        TParams extends unknown[],
-        TDone,
-        TFaild,
-        TEffect extends Effect<TParams, TDone, TFaild>
-    >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
-        eventName: typeof faildSymbol,
-        listener: (payload: TFaild) => void
-    ): IEvent<OutDone>;
-
-    on<
-        TParams extends unknown[],
-        TDone,
-        TFaild,
-        TEffect extends Effect<TParams, TDone, TFaild>
-    >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
-        listener: (payload: TDone) => void
-    ): IEvent<OutDone>;
-
-    off<
-        TParams extends unknown[],
-        TDone,
-        TFaild,
-        TEffect extends Effect<TParams, TDone, TFaild>
-    >(
-        target: IUnit<TParams, TDone, TFaild, TEffect>
-    ): IEvent<OutDone>;
-}
-
-const createEvent = <Payload = void>(): IEvent<Payload> => {
-    return createUnit((payload) => payload);
+const createEvent = <Payload = void>(
+    unitOptions?: IUnitOptions
+): IEvent<Payload> => {
+    return createUnit((payload) => payload, {
+        type: UNIT_TYPE.EVENT,
+        ...unitOptions,
+    });
 };
 
 export default createEvent;

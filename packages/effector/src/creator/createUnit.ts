@@ -17,6 +17,7 @@ export interface IUnit<
     (...params: Parameters<OutEffect>): Promise<void>;
     scope: Scope;
     slot: Slot;
+    type: UNIT_TYPE;
     on<
         TParams extends unknown[],
         TDone,
@@ -40,6 +41,18 @@ export interface IUnit<
     ): IUnit<OutParams, OutDone, OutFaild, OutEffect>;
 }
 
+export enum UNIT_TYPE {
+    STORE = "STORE",
+    EVENT = "EVENT",
+    INTERNAL_EVENT = "INTERNAL_EVENT",
+    UNIT = "UNIT",
+}
+
+export interface IUnitOptions {
+    name?: string;
+    type: UNIT_TYPE;
+}
+
 export type Effect<Params extends unknown[], Done, Faild> = (
     ...params: Params
 ) => Done | Promise<Done> | Faild;
@@ -48,7 +61,7 @@ function createUnit<
     Params extends unknown[] = unknown[],
     Done = unknown,
     Faild = unknown
->(effect: Effect<Params, Done, Faild>) {
+>(effect: Effect<Params, Done, Faild>, unitOptions?: IUnitOptions) {
     const scope = defaultScope;
     const slot = scope.createSlot();
 
@@ -119,6 +132,10 @@ function createUnit<
             slot,
             on,
             off,
+        },
+        {
+            type: UNIT_TYPE.UNIT,
+            ...unitOptions,
         }
     );
 

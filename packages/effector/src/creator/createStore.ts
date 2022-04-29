@@ -1,5 +1,5 @@
-import createEvent, { IEvent } from "./createEvent";
-import { Effect, IUnit, updateSymbol } from "./createUnit";
+import createInternalEvent, { IEvent } from "./createInternalEvent";
+import { Effect, IUnit, UNIT_TYPE, updateSymbol } from "./createUnit";
 
 interface ISubscribeListener<State> {
     (state: State): void;
@@ -9,20 +9,22 @@ interface IUnSubscribe {
     (): void;
 }
 
-export interface IStore<State> {
+export interface IStore<State>
+    extends Omit<
+        IUnit<State[], State, never, Effect<State[], State, never>>,
+        "on" | "off"
+    > {
     on<
         TParams extends unknown[],
         TDone,
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect>,
+        target:
+            | IUnit<TParams, TDone, TFaild, TEffect>
+            | IEvent<TDone>
+            | IStore<TDone>,
         listener: (state: State, payload: TDone | TFaild) => State
-    ): IStore<State>;
-
-    on<TDone>(
-        target: IEvent<TDone>,
-        listener: (state: State, payload: TDone) => State
     ): IStore<State>;
 
     off<
@@ -31,7 +33,10 @@ export interface IStore<State> {
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect>
+        target:
+            | IUnit<TParams, TDone, TFaild, TEffect>
+            | IEvent<TDone>
+            | IStore<TDone>
     ): IStore<State>;
 
     getState(): State;
@@ -41,7 +46,9 @@ export interface IStore<State> {
 const createStore = <State>(initialState: State) => {
     let state = initialState;
 
-    const unit = createEvent<State>();
+    const unit = createInternalEvent<State>({
+        type: UNIT_TYPE.STORE,
+    });
     const originOn = unit.on;
     const originOff = unit.off;
 
@@ -51,7 +58,10 @@ const createStore = <State>(initialState: State) => {
         TFaild,
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
-        target: IUnit<TParams, TDone, TFaild, TEffect> | IEvent<TDone>,
+        target:
+            | IUnit<TParams, TDone, TFaild, TEffect>
+            | IEvent<TDone>
+            | IStore<TDone>,
         listener: (state: State, payload?: TDone | TFaild) => State
     ) => {
         originOn(target, (payload) => {
