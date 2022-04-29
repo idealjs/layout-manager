@@ -1,4 +1,4 @@
-import { IUnit } from "../creator/createUnit";
+import { IUnit, UNIT_TYPE } from "../creator/createUnit";
 import { INode } from "./createNode";
 
 enum SEARCH_STATUS {
@@ -34,17 +34,27 @@ class Graph {
     ) {
         search(unit);
         this.adjacency.get(unit)?.forEach((node) => {
-            this.dfs(unit, search, done);
+            this.dfs(node.unit, search, done);
         });
         done(unit);
     }
 
-    public hasCircle() {
+    public storeHasCircle() {
         try {
             const searchStatus = new WeakMap<Unit, SEARCH_STATUS>();
             let searchStack: Unit[] = [];
-            const search = (unit: Unit) => {
+            const searchStoreUnit = (unit: Unit) => {
+                console.log(
+                    "test test status",
+                    unit.type,
+                    searchStatus.get(unit)
+                );
+
                 searchStack.push(unit);
+                if (unit.type !== UNIT_TYPE.STORE) {
+                    searchStatus.set(unit, SEARCH_STATUS.DONE);
+                    return;
+                }
                 // if has visist;
                 if (searchStatus.get(unit) === SEARCH_STATUS.DOING) {
                     throw new Error(
@@ -66,15 +76,16 @@ class Graph {
             };
 
             this.adjacency.forEach((nodes, node, map) => {
-                this.dfs(node, search, (node) => {
+                this.dfs(node, searchStoreUnit, (node) => {
+                    console.log("test test done");
                     searchStatus.set(node, SEARCH_STATUS.DONE);
                 });
                 searchStack = [];
             });
-            return true;
+            return false;
         } catch (error) {
             console.error(error);
-            return false;
+            return true;
         }
     }
 }
