@@ -1,4 +1,4 @@
-import createInternalEvent, { IEvent } from "./createInternalEvent";
+import createInternalEvent, { IInternalEvent } from "./createInternalEvent";
 import createStore, { IStore } from "./createStore";
 import createUnit, {
     doneSymbol,
@@ -9,8 +9,8 @@ import createUnit, {
 
 export interface IEffect<Params extends unknown[], Done, Faild> {
     (...params: Params): void;
-    done: IEvent<Done>;
-    faild: IEvent<Faild>;
+    done: IInternalEvent<Done>;
+    faild: IInternalEvent<Faild>;
     pending: IStore<boolean>;
 }
 

@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from "react";
 
-import Store from "./Store";
+import { IStore } from "../creator/createStore";
 
 const useStoreMap = <State, Result>(
-    store: Store<State>,
+    store: IStore<State>,
     selector: (store: State) => Result
 ) => {
     return useSyncExternalStore(store.subscribe, () =>

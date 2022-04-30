@@ -1,4 +1,5 @@
-import createInternalEvent, { IEvent } from "./createInternalEvent";
+import { IEvent } from "./createEvent";
+import createInternalEvent, { IInternalEvent } from "./createInternalEvent";
 import { Effect, IUnit, UNIT_TYPE, updateSymbol } from "./createUnit";
 
 interface ISubscribeListener<State> {
@@ -22,6 +23,7 @@ export interface IStore<State>
     >(
         target:
             | IUnit<TParams, TDone, TFaild, TEffect>
+            | IInternalEvent<TDone>
             | IEvent<TDone>
             | IStore<TDone>,
         listener: (state: State, payload: TDone | TFaild) => State

@@ -1,3 +1,4 @@
+import { IEvent } from "./createEvent";
 import { IStore } from "./createStore";
 import createUnit, {
     doneSymbol,
@@ -9,7 +10,7 @@ import createUnit, {
     UNIT_TYPE,
 } from "./createUnit";
 
-export interface IEvent<OutDone>
+export interface IInternalEvent<OutDone>
     extends IUnit<
         OutDone[],
         OutDone,
@@ -24,11 +25,12 @@ export interface IEvent<OutDone>
     >(
         target:
             | IUnit<TParams, TDone, TFaild, TEffect>
+            | IInternalEvent<TDone>
             | IEvent<TDone>
             | IStore<TDone>,
         eventName: typeof startSymbol,
         listener: () => void
-    ): IEvent<OutDone>;
+    ): IInternalEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -38,11 +40,12 @@ export interface IEvent<OutDone>
     >(
         target:
             | IUnit<TParams, TDone, TFaild, TEffect>
+            | IInternalEvent<TDone>
             | IEvent<TDone>
             | IStore<TDone>,
         eventName: typeof doneSymbol,
         listener: (payload: TDone) => void
-    ): IEvent<OutDone>;
+    ): IInternalEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -52,11 +55,12 @@ export interface IEvent<OutDone>
     >(
         target:
             | IUnit<TParams, TDone, TFaild, TEffect>
+            | IInternalEvent<TDone>
             | IEvent<TDone>
             | IStore<TDone>,
         eventName: typeof faildSymbol,
         listener: (payload: TFaild) => void
-    ): IEvent<OutDone>;
+    ): IInternalEvent<OutDone>;
 
     on<
         TParams extends unknown[],
@@ -66,10 +70,11 @@ export interface IEvent<OutDone>
     >(
         target:
             | IUnit<TParams, TDone, TFaild, TEffect>
+            | IInternalEvent<TDone>
             | IEvent<TDone>
             | IStore<TDone>,
         listener: (payload: TDone) => void
-    ): IEvent<OutDone>;
+    ): IInternalEvent<OutDone>;
 
     off<
         TParams extends unknown[],
@@ -78,12 +83,12 @@ export interface IEvent<OutDone>
         TEffect extends Effect<TParams, TDone, TFaild>
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect>
-    ): IEvent<OutDone>;
+    ): IInternalEvent<OutDone>;
 }
 
 const createInternalEvent = <Payload = void>(
     unitOptions?: IUnitOptions
-): IEvent<Payload> => {
+): IInternalEvent<Payload> => {
     return createUnit((payload) => payload, {
         type: UNIT_TYPE.EVENT,
         ...unitOptions,

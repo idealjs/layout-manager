@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, useContext } from "react";
 
-import { Scope } from "./creator/createScope";
+import { defaultScope, Scope } from "../creator/createScope";
 
-const context = createContext<Scope | null>(null);
+const context = createContext<Scope>(defaultScope);
 
 interface IProps {
     scope: Scope;

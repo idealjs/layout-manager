@@ -9,7 +9,9 @@ export interface IEvent<OutDone>
     extends Omit<
         IUnit<OutDone[], OutDone, never, Effect<OutDone[], OutDone, never>>,
         "on" | "off"
-    > {}
+    > {
+    (...params: Parameters<Effect<OutDone[], OutDone, never>>): Promise<void>;
+}
 
 const createEvent = <Payload = void>(
     unitOptions?: IUnitOptions
