@@ -35,8 +35,6 @@ const useTabRef = <T extends HTMLElement>(
                     },
                 })
                 .addListener(DND_EVENT.DRAG_END, (payload) => {
-                    console.log("test test", payload);
-
                     if (payload.dropOut) {
                         popout && popout(payload.screen);
                     }
