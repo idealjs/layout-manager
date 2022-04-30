@@ -3,13 +3,12 @@ import createStore from "../src/creator/createStore";
 
 jest.useFakeTimers();
 
-describe("event test", () => {
+describe("store test", () => {
     test("should change state", (done) => {
         let count = "0";
         const mockFn = jest.fn((timer: number): Promise<string> => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    console.log("test test");
                     resolve("100");
                 }, timer);
             });
@@ -18,7 +17,6 @@ describe("event test", () => {
         const store = createStore("0");
         const fx = createEffect(mockFn);
         store.on(fx.done, (state, payload) => {
-            console.log("test test", state, payload);
             return state + payload;
         });
 

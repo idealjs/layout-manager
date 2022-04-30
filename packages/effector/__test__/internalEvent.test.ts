@@ -1,7 +1,7 @@
 import createInternalEvent from "../src/creator/createInternalEvent";
 import { updateSymbol } from "../src/creator/createUnit";
 
-describe("event test", () => {
+describe("internal event test", () => {
     test("should be triggered", (done) => {
         const $plus = createInternalEvent<number>();
 

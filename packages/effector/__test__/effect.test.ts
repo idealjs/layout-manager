@@ -3,12 +3,11 @@ import { updateSymbol } from "../src/creator/createUnit";
 
 jest.useFakeTimers();
 
-describe("event test", () => {
+describe("effect test", () => {
     test("should change state", (done) => {
         const mockFn = jest.fn((timer: number): Promise<number> => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    console.log("test test");
                     resolve(100);
                 }, timer);
             });

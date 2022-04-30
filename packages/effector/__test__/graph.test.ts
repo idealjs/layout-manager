@@ -11,7 +11,6 @@ describe("graph test", () => {
         });
         $event.on($event, listener);
         $event(1);
-        console.log("test test", $event.scope.graph.adjacency);
         expect($event.scope.graph.storeHasCircle()).toBe(true);
     });
 
@@ -23,7 +22,6 @@ describe("graph test", () => {
         });
         $store.on($store, listener);
 
-        console.log("test test", $store.scope.graph.adjacency);
         expect($store.scope.graph.storeHasCircle()).toBe(true);
         done();
     });
