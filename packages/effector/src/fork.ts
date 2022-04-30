@@ -1,16 +1,27 @@
-import { Sns } from "@idealjs/sns";
-
-import { defaultScope, Scope } from "./creator/createScope";
-import Graph from "./graph/Graph";
+import createScope, { defaultScope, Scope } from "./creator/createScope";
 
 const fork = (scope: Scope = defaultScope) => {
-    if (scope.graph.hasCircle()) {
+    if (scope.graph.storeHasCircle()) {
         throw new Error("Circular dependency detected");
     }
-    const graph = new Graph();
-    const sns = new Sns();
 
-    scope.graph.adjacency.forEach((value, unit) => {});
+    const newScope = createScope();
+    scope.getUnits().forEach((unit) => {
+        let forkUnit = newScope.getUnit(unit.slot.id);
+
+        if (!forkUnit) {
+            forkUnit = unit.fork(newScope);
+        }
+        scope.graph.adjacency.get(unit)?.forEach((node) => {
+            let unit = newScope.getUnit(node.unit.slot.id);
+            if (!unit) {
+                unit = node.unit.fork(newScope);
+            }
+            forkUnit?.on(unit, node.weight);
+        });
+    });
+
+    return newScope;
 };
 
 export default fork;

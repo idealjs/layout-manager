@@ -39,6 +39,8 @@ export interface IUnit<
     >(
         target: IUnit<TParams, TDone, TFaild, TEffect>
     ): IUnit<OutParams, OutDone, OutFaild, OutEffect>;
+
+    fork(scope: Scope): IUnit<OutParams, OutDone, OutFaild, OutEffect>;
 }
 
 export enum UNIT_TYPE {
@@ -50,6 +52,8 @@ export enum UNIT_TYPE {
 
 export interface IUnitOptions {
     name?: string;
+    id?: string | number | symbol;
+    scope?: Scope;
     type: UNIT_TYPE;
 }
 
@@ -61,9 +65,12 @@ function createUnit<
     Params extends unknown[] = unknown[],
     Done = unknown,
     Faild = unknown
->(effect: Effect<Params, Done, Faild>, unitOptions?: IUnitOptions) {
-    const scope = defaultScope;
-    const slot = scope.createSlot();
+>(
+    effect: Effect<Params, Done, Faild>,
+    unitOptions: IUnitOptions = { type: UNIT_TYPE.UNIT }
+) {
+    const scope = unitOptions?.scope ?? defaultScope;
+    const slot = scope.createSlot(unitOptions?.id);
 
     const listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
 
@@ -111,6 +118,10 @@ function createUnit<
         return unit;
     };
 
+    const fork = (scope: Scope) => {
+        return createUnit(effect, { ...unitOptions, id: slot.id, scope });
+    };
+
     const unit: IUnit<
         Params,
         Done,
@@ -132,12 +143,12 @@ function createUnit<
             slot,
             on,
             off,
+            fork,
         },
-        {
-            type: UNIT_TYPE.UNIT,
-            ...unitOptions,
-        }
+        unitOptions
     );
+
+    scope.setUnit(unit.slot.id, unit);
 
     return unit;
 }

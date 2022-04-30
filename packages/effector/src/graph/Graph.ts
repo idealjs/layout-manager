@@ -1,12 +1,11 @@
-import { IUnit, UNIT_TYPE } from "../creator/createUnit";
+import { Unit } from "../creator/createScope";
+import { UNIT_TYPE } from "../creator/createUnit";
 import { INode } from "./createNode";
 
 enum SEARCH_STATUS {
     DOING,
     DONE,
 }
-
-type Unit = IUnit<any, any, any, any>;
 
 class Graph {
     public adjacency: Readonly<Map<Unit, INode<any>[]>> = new Map();
