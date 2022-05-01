@@ -1,5 +1,5 @@
-import createInternalEvent, { IInternalEvent } from "./createInternalEvent";
-import createStore, { IStore } from "./createStore";
+import createInternalEvent from "./createInternalEvent";
+import createStore from "./createStore";
 import createUnit, {
     doneSymbol,
     Effect,
@@ -7,20 +7,13 @@ import createUnit, {
     startSymbol,
 } from "./createUnit";
 
-export interface IEffect<Params extends unknown[], Done, Faild> {
-    (...params: Params): void;
-    done: IInternalEvent<Done>;
-    faild: IInternalEvent<Faild>;
-    pending: IStore<boolean>;
-}
-
 const createEffect = <
     Params extends unknown[] = unknown[],
     Done = unknown,
     Faild = unknown
 >(
     effect: Effect<Params, Done, Faild>
-): IEffect<Params, Done, Faild> => {
+) => {
     const effectUnit = createUnit(effect);
     const done = createInternalEvent<Done>();
     const faild = createInternalEvent<Faild>();

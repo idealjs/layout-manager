@@ -1,16 +1,31 @@
-import { Unit } from "../creator/createScope";
 import { UNIT_TYPE } from "../creator/createUnit";
-import { INode } from "./createNode";
+import CommonNode from "./CommonNode";
+import CommonUnit from "./CommonUnit";
 
 enum SEARCH_STATUS {
     DOING,
     DONE,
 }
 
-class Graph {
-    public adjacency: Readonly<Map<Unit, INode<any>[]>> = new Map();
+class CommonGraph {
+    public adjacency: Readonly<
+        Map<
+            CommonUnit<any[], any, any>,
+            Array<CommonNode<any[], any, any, any>>
+        >
+    > = new Map();
 
-    public addEdge<To>(unit: Unit, to?: INode<To>) {
+    constructor() {
+        this.addEdge = this.addEdge.bind(this);
+        this.removeEdge = this.removeEdge.bind(this);
+        this.dfs = this.dfs.bind(this);
+        this.storeHasCircle = this.storeHasCircle.bind(this);
+    }
+
+    public addEdge<To>(
+        unit: CommonUnit<any[], any, any>,
+        to?: CommonNode<any[], any, any, To>
+    ) {
         this.adjacency.set(
             unit,
             to == null
@@ -19,30 +34,38 @@ class Graph {
         );
     }
 
-    public removeEdge(unit: Unit, to: Unit) {
+    public removeEdge(
+        unit: CommonUnit<any[], any, any>,
+        to: CommonUnit<any[], any, any>
+    ) {
         this.adjacency.set(
             unit,
-            (this.adjacency.get(unit) ?? []).filter((node) => node.unit !== to)
+            (this.adjacency.get(unit) ?? []).filter(
+                (node) => node.commonUnit !== to
+            )
         );
     }
 
     private dfs(
-        unit: Unit,
-        search: (node: Unit) => void,
-        done: (node: Unit) => void
+        unit: CommonUnit<any[], any, any>,
+        search: (unit: CommonUnit<any[], any, any>) => void,
+        done: (unit: CommonUnit<any[], any, any>) => void
     ) {
         search(unit);
         this.adjacency.get(unit)?.forEach((node) => {
-            this.dfs(node.unit, search, done);
+            this.dfs(node.commonUnit, search, done);
         });
         done(unit);
     }
 
     public storeHasCircle() {
         try {
-            const searchStatus = new WeakMap<Unit, SEARCH_STATUS>();
-            let searchStack: Unit[] = [];
-            const searchStoreUnit = (unit: Unit) => {
+            const searchStatus = new WeakMap<
+                CommonUnit<any[], any, any>,
+                SEARCH_STATUS
+            >();
+            let searchStack: CommonUnit<any[], any, any>[] = [];
+            const searchStoreUnit = (unit: CommonUnit<any[], any, any>) => {
                 searchStack.push(unit);
                 if (unit.type !== UNIT_TYPE.STORE) {
                     searchStatus.set(unit, SEARCH_STATUS.DONE);
@@ -82,4 +105,4 @@ class Graph {
     }
 }
 
-export default Graph;
+export default CommonGraph;

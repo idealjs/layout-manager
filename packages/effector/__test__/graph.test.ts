@@ -22,7 +22,7 @@ describe("graph test", () => {
         });
         $store.on($store, listener);
 
-        expect($store.scope.graph.storeHasCircle()).toBe(true);
+        expect($store.unit.scope.graph.storeHasCircle()).toBe(true);
         done();
     });
 });

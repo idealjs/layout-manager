@@ -1,17 +1,21 @@
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 
-import { defaultScope, Scope } from "../creator/createScope";
+import CommonScope, { defaultScope } from "../classes/CommonScope";
+import fork from "../fork";
 
-const context = createContext<Scope>(defaultScope);
+const context = createContext<CommonScope>(defaultScope);
 
-interface IProps {
-    scope: Scope;
-}
+interface IProps {}
 
 const ScopeProvider = (props: PropsWithChildren<IProps>) => {
-    const { children, scope } = props;
+    const { children } = props;
 
-    return <context.Provider value={scope}>{children}</context.Provider>;
+    const newScope = useMemo(() => {
+        const newScope = fork();
+        return newScope;
+    }, []);
+
+    return <context.Provider value={newScope}>{children}</context.Provider>;
 };
 
 export default ScopeProvider;
