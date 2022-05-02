@@ -1,17 +1,19 @@
+import { ScopeProvider } from "@idealjs/effector";
+import GrapeLayout from "@idealjs/grape-layout";
 import {
     CMPTFactory,
+    Layout,
     LAYOUT_DIRECTION,
     LayoutNode,
     LayoutNodeActionType,
     MASK_PART,
     PanelNode,
     ROOTID,
-    Layout,
 } from "@idealjs/layout-manager";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
-import GrapeLayout from "@idealjs/grape-layout";
+import Counter from "./Counter";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -69,7 +71,7 @@ N_A.appendPanelNode(P_A_A, P_A_B);
 const P_B_A_A = new PanelNode({
     panelJSON: {
         id: "P_B_A_A",
-        page: "test",
+        page: "test4",
     },
 });
 
@@ -86,7 +88,7 @@ N_B_A.appendPanelNode(P_B_A_A, P_B_A_B);
 const P_B_B_A = new PanelNode({
     panelJSON: {
         id: "P_B_B_A",
-        page: "test",
+        page: "test3",
     },
 });
 
@@ -173,6 +175,21 @@ const factory: CMPTFactory = (page: string) => {
 
                         {nodeData}
                         {counter}
+                    </div>
+                );
+            };
+        case "test3":
+            return (props) => {
+                return <Counter />;
+            };
+        case "test4":
+            return (props) => {
+                return (
+                    <div>
+                        <div>with new scope</div>
+                        <ScopeProvider>
+                            <Counter />
+                        </ScopeProvider>
                     </div>
                 );
             };
