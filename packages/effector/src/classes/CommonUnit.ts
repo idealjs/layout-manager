@@ -11,12 +11,13 @@ import {
 import CommonEvent from "./CommonEvent";
 import CommonNode from "./CommonNode";
 import CommonScope, { defaultScope } from "./CommonScope";
-import CommonStore from "./CommonStore";
+import CommonStore, { isCommonStore } from "./CommonStore";
 
 export interface IUnitOptions {
     id?: string | number | symbol;
     scope?: CommonScope;
     type?: UNIT_TYPE;
+    forkCounter?: number;
 }
 
 class CommonUnit<Params extends unknown[], Done, Faild> {
@@ -26,6 +27,8 @@ class CommonUnit<Params extends unknown[], Done, Faild> {
     public scope: CommonScope;
     public slot: Slot;
     public type: UNIT_TYPE;
+    public forkCounter: number;
+
     constructor(
         effect: Effect<Params, Done, Faild>,
         unitOptions: IUnitOptions
@@ -34,76 +37,98 @@ class CommonUnit<Params extends unknown[], Done, Faild> {
         this.unitOptions = unitOptions;
         this.type = this.unitOptions.type ?? UNIT_TYPE.UNIT;
         this.scope = this.unitOptions.scope ?? defaultScope;
+        this.forkCounter =
+            this.unitOptions.forkCounter != null
+                ? this.unitOptions.forkCounter + 1
+                : 0;
         this.slot = this.scope.createSlot(unitOptions.id);
         this.scope.setUnit(this.slot.id, this);
 
         this.on = this.on.bind(this);
         this.off = this.off.bind(this);
         this.fork = this.fork.bind(this);
+        this.runUnit = this.runUnit.bind(this as any);
     }
 
     public on<TParams extends unknown[], TDone, TFaild>(
-        target:
-            | CommonUnit<TParams, TDone, TFaild>
-            | CommonEvent<TDone>
-            | CommonStore<TDone>,
+        target: CommonUnit<TParams, TDone, TFaild>,
         eventName: typeof startSymbol,
         listener: () => void
     ): this;
 
     public on<TParams extends unknown[], TDone, TFaild>(
-        target:
-            | CommonUnit<TParams, TDone, TFaild>
-            | CommonEvent<TDone>
-            | CommonStore<TDone>,
+        target: CommonUnit<TParams, TDone, TFaild>,
         eventName: typeof doneSymbol,
         listener: (payload: TDone) => void
     ): this;
 
     public on<TParams extends unknown[], TDone, TFaild>(
-        target:
-            | CommonUnit<TParams, TDone, TFaild>
-            | CommonEvent<TDone>
-            | CommonStore<TDone>,
+        target: CommonUnit<TParams, TDone, TFaild>,
         eventName: typeof faildSymbol,
         listener: (payload: TFaild) => void
     ): this;
 
-    public on<TParams extends unknown[], TDone, TFaild>(
+    public on<TParams extends unknown[], TDone, TFaild, TState>(
         target:
             | CommonUnit<TParams, TDone, TFaild>
             | CommonEvent<TDone>
-            | CommonStore<TDone>,
-        listener: (payload: TDone) => void
+            | CommonStore<TState>,
+        listener: (payload: TDone | TFaild) => void
     ): this;
 
-    public on<TParams extends unknown[], TDone, TFaild>(
-        target: CommonUnit<TParams, TDone, TFaild>,
+    public on<TParams extends unknown[], TDone, TFaild, TState>(
+        target:
+            | CommonUnit<TParams, TDone, TFaild>
+            | CommonEvent<TDone>
+            | CommonStore<TState>,
+        listener: (
+            _this:
+                | CommonUnit<TParams, TDone, TFaild>
+                | CommonEvent<TDone>
+                | CommonStore<TState>,
+            payload: TDone | TFaild
+        ) => void
+    ): this;
+
+    public on<TParams extends unknown[], TDone, TFaild, TState>(
+        target:
+            | CommonUnit<TParams, TDone, TFaild>
+            | CommonEvent<TDone>
+            | CommonStore<TState>,
         listenerOrEvent:
             | ((
-                  this: CommonUnit<Params, Done, Faild>,
+                  _this:
+                      | CommonUnit<TParams, TDone, TFaild>
+                      | CommonEvent<TDone>
+                      | CommonStore<TState>,
                   payload?: TDone | TFaild
               ) => void)
             | (string | symbol),
-        listener?: (
-            this: CommonUnit<Params, Done, Faild>,
-            payload?: TDone | TFaild
-        ) => void
+        listener?: (payload: TDone | TFaild) => void
     ) {
-        if (typeof listenerOrEvent === "function") {
-            target.slot.addListener(updateSymbol, listenerOrEvent);
-            this.listeners.set(target.slot, listenerOrEvent);
-            this.scope.graph.addEdge(
-                this,
-                new CommonNode(target, listenerOrEvent)
-            );
-        } else if (listener) {
-            target.slot.addListener(listenerOrEvent, listener);
-            this.listeners.set(target.slot, listener);
-            this.scope.graph.addEdge(
-                this,
-                new CommonNode(target, listenerOrEvent)
-            );
+        let unit:
+            | CommonUnit<TParams, TDone, TFaild>
+            | CommonUnit<TState[], TState, never>
+            | CommonEvent<TDone>;
+
+        if (isCommonStore(target)) {
+            unit = target.unit;
+        } else {
+            unit = target;
+        }
+
+        const eventName =
+            typeof listenerOrEvent === "function"
+                ? updateSymbol
+                : listenerOrEvent;
+
+        let _listener =
+            typeof listenerOrEvent === "function" ? listenerOrEvent : listener;
+
+        if (_listener) {
+            unit.slot.addListener(eventName, _listener);
+            this.listeners.set(unit.slot, _listener);
+            this.scope.graph.addEdge(this, new CommonNode(unit, _listener));
         } else {
             throw new Error("listener is required");
         }
@@ -130,6 +155,7 @@ class CommonUnit<Params extends unknown[], Done, Faild> {
             this.scope.sns.send(this.slot.id, doneSymbol, done);
             this.scope.sns.send(this.slot.id, updateSymbol, done);
         } catch (error) {
+            console.error(error);
             this.scope.sns.send(this.slot.id, faildSymbol, error as Faild);
         }
     }
@@ -138,6 +164,7 @@ class CommonUnit<Params extends unknown[], Done, Faild> {
         return new CommonUnit(this.effect, {
             ...this.unitOptions,
             id: this.slot.id,
+            forkCounter: this.forkCounter,
             scope,
         });
     }

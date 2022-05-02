@@ -59,7 +59,6 @@ class CommonScope {
     }
 
     public setStore(key: string | number | symbol, store: CommonStore<any>) {
-        console.log("test test setStore");
         return this.storeMaps.set(key, store);
     }
 

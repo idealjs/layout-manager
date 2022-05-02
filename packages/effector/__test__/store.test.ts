@@ -1,10 +1,35 @@
 import createEffect from "../src/creator/createEffect";
+import createEvent from "../src/creator/createEvent";
 import createStore from "../src/creator/createStore";
 
 jest.useFakeTimers();
 
 describe("store test", () => {
-    test("should change state", (done) => {
+    test("should change by event", (done) => {
+        const $counter = createStore(1, {
+            id: "counter",
+        });
+
+        const $add = createEvent<number>({
+            id: "add",
+        });
+
+        $counter.on($add, (state, payload) => {
+            return state + payload;
+        });
+
+        const listener = jest.fn((state: number) => {
+            expect(listener).toBeCalledTimes(1);
+            expect(state).toBe(2);
+            done();
+        });
+
+        $counter.subscribe(listener);
+
+        $add(1);
+    });
+
+    test("should change by effect", (done) => {
         let count = "0";
         const mockFn = jest.fn((timer: number): Promise<string> => {
             return new Promise((resolve, reject) => {

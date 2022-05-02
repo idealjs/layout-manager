@@ -1,9 +1,9 @@
 import CommonUnit from "./CommonUnit";
 
-class CommonNode<Params extends unknown[], Done, Faild, Weight> {
-    public commonUnit: CommonUnit<Params, Done, Faild>;
+class CommonNode<Weight> {
+    public commonUnit: CommonUnit<any[], any, any>;
     public weight: Weight;
-    constructor(commonUnit: CommonUnit<Params, Done, Faild>, weight: Weight) {
+    constructor(commonUnit: CommonUnit<any[], any, any>, weight: Weight) {
         this.commonUnit = commonUnit;
         this.weight = weight;
     }

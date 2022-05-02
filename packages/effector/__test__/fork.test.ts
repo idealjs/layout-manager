@@ -1,6 +1,6 @@
 import createEvent from "../src/creator/createEvent";
 import createStore from "../src/creator/createStore";
-import createUnit, { UNIT_TYPE, updateSymbol } from "../src/creator/createUnit";
+import createUnit, { updateSymbol } from "../src/creator/createUnit";
 import fork from "../src/fork";
 
 describe("fork test", () => {
@@ -21,7 +21,6 @@ describe("fork test", () => {
     test("should store change", (done) => {
         const $counter = createStore(1, {
             id: "counter",
-            type: UNIT_TYPE.STORE,
         });
 
         const $add = createEvent<number>({
@@ -33,7 +32,7 @@ describe("fork test", () => {
         });
 
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(10);
+            expect(state).toBe(11);
             done();
         });
 
@@ -43,8 +42,15 @@ describe("fork test", () => {
 
         const $newCounter = scope.getUnit($counter.unit.slot.id);
 
+        console.log(
+            "test test $newCounter?.forkCounter",
+            $newCounter?.forkCounter
+        );
+
         $newCounter?.slot.addListener(updateSymbol, listener);
 
-        $newUnit && $newUnit.runUnit(10);
+        if ($newUnit) {
+            $newUnit.runUnit(10);
+        }
     });
 });

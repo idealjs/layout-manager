@@ -9,10 +9,7 @@ enum SEARCH_STATUS {
 
 class CommonGraph {
     public adjacency: Readonly<
-        Map<
-            CommonUnit<any[], any, any>,
-            Array<CommonNode<any[], any, any, any>>
-        >
+        Map<CommonUnit<any[], any, any>, Array<CommonNode<any>>>
     > = new Map();
 
     constructor() {
@@ -22,10 +19,7 @@ class CommonGraph {
         this.storeHasCircle = this.storeHasCircle.bind(this);
     }
 
-    public addEdge<To>(
-        unit: CommonUnit<any[], any, any>,
-        to?: CommonNode<any[], any, any, To>
-    ) {
+    public addEdge<To>(unit: CommonUnit<any[], any, any>, to?: CommonNode<To>) {
         this.adjacency.set(
             unit,
             to == null

@@ -11,7 +11,7 @@ describe("graph test", () => {
         });
         $event.on($event, listener);
         $event(1);
-        expect($event.scope.graph.storeHasCircle()).toBe(true);
+        expect($event.scope.graph.storeHasCircle()).toBe(false);
     });
 
     test("store should has circle", (done) => {

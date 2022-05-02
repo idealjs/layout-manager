@@ -1,5 +1,6 @@
 import CommonScope, { defaultScope } from "./classes/CommonScope";
 import createScope from "./creator/createScope";
+import { UNIT_TYPE } from "./creator/createUnit";
 
 const fork = (scope: CommonScope = defaultScope) => {
     if (scope.graph.storeHasCircle()) {
@@ -16,12 +17,26 @@ const fork = (scope: CommonScope = defaultScope) => {
         if (!forkUnit) {
             forkUnit = unit.fork(newScope);
         }
+
         scope.graph.adjacency.get(unit)?.forEach((node) => {
-            let unit = newScope.getUnit(node.commonUnit.slot.id);
-            if (!unit) {
-                unit = node.commonUnit.fork(newScope);
+            let toUnit = newScope.getUnit(node.commonUnit.slot.id);
+            if (!toUnit) {
+                toUnit = node.commonUnit.fork(newScope);
             }
-            forkUnit?.on(unit, node.weight);
+
+            if (forkUnit?.type === UNIT_TYPE.STORE) {
+                const store = newScope.getStore(forkUnit.slot.id);
+                if (store) {
+                    store.on(toUnit, node.weight);
+                    return;
+                } else {
+                    throw new Error(
+                        `${store} is empty.${forkUnit.slot.id.toString()} not found`
+                    );
+                }
+            }
+
+            forkUnit?.on(toUnit, node.weight);
         });
     });
 
