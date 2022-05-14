@@ -22,7 +22,7 @@ class Sns {
     }
 
     public send(target: SlotId, event: string | symbol, data?: any) {
-        console.debug("[Debug] send", target, event, data, this.slots[target]);
+        console.debug("[Debug] send", target, event, data);
         this.slots[target]?.emit(event, data);
         return this;
     }
