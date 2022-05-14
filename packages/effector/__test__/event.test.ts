@@ -6,8 +6,12 @@ describe("internal event test", () => {
         const $plus = createEvent<number>();
 
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(1);
-            done();
+            try {
+                expect(state).toBe(1);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
 
         $plus.slot.addListener(updateSymbol, listener);
@@ -20,9 +24,13 @@ describe("internal event test", () => {
         const $unit = createEvent();
 
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(1);
-            expect(listener).toBeCalledTimes(1);
-            done();
+            try {
+                expect(state).toBe(1);
+                expect(listener).toBeCalledTimes(1);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
 
         $unit.on($plus, listener);

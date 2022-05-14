@@ -16,8 +16,12 @@ describe("effect test", () => {
         const fx = createEffect(mockFn);
 
         const listener = jest.fn((payload) => {
-            expect(payload).toBe(100);
-            done();
+            try {
+                expect(payload).toBe(100);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
 
         fx.done.slot.addListener(updateSymbol, listener);

@@ -6,15 +6,19 @@ describe("graph test", () => {
         const $event = createEvent<number>();
 
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(1);
-            done();
+            try {
+                expect(state).toBe(1);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
         $event.on($event, listener);
         $event(1);
         expect($event.scope.graph.storeHasCircle()).toBe(false);
     });
 
-    test("store should has circle", (done) => {
+    test("store should has circle", () => {
         const $store = createStore<number>(0);
 
         const listener = jest.fn((state: number, payload: number) => {
@@ -23,6 +27,5 @@ describe("graph test", () => {
         $store.on($store, listener);
 
         expect($store.unit.scope.graph.storeHasCircle()).toBe(true);
-        done();
     });
 });

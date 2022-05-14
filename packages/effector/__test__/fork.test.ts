@@ -7,8 +7,12 @@ describe("fork test", () => {
     test("should be triggered", (done) => {
         const $unit = createUnit<[number], number>((p) => p);
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(10);
-            done();
+            try {
+                expect(state).toBe(10);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
 
         const scope = fork();
@@ -18,7 +22,7 @@ describe("fork test", () => {
 
         $newUnit && $newUnit.runUnit(10);
     });
-    test("should store change", (done) => {
+    test("should store change add", (done) => {
         const $counter = createStore(1, {
             id: "counter",
         });
@@ -32,8 +36,12 @@ describe("fork test", () => {
         });
 
         const listener = jest.fn((state: number) => {
-            expect(state).toBe(11);
-            done();
+            try {
+                expect(state).toBe(11);
+                done();
+            } catch (error) {
+                done(error);
+            }
         });
 
         const scope = fork();
@@ -41,11 +49,6 @@ describe("fork test", () => {
         const $newUnit = scope.getUnit($add.slot.id);
 
         const $newCounter = scope.getUnit($counter.unit.slot.id);
-
-        console.log(
-            "test test $newCounter?.forkCounter",
-            $newCounter?.unitOptions.forkCounter
-        );
 
         $newCounter?.slot.addListener(updateSymbol, listener);
 
