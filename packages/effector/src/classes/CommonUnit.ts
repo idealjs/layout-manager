@@ -69,6 +69,11 @@ class CommonUnit<Params extends unknown[], Done, Faild>
             ...unitOptions,
         };
         this.scope = this.unitOptions.scope ?? defaultScope;
+        if (unitOptions.id != null && this.scope.hasUnit(unitOptions.id)) {
+            throw new Error(
+                `Has already set with id: ${unitOptions.id.toString()} `
+            );
+        }
 
         this.slot = this.scope.createSlot(unitOptions.id);
         this.scope.setUnit(this.slot.id, this);

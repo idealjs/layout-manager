@@ -14,7 +14,7 @@ interface IUnSubscribe {
     (): void;
 }
 
-interface IStore<State> {
+export interface IStore<State> {
     readonly unit: CommonUnit<State[], State, never>;
 
     on<TDone, TState>(
@@ -37,16 +37,12 @@ class CommonStore<State> implements IStore<State> {
     #state: State;
     #listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
 
-    constructor(
-        initialState: State,
-        unitOptions: Omit<IUnitOptions, "type"> = {}
-    ) {
+    constructor(initialState: State, unitOptions: IUnitOptions = {}) {
         this.#state = initialState;
 
         this.unit = new CommonUnit<State[], State, never>((p) => p, {
-            ...unitOptions,
             type: UNIT_TYPE.STORE,
-            forkCounter: unitOptions.forkCounter,
+            ...unitOptions,
         });
 
         this.unit.scope.setStore(this.unit.slot.id, this);
@@ -84,7 +80,7 @@ class CommonStore<State> implements IStore<State> {
             this.#state = listener(this.#state, payload);
             this.unit.runUnit(this.#state);
         };
-        console.log("test test", unit);
+
         unit.slot.addListener(updateSymbol, _listener);
 
         this.#listeners.set(unit.slot, _listener);

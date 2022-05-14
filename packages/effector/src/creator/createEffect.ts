@@ -1,3 +1,4 @@
+import { IUnitOptions } from "../classes/CommonUnit";
 import createEvent from "./createEvent";
 import createStore from "./createStore";
 import createUnit, {
@@ -12,13 +13,14 @@ const createEffect = <
     Done = unknown,
     Faild = unknown
 >(
-    effect: Effect<Params, Done, Faild>
+    effect: Effect<Params, Done, Faild>,
+    unitOptions?: Omit<IUnitOptions, "type">
 ) => {
-    const effectUnit = createUnit(effect);
-    const done = createEvent<Done>();
-    const faild = createEvent<Faild>();
-    const start = createEvent();
-    const pending = createStore(true);
+    const effectUnit = createUnit(effect, unitOptions);
+    const done = createEvent<Done>(unitOptions);
+    const faild = createEvent<Faild>(unitOptions);
+    const start = createEvent(unitOptions);
+    const pending = createStore(true, unitOptions);
 
     done.on(effectUnit, doneSymbol, (payload) => {
         done(payload);

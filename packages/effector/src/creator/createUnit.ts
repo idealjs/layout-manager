@@ -6,9 +6,9 @@ export const faildSymbol = Symbol("faild");
 export const updateSymbol = Symbol("update");
 
 export enum UNIT_TYPE {
+    MACHINE = "MACHINE",
     STORE = "STORE",
     EVENT = "EVENT",
-    INTERNAL_EVENT = "INTERNAL_EVENT",
     UNIT = "UNIT",
 }
 
