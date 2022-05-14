@@ -1,6 +1,6 @@
 import { UNIT_TYPE } from "../creator/createUnit";
 import CommonNode from "./CommonNode";
-import CommonUnit from "./CommonUnit";
+import { IUnit } from "./CommonUnit";
 
 enum SEARCH_STATUS {
     DOING,
@@ -9,7 +9,7 @@ enum SEARCH_STATUS {
 
 class CommonGraph {
     public adjacency: Readonly<
-        Map<CommonUnit<any[], any, any>, Array<CommonNode<any>>>
+        Map<IUnit<any[], any, any>, Array<CommonNode<any>>>
     > = new Map();
 
     constructor() {
@@ -19,7 +19,7 @@ class CommonGraph {
         this.storeHasCircle = this.storeHasCircle.bind(this);
     }
 
-    public addEdge<To>(unit: CommonUnit<any[], any, any>, to?: CommonNode<To>) {
+    public addEdge<To>(unit: IUnit<any[], any, any>, to?: CommonNode<To>) {
         this.adjacency.set(
             unit,
             to == null
@@ -29,8 +29,8 @@ class CommonGraph {
     }
 
     public removeEdge(
-        unit: CommonUnit<any[], any, any>,
-        to: CommonUnit<any[], any, any>
+        unit: IUnit<any[], any, any>,
+        to: IUnit<any[], any, any>
     ) {
         this.adjacency.set(
             unit,
@@ -41,9 +41,9 @@ class CommonGraph {
     }
 
     private dfs(
-        unit: CommonUnit<any[], any, any>,
-        search: (unit: CommonUnit<any[], any, any>) => void,
-        done: (unit: CommonUnit<any[], any, any>) => void
+        unit: IUnit<any[], any, any>,
+        search: (unit: IUnit<any[], any, any>) => void,
+        done: (unit: IUnit<any[], any, any>) => void
     ) {
         search(unit);
         this.adjacency.get(unit)?.forEach((node) => {
@@ -55,13 +55,13 @@ class CommonGraph {
     public storeHasCircle() {
         try {
             const searchStatus = new WeakMap<
-                CommonUnit<any[], any, any>,
+                IUnit<any[], any, any>,
                 SEARCH_STATUS
             >();
-            let searchStack: CommonUnit<any[], any, any>[] = [];
-            const searchStoreUnit = (unit: CommonUnit<any[], any, any>) => {
+            let searchStack: IUnit<any[], any, any>[] = [];
+            const searchStoreUnit = (unit: IUnit<any[], any, any>) => {
                 searchStack.push(unit);
-                if (unit.type !== UNIT_TYPE.STORE) {
+                if (unit.unitOptions.type !== UNIT_TYPE.STORE) {
                     searchStatus.set(unit, SEARCH_STATUS.DONE);
                     return;
                 }

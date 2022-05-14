@@ -44,7 +44,7 @@ describe("fork test", () => {
 
         console.log(
             "test test $newCounter?.forkCounter",
-            $newCounter?.forkCounter
+            $newCounter?.unitOptions.forkCounter
         );
 
         $newCounter?.slot.addListener(updateSymbol, listener);

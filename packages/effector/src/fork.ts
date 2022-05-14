@@ -24,7 +24,7 @@ const fork = (scope: CommonScope = defaultScope) => {
                 toUnit = node.commonUnit.fork(newScope);
             }
 
-            if (forkUnit?.type === UNIT_TYPE.STORE) {
+            if (forkUnit?.unitOptions.type === UNIT_TYPE.STORE) {
                 const store = newScope.getStore(forkUnit.slot.id);
                 if (store) {
                     store.on(toUnit, node.weight);

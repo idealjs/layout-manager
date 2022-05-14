@@ -1,7 +1,7 @@
 import { Slot } from "@idealjs/sns";
 
 import { UNIT_TYPE, updateSymbol } from "../creator/createUnit";
-import CommonEvent from "./CommonEvent";
+import { IEvent } from "./CommonEvent";
 import CommonNode from "./CommonNode";
 import CommonScope from "./CommonScope";
 import CommonUnit, { IUnitOptions } from "./CommonUnit";
@@ -14,28 +14,39 @@ interface IUnSubscribe {
     (): void;
 }
 
-class CommonStore<State> {
-    private state: State;
-    private unitOptions: Omit<IUnitOptions, "type">;
-    public unit: CommonUnit<State[], State, never>;
-    public forkCounter: number;
-    private listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
+interface IStore<State> {
+    readonly unit: CommonUnit<State[], State, never>;
+
+    on<TDone, TState>(
+        target: IEvent<TDone> | IStore<TState>,
+        listener: (state: State, payload: TDone | TState) => State
+    ): this;
+
+    off<TDone, TState>(target: IEvent<TDone> | IStore<TState>): this;
+
+    getState(): State;
+
+    subscribe(listener: ISubscribeListener<State>): IUnSubscribe;
+
+    fork(scope: CommonScope): IStore<State>;
+}
+
+class CommonStore<State> implements IStore<State> {
+    readonly unit: CommonUnit<State[], State, never>;
+
+    #state: State;
+    #listeners: WeakMap<Slot, (...args: any[]) => void> = new WeakMap();
 
     constructor(
         initialState: State,
         unitOptions: Omit<IUnitOptions, "type"> = {}
     ) {
-        this.state = initialState;
-        this.unitOptions = unitOptions;
-        this.forkCounter =
-            this.unitOptions.forkCounter != null
-                ? this.unitOptions.forkCounter + 1
-                : 0;
+        this.#state = initialState;
 
         this.unit = new CommonUnit<State[], State, never>((p) => p, {
             ...unitOptions,
             type: UNIT_TYPE.STORE,
-            forkCounter: this.unitOptions.forkCounter,
+            forkCounter: unitOptions.forkCounter,
         });
 
         this.unit.scope.setStore(this.unit.slot.id, this);
@@ -47,27 +58,21 @@ class CommonStore<State> {
         this.fork = this.fork.bind(this);
     }
 
-    public static getStoreListener<State, TDone, TFaild>(
-        store: CommonStore<State>,
-        listener: (state: State, payload: TDone | TFaild) => State
-    ) {
-        return (payload: TDone | TFaild) => {
-            store.state = listener(store.state, payload);
-            store.unit.runUnit(store.state);
-        };
-    }
+    on<TState>(
+        target: IStore<TState>,
+        listener: (state: State, payload: TState) => State
+    ): this;
 
-    public on<TParams extends unknown[], TDone, TFaild>(
-        target:
-            | CommonUnit<TParams, TDone, TFaild>
-            | CommonEvent<TDone>
-            | CommonStore<State>,
-        listener: (state: State, payload: TDone | TFaild) => State
+    on<TDone>(
+        target: IEvent<TDone>,
+        listener: (state: State, payload: TDone) => State
+    ): this;
+
+    on<TDone, TState>(
+        target: IEvent<TDone> | IStore<TState>,
+        listener: (state: State, payload: TDone | TState) => State
     ) {
-        let unit:
-            | CommonUnit<TParams, TDone, TFaild>
-            | CommonUnit<State[], State, never>
-            | CommonEvent<TDone>;
+        let unit: IEvent<TDone> | IEvent<TState>;
 
         if (isCommonStore(target)) {
             unit = target.unit;
@@ -75,11 +80,14 @@ class CommonStore<State> {
             unit = target;
         }
 
-        const _listener = CommonStore.getStoreListener(this, listener);
-
+        const _listener = (payload: TDone) => {
+            this.#state = listener(this.#state, payload);
+            this.unit.runUnit(this.#state);
+        };
+        console.log("test test", unit);
         unit.slot.addListener(updateSymbol, _listener);
 
-        this.listeners.set(unit.slot, _listener);
+        this.#listeners.set(unit.slot, _listener);
 
         this.unit.scope.graph.addEdge(
             this.unit,
@@ -89,47 +97,52 @@ class CommonStore<State> {
         return this;
     }
 
-    public off<TParams extends unknown[], TDone, TFaild>(
-        target: CommonUnit<TParams, TDone, TFaild>
-    ) {
-        const _listener = this.listeners.get(target.slot);
+    off<TDone, TState>(target: IEvent<TDone> | IStore<TState>) {
+        let unit: IEvent<TDone> | IEvent<TState>;
+
+        if (isCommonStore(target)) {
+            unit = target.unit;
+        } else {
+            unit = target;
+        }
+
+        const _listener = this.#listeners.get(unit.slot);
         if (_listener) {
-            target.slot.removeListener(updateSymbol, _listener);
-            this.listeners.delete(target.slot);
-            this.unit.scope.graph.removeEdge(this.unit, target);
+            unit.slot.removeListener(updateSymbol, _listener);
+            this.#listeners.delete(unit.slot);
+            this.unit.scope.graph.removeEdge(this.unit, unit);
         }
         return this;
     }
 
-    public getState(): State {
-        return this.state;
+    getState(): State {
+        return this.#state;
     }
 
-    public subscribe(listener: ISubscribeListener<State>): IUnSubscribe {
+    subscribe(listener: ISubscribeListener<State>): IUnSubscribe {
         this.unit.slot.addListener(updateSymbol, listener);
         return () => {
             this.unit.slot.removeListener(updateSymbol, listener);
         };
     }
 
-    public fork(scope: CommonScope) {
-        return new CommonStore(this.state, {
-            ...this.unitOptions,
+    fork(scope: CommonScope): IStore<State> {
+        return new CommonStore(this.#state, {
+            ...this.unit.unitOptions,
             id: this.unit.slot.id,
             scope,
-            forkCounter: this.forkCounter,
+            forkCounter: this.unit.unitOptions.forkCounter
+                ? this.unit.unitOptions.forkCounter + 1
+                : 1,
         });
     }
 }
 
 export default CommonStore;
 
-export const isCommonStore = <TParams extends unknown[], TDone, TFaild, TState>(
-    store:
-        | CommonUnit<TParams, TDone, TFaild>
-        | CommonEvent<TDone>
-        | CommonStore<TState>
-): store is CommonStore<TState> => {
+export const isCommonStore = <TDone, TState>(
+    store: IEvent<TDone> | IStore<TState>
+): store is IStore<TState> => {
     if ("unit" in store) {
         return true;
     }

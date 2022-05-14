@@ -1,4 +1,4 @@
-import createInternalEvent from "./createInternalEvent";
+import createEvent from "./createEvent";
 import createStore from "./createStore";
 import createUnit, {
     doneSymbol,
@@ -15,9 +15,9 @@ const createEffect = <
     effect: Effect<Params, Done, Faild>
 ) => {
     const effectUnit = createUnit(effect);
-    const done = createInternalEvent<Done>();
-    const faild = createInternalEvent<Faild>();
-    const start = createInternalEvent();
+    const done = createEvent<Done>();
+    const faild = createEvent<Faild>();
+    const start = createEvent();
     const pending = createStore(true);
 
     done.on(effectUnit, doneSymbol, (payload) => {

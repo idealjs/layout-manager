@@ -1,9 +1,9 @@
-import createInternalEvent from "../src/creator/createInternalEvent";
+import createEvent from "../src/creator/createEvent";
 import createStore from "../src/creator/createStore";
 
 describe("graph test", () => {
     test("event shouldn't has circle", (done) => {
-        const $event = createInternalEvent<number>();
+        const $event = createEvent<number>();
 
         const listener = jest.fn((state: number) => {
             expect(state).toBe(1);

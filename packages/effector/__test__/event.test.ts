@@ -1,9 +1,9 @@
-import createInternalEvent from "../src/creator/createInternalEvent";
+import createEvent from "../src/creator/createEvent";
 import { updateSymbol } from "../src/creator/createUnit";
 
 describe("internal event test", () => {
     test("should be triggered", (done) => {
-        const $plus = createInternalEvent<number>();
+        const $plus = createEvent<number>();
 
         const listener = jest.fn((state: number) => {
             expect(state).toBe(1);
@@ -16,8 +16,8 @@ describe("internal event test", () => {
     });
 
     test("should trigger unit", (done) => {
-        const $plus = createInternalEvent<number>();
-        const $unit = createInternalEvent();
+        const $plus = createEvent<number>();
+        const $unit = createEvent();
 
         const listener = jest.fn((state: number) => {
             expect(state).toBe(1);

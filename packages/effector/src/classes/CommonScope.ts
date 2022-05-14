@@ -2,14 +2,14 @@ import { Sns } from "@idealjs/sns";
 
 import CommonGraph from "./CommonGraph";
 import CommonStore from "./CommonStore";
-import CommonUnit from "./CommonUnit";
+import { IUnit } from "./CommonUnit";
 
 class CommonScope {
     public sns = new Sns();
     public graph = new CommonGraph();
     private unitMaps = new Map<
         string | number | symbol,
-        CommonUnit<any[], any, any>
+        IUnit<any[], any, any>
     >();
 
     private storeMaps = new Map<string | number | symbol, CommonStore<any>>();
@@ -41,12 +41,12 @@ class CommonScope {
 
     public setUnit(
         key: string | number | symbol,
-        unit: CommonUnit<any[], any, any>
+        unit: IUnit<any[], any, any>
     ) {
         return this.unitMaps.set(key, unit);
     }
 
-    public getUnits(): CommonUnit<any[], any, any>[] {
+    public getUnits(): IUnit<any[], any, any>[] {
         return Array.from(this.unitMaps.values());
     }
 

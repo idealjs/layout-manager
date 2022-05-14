@@ -1,9 +1,9 @@
-import CommonUnit from "./CommonUnit";
+import { IUnit } from "./CommonUnit";
 
 class CommonNode<Weight> {
-    public commonUnit: CommonUnit<any[], any, any>;
+    public commonUnit: IUnit<any[], any, any>;
     public weight: Weight;
-    constructor(commonUnit: CommonUnit<any[], any, any>, weight: Weight) {
+    constructor(commonUnit: IUnit<any[], any, any>, weight: Weight) {
         this.commonUnit = commonUnit;
         this.weight = weight;
     }
