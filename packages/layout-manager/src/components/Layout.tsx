@@ -1,4 +1,3 @@
-import { useStore } from "@idealjs/effector";
 import { useSlot, useSns } from "@idealjs/sns";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -9,7 +8,7 @@ import { LayoutNodeUpdate } from "../lib/LayoutNode";
 import { LayoutNodeActionType } from "../lib/LayoutNode";
 import { useLayouts } from "../stores/layouts";
 import { usePanels } from "../stores/panels";
-import $splitters from "../stores/splitters";
+import { useSplitters } from "../stores/splitters";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
@@ -26,7 +25,7 @@ const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
     const [rect] = useRect(ref);
     const layoutNode = useLayoutNode();
-    const splitters = useStore($splitters);
+    const splitters = useSplitters();
     const layouts = useLayouts();
     const panels = usePanels();
     const layoutSymbol = useLayoutSymbol();
