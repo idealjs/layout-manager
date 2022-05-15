@@ -4,7 +4,10 @@ import CommonScope from "../classes/CommonScope";
 import CommonStore from "../classes/CommonStore";
 import { useScope } from "./ScopeProvider";
 
-const useStore = <State>(store: CommonStore<State>, _scope?: CommonScope) => {
+const useStore = <State>(
+    store: CommonStore<State>,
+    _scope?: CommonScope
+): State => {
     const scope = useScope();
     const scopeStore = useMemo(() => {
         const scopeStore = (_scope ?? scope).getStore(store.unit.slot.id);
