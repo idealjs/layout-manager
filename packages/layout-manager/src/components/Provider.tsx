@@ -1,3 +1,4 @@
+import { ScopeProvider } from "@idealjs/effector";
 import {
     createContext,
     CSSProperties,
@@ -12,10 +13,7 @@ import DefaultSplitter from "./DefaultSplitter";
 import DefaultTab from "./DefaultTab";
 import DefaultTitlebar from "./DefaultTitlebar";
 import LayoutNodeProvider from "./providers/LayoutNodeProvider";
-import LayoutsProvider from "./providers/LayoutsProvider";
 import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
-import PanelsProvider from "./providers/PanelsProvider";
-import SplittersProvider from "./providers/SplittersProvider";
 import UpdateHookProvider from "./providers/UpdateHookProvider";
 
 export type CMPTFactory = (
@@ -73,15 +71,7 @@ const Provider: FC<
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
-                        <LayoutsProvider>
-                            <PanelsProvider>
-                                <SplittersProvider>
-                                    <LayoutsProvider>
-                                        {children}
-                                    </LayoutsProvider>
-                                </SplittersProvider>
-                            </PanelsProvider>
-                        </LayoutsProvider>
+                        <ScopeProvider>{children}</ScopeProvider>
                     </LayoutSymbolProvider>
                 </CMPTContext.Provider>
             </LayoutNodeProvider>

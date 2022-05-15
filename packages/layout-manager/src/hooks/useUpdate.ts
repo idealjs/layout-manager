@@ -1,23 +1,24 @@
+import { useEvent } from "@idealjs/effector";
 import { useCallback } from "react";
 
-import { useSplitterThickness, useTitlebarHeight } from "../components/Provider";
+import {
+    useSplitterThickness,
+    useTitlebarHeight,
+} from "../components/Provider";
 import { useLayoutNode } from "../components/providers/LayoutNodeProvider";
-import { useLayouts } from "../components/providers/LayoutsProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { usePanels } from "../components/providers/PanelsProvider";
-import { useSplitters } from "../components/providers/SplittersProvider";
 import { useUpdateHook } from "../components/providers/UpdateHookProvider";
-import { setAll as setAllLayouts } from "../reducers/layouts";
-import { setAll as setAllPanels } from "../reducers/panels";
-import { setAll as setAllSplitters } from "../reducers/splitters";
+import { $setAllLayouts } from "../stores/layouts";
+import { $setAllPanels } from "../stores/panels";
+import { $setAllSplitters } from "../stores/splitters";
 
 const useUpdate = (rect?: { height: number; width: number }) => {
     const layoutSymbol = useLayoutSymbol();
     const layoutNode = useLayoutNode();
     const hook = useUpdateHook();
-    const [, , dispatchSplitters] = useSplitters();
-    const [, , dispatchLayouts] = useLayouts();
-    const [, , dispatchPanels] = usePanels();
+    const setAllLayouts = useEvent($setAllLayouts);
+    const setAllPanels = useEvent($setAllPanels);
+    const setAllSplitters = useEvent($setAllSplitters);
 
     const titlebarHeight = useTitlebarHeight();
     const splitterThickness = useSplitterThickness();
@@ -42,11 +43,22 @@ const useUpdate = (rect?: { height: number; width: number }) => {
         const splitters = layoutNode.parseSplitter(splitterThickness);
         const panels = layoutNode.parsePanel(titlebarHeight);
 
-        dispatchLayouts(setAllLayouts(layouts));
-        dispatchSplitters(setAllSplitters(splitters));
-        dispatchPanels(setAllPanels(panels));
+        setAllLayouts(layouts);
+        setAllPanels(panels);
+        setAllSplitters(splitters);
+
         hook?.after && hook.after(layoutSymbol, layoutNode);
-    }, [dispatchLayouts, dispatchPanels, dispatchSplitters, hook, layoutNode, layoutSymbol, rect, splitterThickness, titlebarHeight]);
+    }, [
+        hook,
+        layoutNode,
+        layoutSymbol,
+        rect,
+        setAllLayouts,
+        setAllPanels,
+        setAllSplitters,
+        splitterThickness,
+        titlebarHeight,
+    ]);
 };
 
 export default useUpdate;

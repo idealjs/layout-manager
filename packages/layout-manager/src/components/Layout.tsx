@@ -1,3 +1,4 @@
+import { useStore } from "@idealjs/effector";
 import { useSlot, useSns } from "@idealjs/sns";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -6,6 +7,9 @@ import useRect from "../hooks/useRect";
 import useUpdate from "../hooks/useUpdate";
 import { LayoutNodeUpdate } from "../lib/LayoutNode";
 import { LayoutNodeActionType } from "../lib/LayoutNode";
+import { useLayouts } from "../stores/layouts";
+import { usePanels } from "../stores/panels";
+import $splitters from "../stores/splitters";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
@@ -16,18 +20,15 @@ import {
 import Panel from "./Panel";
 import { useCustomSplitter, useCustomTitlebar } from "./Provider";
 import { useLayoutNode } from "./providers/LayoutNodeProvider";
-import { useLayouts } from "./providers/LayoutsProvider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
-import { usePanels } from "./providers/PanelsProvider";
-import { useSplitters } from "./providers/SplittersProvider";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
     const [rect] = useRect(ref);
     const layoutNode = useLayoutNode();
-    const [splitters] = useSplitters();
-    const [layouts] = useLayouts();
-    const [panels] = usePanels();
+    const splitters = useStore($splitters);
+    const layouts = useLayouts();
+    const panels = usePanels();
     const layoutSymbol = useLayoutSymbol();
     const sns = useSns();
     const slot = useSlot(layoutSymbol);

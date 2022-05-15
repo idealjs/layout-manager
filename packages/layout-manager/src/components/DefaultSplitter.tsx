@@ -4,13 +4,13 @@ import useSplitterRef, {
     createShadowStyle,
     createSplitterStyle,
 } from "../hooks/useSplitterRef";
+import { useLayout } from "../stores/layouts";
+import { useSplitter } from "../stores/splitters";
 import { SplitterCMPT } from "../type";
-import { useLayout } from "./providers/LayoutsProvider";
-import { useSplitter } from "./providers/SplittersProvider";
 
 const DefaultSplitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
-    const splitter = useSplitter(id)!;
+    const splitter = useSplitter(id);
     const { ref, shadowRef, dragging, movingOffset } = useSplitterRef({
         id,
         parentId,
@@ -34,10 +34,10 @@ const DefaultSplitter: SplitterCMPT = (props) => {
         <div
             style={{
                 position: "absolute",
-                height: splitter.height,
-                width: splitter.width,
-                left: splitter.left,
-                top: splitter.top,
+                height: splitter?.height,
+                width: splitter?.width,
+                left: splitter?.left,
+                top: splitter?.top,
             }}
         >
             <div id={id} ref={ref} style={splitterStyle}>
