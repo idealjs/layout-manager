@@ -40,6 +40,7 @@ module.exports = {
     },
     externals: [
         "@idealjs/drag-drop",
+        "@idealjs/effector",
         "@idealjs/sns",
         "@idealjs/entity",
         "events",

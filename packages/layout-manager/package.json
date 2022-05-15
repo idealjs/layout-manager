@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@idealjs/drag-drop": "^1.11.0",
+        "@idealjs/effector": "^1.0.0",
         "@idealjs/entity": "^1.11.0",
         "@idealjs/sns": "^1.11.0"
     },
