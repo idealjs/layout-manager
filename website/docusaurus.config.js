@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
     title: "layout-manager",
     tagline: "layout-manager is a layout manager for React",
-    url: "https://layout-manager.idealjs.com",
+    url: "https://idealjs.github.io/layout-manager",
     baseUrl: "/",
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
