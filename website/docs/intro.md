@@ -8,9 +8,15 @@ sidebar_position: 1
 
 # 简介
 
-## 快速开始
-
 ### layout-manager 是什么
+
+@idealjs/layout-manager 是一个基于网页的多窗口库。
+
+已有功能
+
+-   以嵌套的方式在单个页面内显示多个窗口
+-   可以添加/关闭窗口
+-   可以自定义添加规则
 
 ## 快速体验（基于 layout-manager 的 grape-layout）
 
@@ -18,3 +24,5 @@ sidebar_position: 1
 -   [Example Create by CRA][example_folder]
 
 ## 在项目中使用
+
+-   [with CRA](./tutorial/with-cra)
