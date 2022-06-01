@@ -15,6 +15,7 @@ sidebar_position: 1
 已有功能
 
 -   以嵌套的方式在单个页面内显示多个窗口
+-   自定义 titlebar 和 splitter
 -   可以添加/关闭窗口
 -   可以自定义添加规则
 
