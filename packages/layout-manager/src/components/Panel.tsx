@@ -5,10 +5,10 @@ import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 import { MASK_PART, SLOT_EVENT } from "../enum";
 import useStateRef from "../hooks/useStateRef";
 import PanelNode from "../lib/PanelNode";
+import { usePanel } from "../stores/panels";
 import { ADD_PANEL_DATA, MOVE_PANEL_DATA, REMOVE_PANEL_DATA } from "../type";
 import { useFactory } from "./Provider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
-import { usePanel } from "./providers/PanelsProvider";
 
 const top: CSSProperties = {
     zIndex: 1,
