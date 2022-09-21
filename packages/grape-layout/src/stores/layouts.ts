@@ -1,4 +1,5 @@
 import { ILayoutNode } from "@idealjs/layout-manager";
+import { useMemo } from "react";
 import { useSnapshot } from "valtio";
 
 import state from "./state";
@@ -10,7 +11,10 @@ export const useLayouts = () => {
 
 export const useLayout = (nodeId: string) => {
     const snapshot = useSnapshot(state);
-    return snapshot.layouts.find((layout) => layout.id === nodeId);
+    return useMemo(
+        () => snapshot.layouts.find((layout) => layout.id === nodeId),
+        [nodeId, snapshot.layouts]
+    );
 };
 
 export const setAllLayouts = (layouts: ILayoutNode[]) => {
