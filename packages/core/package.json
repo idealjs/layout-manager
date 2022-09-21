@@ -20,11 +20,7 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "dependencies": {
-        "@idealjs/drag-drop": "^1.12.0",
-        "@idealjs/sns": "^1.12.0",
-        "valtio": "^1.7.0"
-    },
+    "dependencies": {},
     "peerDependencies": {
         "events": "^3.3.0",
         "nanoid": "^3.3.2",
