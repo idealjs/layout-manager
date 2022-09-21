@@ -1,11 +1,14 @@
 import { DND_EVENT, IDragData, useDnd } from "@idealjs/drag-drop";
+import {
+    ILayoutNode,
+    LAYOUT_DIRECTION,
+    MOVE_SPLITTER_DATA,
+    SLOT_EVENT,
+    useLayout,
+    useLayoutSymbol,
+} from "@idealjs/layout-manager";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-
-import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { LAYOUT_DIRECTION, SLOT_EVENT } from "../enum";
-import { useLayout } from "../stores/layouts";
-import { ILayoutNode, MOVE_SPLITTER_DATA } from "../type";
 
 export const createSplitterStyle = (config: {
     dragging: boolean;

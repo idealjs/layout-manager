@@ -1,13 +1,15 @@
 import {
-    createShadowStyle,
-    createSplitterStyle,
     LAYOUT_DIRECTION,
     SplitterCMPT,
     useLayout,
     useSplitter,
-    useSplitterRef,
 } from "@idealjs/layout-manager";
 import { useMemo } from "react";
+
+import useSplitterRef, {
+    createShadowStyle,
+    createSplitterStyle,
+} from "../hooks/useSplitterRef";
 
 const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;

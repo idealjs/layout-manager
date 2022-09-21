@@ -12,7 +12,6 @@ import {
     useLayoutNode,
     useLayoutSymbol,
     usePanel,
-    useTabRef,
 } from "@idealjs/layout-manager";
 import { useSlot, useSns } from "@idealjs/sns";
 import clsx from "clsx";
@@ -20,6 +19,7 @@ import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { useMemo } from "react";
 
+import useTabRef from "../../hooks/useTabRef";
 import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
 import { usePortals } from "../PopoutManager";
 import Close from "../svg/Close";

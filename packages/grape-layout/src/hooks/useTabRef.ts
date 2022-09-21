@@ -1,8 +1,6 @@
 import { DND_EVENT, IPoint, useDnd } from "@idealjs/drag-drop";
+import { useLayoutSymbol, usePanel } from "@idealjs/layout-manager";
 import { useEffect, useRef } from "react";
-
-import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { usePanel } from "../stores/panels";
 
 const useTabRef = <T extends HTMLElement>(
     nodeId: string,
