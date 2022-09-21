@@ -52,17 +52,25 @@ export interface IPanelNode {
     data?: any;
 }
 
-export type TABCMPT = FC<PropsWithChildren<{ nodeId: string }>>;
+type PropsWithClassName<P> = P & { className?: string };
 
-export type TitlebarCMPT = FC<PropsWithChildren<{ nodeId: string }>>;
+export type TABCMPT = FC<
+    PropsWithChildren<PropsWithClassName<{ nodeId: string }>>
+>;
+
+export type TitlebarCMPT = FC<
+    PropsWithChildren<PropsWithClassName<{ nodeId: string }>>
+>;
 
 export type SplitterCMPT = FC<
-    PropsWithChildren<{
-        id: string;
-        parentId: string;
-        primaryId: string;
-        secondaryId: string;
-    }>
+    PropsWithChildren<
+        PropsWithClassName<{
+            id: string;
+            parentId: string;
+            primaryId: string;
+            secondaryId: string;
+        }>
+    >
 >;
 
 export interface IRule {
