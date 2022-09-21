@@ -1,13 +1,10 @@
 import { createContext, FC, FunctionComponent, useContext } from "react";
 
 import LayoutNode from "../lib/LayoutNode";
-import { SplitterCMPT, TABCMPT, TitlebarCMPT, UPDATE_HOOK } from "../type";
+import { UPDATE_HOOK } from "../type";
 import LayoutNodeProvider from "./providers/LayoutNodeProvider";
 import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
 import UpdateHookProvider from "./providers/UpdateHookProvider";
-import DefaultSplitter from "./Splitter";
-import DefaultTab from "./Tab";
-import DefaultTitlebar from "./Titlebar";
 
 export type CMPTFactory = (
     page: string,
@@ -16,9 +13,6 @@ export type CMPTFactory = (
 
 export interface ILayoutProviderProps {
     factory: CMPTFactory;
-    Tab: TABCMPT;
-    Titlebar: TitlebarCMPT;
-    Splitter: SplitterCMPT;
     titlebarHeight: number;
     splitterThickness: number;
 }
@@ -40,9 +34,6 @@ const Provider: FC<
         layoutNode,
         updateHook,
         factory,
-        Tab,
-        Titlebar,
-        Splitter,
         titlebarHeight,
         splitterThickness,
     } = props;
@@ -53,9 +44,6 @@ const Provider: FC<
                 <CMPTContext.Provider
                     value={{
                         factory: factory ?? (() => () => null),
-                        Tab: Tab ?? DefaultTab,
-                        Titlebar: Titlebar ?? DefaultTitlebar,
-                        Splitter: Splitter ?? DefaultSplitter,
                         titlebarHeight: titlebarHeight ?? 24,
                         splitterThickness: splitterThickness ?? 4,
                     }}

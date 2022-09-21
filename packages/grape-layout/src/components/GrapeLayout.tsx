@@ -6,9 +6,6 @@ import {
 } from "@idealjs/layout-manager";
 import { PropsWithChildren, useState } from "react";
 
-import CustomSplitter from "./CustomSplitter";
-import CustomTab from "./CustomTab";
-import CustomTitlebar from "./CustomTitlebar";
 import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
 import PopoutManager, { IPortal, PortalsProvider } from "./PopoutManager";
@@ -34,9 +31,6 @@ const GrapeLayout = (props: PropsWithChildren<IProps>) => {
                         layoutSymbol={mainLayoutSymbol}
                         layoutNode={layout}
                         factory={factory}
-                        Tab={CustomTab}
-                        Titlebar={CustomTitlebar}
-                        Splitter={CustomSplitter}
                         splitterThickness={4}
                         titlebarHeight={24}
                     >
@@ -46,9 +40,6 @@ const GrapeLayout = (props: PropsWithChildren<IProps>) => {
                 </div>
                 <PopoutManager
                     factory={factory}
-                    Tab={CustomTab}
-                    Titlebar={CustomTitlebar}
-                    Splitter={CustomSplitter}
                     splitterThickness={4}
                     titlebarHeight={24}
                 >
