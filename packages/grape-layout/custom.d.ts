@@ -1,4 +1,5 @@
 /// <reference types="@idealjs/layout-manager/custom" />
+
 import { PanelNode, Slot as ISlot, Sns as ISns } from "@idealjs/sns";
 
 declare module "@idealjs/sns" {
