@@ -17,9 +17,11 @@ import {
     SELECT_TAB_DATA,
 } from "../type";
 import Panel from "./Panel";
-import { useCustomSplitter, useCustomTitlebar } from "./Provider";
 import { useLayoutNode } from "./providers/LayoutNodeProvider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import Splitter from "./Splitter";
+import Tab from "./Tab";
+import Titlebar from "./Titlebar";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
@@ -105,8 +107,6 @@ const Layout = () => {
         update,
     ]);
 
-    const CustomTitlebar = useCustomTitlebar();
-    const CustomSplitter = useCustomSplitter();
     return (
         <div
             ref={ref}
@@ -118,11 +118,17 @@ const Layout = () => {
             {layouts
                 .filter((l) => l.direction === LAYOUT_DIRECTION.TAB)
                 .map((n) => {
-                    return <CustomTitlebar key={n.id} nodeId={n.id} />;
+                    return (
+                        <Titlebar key={n.id} nodeId={n.id}>
+                            {n.children.map((id) => (
+                                <Tab key={id} nodeId={id} />
+                            ))}
+                        </Titlebar>
+                    );
                 })}
             {splitters.map((n) => {
                 return (
-                    <CustomSplitter
+                    <Splitter
                         id={n.id}
                         key={n.id}
                         parentId={n.parentId}

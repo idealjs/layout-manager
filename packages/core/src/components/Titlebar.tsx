@@ -1,11 +1,9 @@
 import { useLayout } from "../stores/layouts";
 import { TitlebarCMPT } from "../type";
-import { useCustomTab } from "./Provider";
 
 const Titlebar: TitlebarCMPT = (props) => {
-    const { nodeId } = props;
+    const { children, nodeId } = props;
     const layout = useLayout(nodeId)!;
-    const CustomTab = useCustomTab();
     return (
         <div
             style={{
@@ -19,9 +17,7 @@ const Titlebar: TitlebarCMPT = (props) => {
                 backgroundColor: "#c5c3c6",
             }}
         >
-            {layout.children.map((id) => (
-                <CustomTab key={id} nodeId={id} />
-            ))}
+            {children}
         </div>
     );
 };

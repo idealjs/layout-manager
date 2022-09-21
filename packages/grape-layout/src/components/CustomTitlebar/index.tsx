@@ -1,11 +1,11 @@
 import {
     TitlebarCMPT,
-    useCustomTab,
     useLayout,
     useTitlebarHeight,
 } from "@idealjs/layout-manager";
 import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
+import CustomTab from "../CustomTab";
 import styles from "./index.module.css";
 
 const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
@@ -13,7 +13,6 @@ const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
     const ref = useRef<HTMLDivElement>(null);
     const titlebarHeight = useTitlebarHeight();
     const layout = useLayout(nodeId)!;
-    const CustomTab = useCustomTab();
     const onWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
         ref.current?.scrollTo({
             left: ref.current?.scrollLeft + e.deltaY * 1.5,

@@ -77,30 +77,6 @@ export const useFactory = (): CMPTFactory => {
     return content.factory;
 };
 
-export const useCustomTab = (): TABCMPT => {
-    const content = useContext(CMPTContext);
-    if (content == null) {
-        throw new Error("Tab CMPT not Provide");
-    }
-    return content.Tab;
-};
-
-export const useCustomTitlebar = (): TitlebarCMPT => {
-    const content = useContext(CMPTContext);
-    if (content == null) {
-        throw new Error("Tab CMPT not Provide");
-    }
-    return content.Titlebar;
-};
-
-export const useCustomSplitter = (): SplitterCMPT => {
-    const content = useContext(CMPTContext);
-    if (content == null) {
-        throw new Error("Tab CMPT not Provide");
-    }
-    return content.Splitter;
-};
-
 export const useTitlebarHeight = (): number => {
     const content = useContext(CMPTContext);
     if (content == null) {
