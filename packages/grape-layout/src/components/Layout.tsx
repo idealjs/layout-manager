@@ -76,15 +76,15 @@ const useInitSlotListener = (ref: React.RefObject<HTMLDivElement>) => {
     const sns = useSns();
     const slot = useSlot(layoutSymbol);
 
-    const update = useUpdate(rect);
+    const update = useUpdate();
 
     const addPanel = useCallback(
         (data: ADD_PANEL_DATA) => {
             console.debug("[Debug] addPanel", data);
             layoutNode.doAction(LayoutNodeActionType.ADD_PANEL, data);
-            update();
+            update(rect);
         },
-        [layoutNode, update]
+        [layoutNode, rect, update]
     );
 
     const removePanel = useCallback(
@@ -124,7 +124,7 @@ const useInitSlotListener = (ref: React.RefObject<HTMLDivElement>) => {
             slot.addListener(SLOT_EVENT.SELECT_TAB, selectTab);
             sns.broadcast("ready", { layoutSymbol });
 
-            update();
+            update(rect);
         }
         layoutNode.addListener(LayoutNodeUpdate, update);
 
@@ -142,6 +142,7 @@ const useInitSlotListener = (ref: React.RefObject<HTMLDivElement>) => {
         layoutSymbol,
         movePanel,
         moveSplitter,
+        rect,
         removePanel,
         selectTab,
         slot,
