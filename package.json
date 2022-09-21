@@ -20,7 +20,7 @@
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "lerna": "^4.0.0",
+        "lerna": "^5.5.2",
         "lerna-update-wizard": "^1.1.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
