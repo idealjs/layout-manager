@@ -1,15 +1,11 @@
-import {
-    ILayoutJSON,
-    ILayoutProviderProps,
-    LayoutNode,
-    Provider,
-} from "@idealjs/layout-manager";
+import { ILayoutJSON, LayoutNode } from "@idealjs/layout-manager";
 import PortalWindow from "@idealjs/portal-window";
 import { FC, useCallback, useRef } from "react";
 import { useMemo } from "react";
 
 import layoutJSON from "./layout.json";
 import { usePortals } from "./PopoutManager";
+import Provider, { ILayoutProviderProps } from "./Provider";
 
 interface IProps extends Partial<ILayoutProviderProps> {
     portalId: string | number;

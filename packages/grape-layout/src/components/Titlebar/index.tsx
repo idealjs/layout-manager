@@ -1,10 +1,8 @@
-import {
-    TitlebarCMPT,
-    useLayout,
-    useTitlebarHeight,
-} from "@idealjs/layout-manager";
+import { TitlebarCMPT } from "@idealjs/layout-manager";
 import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
+import { useLayout } from "../../stores/layouts";
+import { useTitlebarHeight } from "../Provider";
 import styles from "./index.module.css";
 
 const Titlebar: TitlebarCMPT = (props) => {

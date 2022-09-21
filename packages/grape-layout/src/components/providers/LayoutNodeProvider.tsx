@@ -1,10 +1,11 @@
+import { LayoutNode } from "@idealjs/layout-manager";
 import { createContext, FC, useContext } from "react";
-
-import LayoutNode from "../../lib/LayoutNode";
 
 const context = createContext<LayoutNode | null>(null);
 
-const LayoutNodeProvider: FC<React.PropsWithChildren<{ layoutNode: LayoutNode }>> = (props) => {
+const LayoutNodeProvider: FC<
+    React.PropsWithChildren<{ layoutNode: LayoutNode }>
+> = (props) => {
     const { children, layoutNode } = props;
     return <context.Provider value={layoutNode}>{children}</context.Provider>;
 };

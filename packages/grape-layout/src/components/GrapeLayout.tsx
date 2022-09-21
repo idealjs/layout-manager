@@ -1,14 +1,10 @@
-import {
-    CMPTFactory,
-    LayoutNode,
-    Provider,
-    useStateRef,
-} from "@idealjs/layout-manager";
+import { LayoutNode, useStateRef } from "@idealjs/layout-manager";
 import { PropsWithChildren, useState } from "react";
 
 import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
 import PopoutManager, { IPortal, PortalsProvider } from "./PopoutManager";
+import Provider, { CMPTFactory } from "./Provider";
 
 interface IProps {
     factory: CMPTFactory;

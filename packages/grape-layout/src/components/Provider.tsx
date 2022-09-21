@@ -1,7 +1,6 @@
+import { LayoutNode, UPDATE_HOOK } from "@idealjs/layout-manager";
 import { createContext, FC, FunctionComponent, useContext } from "react";
 
-import LayoutNode from "../lib/LayoutNode";
-import { UPDATE_HOOK } from "../type";
 import LayoutNodeProvider from "./providers/LayoutNodeProvider";
 import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
 import UpdateHookProvider from "./providers/UpdateHookProvider";

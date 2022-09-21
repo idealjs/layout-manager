@@ -4,11 +4,12 @@ import {
     LAYOUT_DIRECTION,
     MOVE_SPLITTER_DATA,
     SLOT_EVENT,
-    useLayout,
-    useLayoutSymbol,
 } from "@idealjs/layout-manager";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useEffect, useRef, useState } from "react";
+
+import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
+import { useLayout } from "../stores/layouts";
 
 export const createSplitterStyle = (config: {
     dragging: boolean;

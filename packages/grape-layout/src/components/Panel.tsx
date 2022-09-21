@@ -6,13 +6,14 @@ import {
     PanelNode,
     REMOVE_PANEL_DATA,
     SLOT_EVENT,
-    useFactory,
-    useLayoutSymbol,
-    usePanel,
     useStateRef,
 } from "@idealjs/layout-manager";
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
+
+import { usePanel } from "../stores/panels";
+import { useFactory } from "./Provider";
+import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
 
 const top: CSSProperties = {
     zIndex: 1,

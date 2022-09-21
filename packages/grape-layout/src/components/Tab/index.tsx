@@ -9,9 +9,6 @@ import {
     SELECT_TAB_DATA,
     SLOT_EVENT,
     TABCMPT,
-    useLayoutNode,
-    useLayoutSymbol,
-    usePanel,
 } from "@idealjs/layout-manager";
 import { useSlot, useSns } from "@idealjs/sns";
 import clsx from "clsx";
@@ -20,8 +17,11 @@ import { useCallback } from "react";
 import { useMemo } from "react";
 
 import useTabRef from "../../hooks/useTabRef";
+import { usePanel } from "../../stores/panels";
 import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
 import { usePortals } from "../PopoutManager";
+import { useLayoutNode } from "../providers/LayoutNodeProvider";
+import { useLayoutSymbol } from "../providers/LayoutSymbolProvider";
 import Close from "../svg/Close";
 import Popin from "../svg/Popin";
 import Popout from "../svg/Popout";

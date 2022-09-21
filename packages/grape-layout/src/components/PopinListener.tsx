@@ -3,13 +3,13 @@ import {
     MASK_PART,
     PanelNode,
     ROOTID,
-    useLayoutNode,
 } from "@idealjs/layout-manager";
 import { useSlot } from "@idealjs/sns";
 import { useCallback, useEffect } from "react";
 
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
+import { useLayoutNode } from "./providers/LayoutNodeProvider";
 
 const PopinListener = () => {
     const layoutNode = useLayoutNode();

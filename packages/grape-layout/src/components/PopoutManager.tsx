@@ -1,4 +1,3 @@
-import { ILayoutProviderProps } from "@idealjs/layout-manager";
 import { FC, PropsWithChildren } from "react";
 import {
     createContext,
@@ -9,6 +8,7 @@ import {
 } from "react";
 
 import Popout from "./Popout";
+import { ILayoutProviderProps } from "./Provider";
 
 export interface IPortal {
     id: string | number;
