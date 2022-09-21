@@ -42,7 +42,6 @@ module.exports = {
         "@idealjs/drag-drop",
         "@idealjs/effector",
         "@idealjs/sns",
-        "@idealjs/entity",
         "events",
         "nanoid",
         "react",
