@@ -1,12 +1,9 @@
 import { IPoint } from "@idealjs/drag-drop";
 import {
     ADD_PANEL_DATA,
-    Close,
     LayoutNodeActionType,
     MASK_PART,
     PanelNode,
-    Popin,
-    Popout,
     REMOVE_PANEL_DATA,
     ROOTID,
     SELECT_TAB_DATA,
@@ -25,9 +22,12 @@ import { useMemo } from "react";
 
 import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
 import { usePortals } from "../PopoutManager";
+import Close from "../svg/Close";
+import Popin from "../svg/Popin";
+import Popout from "../svg/Popout";
 import styles from "./index.module.css";
 
-const Tab: TABCMPT = (props) => {
+const CustomTab: TABCMPT = (props) => {
     const { nodeId } = props;
     const { portals, setPortals } = usePortals();
 
@@ -150,4 +150,4 @@ const Tab: TABCMPT = (props) => {
     );
 };
 
-export default Tab;
+export default CustomTab;
