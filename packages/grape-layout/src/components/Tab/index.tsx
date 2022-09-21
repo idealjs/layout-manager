@@ -27,7 +27,7 @@ import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
 import { usePortals } from "../PopoutManager";
 import styles from "./index.module.css";
 
-const CustomTab: TABCMPT = (props) => {
+const Tab: TABCMPT = (props) => {
     const { nodeId } = props;
     const { portals, setPortals } = usePortals();
 
@@ -150,4 +150,4 @@ const CustomTab: TABCMPT = (props) => {
     );
 };
 
-export default CustomTab;
+export default Tab;

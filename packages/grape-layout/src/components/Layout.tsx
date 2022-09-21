@@ -19,9 +19,9 @@ import { useSplitters } from "@idealjs/layout-manager/src/stores/splitters";
 import { useSlot, useSns } from "@idealjs/sns";
 import { useCallback, useEffect, useRef } from "react";
 
-import DefaultSplitter from "./CustomSplitter";
-import CustomTab from "./CustomTab";
-import Titlebar from "./CustomTitlebar";
+import Splitter from "./Splitter";
+import Tab from "./Tab";
+import Titlebar from "./Titlebar";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
@@ -121,14 +121,14 @@ const Layout = () => {
                     return (
                         <Titlebar key={n.id} nodeId={n.id}>
                             {n.children.map((id) => (
-                                <CustomTab key={id} nodeId={id} />
+                                <Tab key={id} nodeId={id} />
                             ))}
                         </Titlebar>
                     );
                 })}
             {splitters.map((n) => {
                 return (
-                    <DefaultSplitter
+                    <Splitter
                         id={n.id}
                         key={n.id}
                         parentId={n.parentId}

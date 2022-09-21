@@ -9,7 +9,7 @@ import {
 } from "@idealjs/layout-manager";
 import { useMemo } from "react";
 
-const DefaultSplitter: SplitterCMPT = (props) => {
+const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
     const splitter = useSplitter(id)!;
     const { ref, shadowRef, dragging, movingOffset } = useSplitterRef({
@@ -55,4 +55,4 @@ const DefaultSplitter: SplitterCMPT = (props) => {
     );
 };
 
-export default DefaultSplitter;
+export default Splitter;

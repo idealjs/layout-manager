@@ -5,7 +5,6 @@ import {
 } from "@idealjs/layout-manager";
 import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 
-import CustomTab from "../CustomTab";
 import styles from "./index.module.css";
 
 const Titlebar: TitlebarCMPT = (props) => {
