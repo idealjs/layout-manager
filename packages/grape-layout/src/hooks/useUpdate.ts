@@ -7,9 +7,11 @@ import {
 import { useLayoutNode } from "../components/providers/LayoutNodeProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { useUpdateHook } from "../components/providers/UpdateHookProvider";
-import { useSetAllLayouts } from "../stores/layouts";
-import { useSetAllPanels } from "../stores/panels";
-import { useSetAllSplitters } from "../stores/splitters";
+import {
+    useSetAllLayouts,
+    useSetAllPanels,
+    useSetAllSplitters,
+} from "../components/providers/ValtioStateProvider";
 
 const useUpdate = () => {
     const layoutSymbol = useLayoutSymbol();
@@ -54,7 +56,16 @@ const useUpdate = () => {
 
             hook?.after && hook.after(layoutSymbol, layoutNode);
         },
-        [hook, layoutNode, layoutSymbol, setAllLayouts, setAllPanels, setAllSplitters, splitterThickness, titlebarHeight]
+        [
+            hook,
+            layoutNode,
+            layoutSymbol,
+            setAllLayouts,
+            setAllPanels,
+            setAllSplitters,
+            splitterThickness,
+            titlebarHeight,
+        ]
     );
 };
 

@@ -2,7 +2,7 @@ import { ILayoutNode } from "@idealjs/layout-manager";
 import { useCallback, useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import { useValtioState } from "../components/providers/ValtioStateProvider";
+import { useValtioState } from ".";
 
 export const useLayouts = () => {
     const state = useValtioState();
@@ -21,7 +21,10 @@ export const useLayout = (nodeId: string) => {
 
 export const useSetAllLayouts = () => {
     const state = useValtioState();
-    return useCallback((layouts: ILayoutNode[]) => {
-        state.layouts = layouts;
-    }, [state]);
+    return useCallback(
+        (layouts: ILayoutNode[]) => {
+            state.layouts = layouts;
+        },
+        [state]
+    );
 };

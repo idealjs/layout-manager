@@ -14,12 +14,14 @@ import { useCallback, useEffect, useRef } from "react";
 
 import useRect from "../hooks/useRect";
 import useUpdate from "../hooks/useUpdate";
-import { useLayouts } from "../stores/layouts";
-import { usePanels } from "../stores/panels";
-import { useSplitters } from "../stores/splitters";
 import Panel from "./Panel";
 import { useLayoutNode } from "./providers/LayoutNodeProvider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import {
+    useLayouts,
+    usePanels,
+    useSplitters,
+} from "./providers/ValtioStateProvider";
 import Splitter from "./Splitter";
 import Tab from "./Tab";
 import Titlebar from "./Titlebar";

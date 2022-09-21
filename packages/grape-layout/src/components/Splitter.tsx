@@ -5,8 +5,7 @@ import useSplitterRef, {
     createShadowStyle,
     createSplitterStyle,
 } from "../hooks/useSplitterRef";
-import { useLayout } from "../stores/layouts";
-import { useSplitter } from "../stores/splitters";
+import { useLayout, useSplitter } from "./providers/ValtioStateProvider";
 
 const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;

@@ -2,7 +2,7 @@ import { ISplitterNode } from "@idealjs/layout-manager";
 import { useCallback, useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import { useValtioState } from "../components/providers/ValtioStateProvider";
+import { useValtioState } from ".";
 
 export const useSplitters = () => {
     const state = useValtioState();

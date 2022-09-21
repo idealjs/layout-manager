@@ -11,9 +11,9 @@ import {
 import { useSns } from "@idealjs/sns";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
-import { usePanel } from "../stores/panels";
 import { useFactory } from "./Provider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import { usePanel } from "./providers/ValtioStateProvider";
 
 const top: CSSProperties = {
     zIndex: 1,
