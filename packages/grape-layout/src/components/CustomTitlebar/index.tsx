@@ -8,8 +8,8 @@ import { CSSProperties, useCallback, useMemo, useRef, WheelEvent } from "react";
 import CustomTab from "../CustomTab";
 import styles from "./index.module.css";
 
-const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
-    const { nodeId } = props;
+const Titlebar: TitlebarCMPT = (props) => {
+    const { children, nodeId } = props;
     const ref = useRef<HTMLDivElement>(null);
     const titlebarHeight = useTitlebarHeight();
     const layout = useLayout(nodeId)!;
@@ -41,9 +41,7 @@ const Titlebar: TitlebarCMPT = (props: { nodeId: string }) => {
             style={style}
             onWheel={onWheel}
         >
-            {layout.children.map((id) => (
-                <CustomTab key={id} nodeId={id} />
-            ))}
+            {children}
         </div>
     );
 };

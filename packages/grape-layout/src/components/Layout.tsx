@@ -1,27 +1,27 @@
-import { useSlot, useSns } from "@idealjs/sns";
-import { useCallback, useEffect, useRef } from "react";
-
-import { LAYOUT_DIRECTION, SLOT_EVENT } from "../enum";
-import useRect from "../hooks/useRect";
-import useUpdate from "../hooks/useUpdate";
-import { LayoutNodeUpdate } from "../lib/LayoutNode";
-import { LayoutNodeActionType } from "../lib/LayoutNode";
-import { useLayouts } from "../stores/layouts";
-import { usePanels } from "../stores/panels";
-import { useSplitters } from "../stores/splitters";
 import {
     ADD_PANEL_DATA,
     MOVE_PANEL_DATA,
     MOVE_SPLITTER_DATA,
     REMOVE_PANEL_DATA,
     SELECT_TAB_DATA,
-} from "../type";
-import Panel from "./Panel";
-import { useLayoutNode } from "./providers/LayoutNodeProvider";
-import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
-import Splitter from "./Splitter";
-import Tab from "./Tab";
-import Titlebar from "./Titlebar";
+} from "@idealjs/layout-manager";
+import { useLayoutNode } from "@idealjs/layout-manager";
+import { useLayoutSymbol } from "@idealjs/layout-manager";
+import { LAYOUT_DIRECTION, SLOT_EVENT } from "@idealjs/layout-manager";
+import { useRect } from "@idealjs/layout-manager";
+import { useUpdate } from "@idealjs/layout-manager";
+import Panel from "@idealjs/layout-manager/src/components/Panel";
+import { LayoutNodeUpdate } from "@idealjs/layout-manager/src/lib/LayoutNode";
+import { LayoutNodeActionType } from "@idealjs/layout-manager/src/lib/LayoutNode";
+import { useLayouts } from "@idealjs/layout-manager/src/stores/layouts";
+import { usePanels } from "@idealjs/layout-manager/src/stores/panels";
+import { useSplitters } from "@idealjs/layout-manager/src/stores/splitters";
+import { useSlot, useSns } from "@idealjs/sns";
+import { useCallback, useEffect, useRef } from "react";
+
+import DefaultSplitter from "./CustomSplitter";
+import CustomTab from "./CustomTab";
+import Titlebar from "./CustomTitlebar";
 
 const Layout = () => {
     const ref = useRef<HTMLDivElement>(null);
@@ -121,14 +121,14 @@ const Layout = () => {
                     return (
                         <Titlebar key={n.id} nodeId={n.id}>
                             {n.children.map((id) => (
-                                <Tab key={id} nodeId={id} />
+                                <CustomTab key={id} nodeId={id} />
                             ))}
                         </Titlebar>
                     );
                 })}
             {splitters.map((n) => {
                 return (
-                    <Splitter
+                    <DefaultSplitter
                         id={n.id}
                         key={n.id}
                         parentId={n.parentId}
