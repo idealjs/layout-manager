@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 
 import { LAYOUT_DIRECTION, MASK_PART } from "./enum";
 import LayoutNode from "./lib/LayoutNode";
@@ -52,16 +52,18 @@ export interface IPanelNode {
     data?: any;
 }
 
-export type TABCMPT = FC<React.PropsWithChildren<{ nodeId: string }>>;
+export type TABCMPT = FC<PropsWithChildren<{ nodeId: string }>>;
 
-export type TitlebarCMPT = FC<React.PropsWithChildren<{ nodeId: string }>>;
+export type TitlebarCMPT = FC<PropsWithChildren<{ nodeId: string }>>;
 
-export type SplitterCMPT = FC<React.PropsWithChildren<{
-    id: string;
-    parentId: string;
-    primaryId: string;
-    secondaryId: string;
-}>>;
+export type SplitterCMPT = FC<
+    PropsWithChildren<{
+        id: string;
+        parentId: string;
+        primaryId: string;
+        secondaryId: string;
+    }>
+>;
 
 export interface IRule {
     part: MASK_PART;

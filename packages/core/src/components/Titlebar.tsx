@@ -2,7 +2,7 @@ import { useLayout } from "../stores/layouts";
 import { TitlebarCMPT } from "../type";
 import { useCustomTab } from "./Provider";
 
-const DefaultTitlebar: TitlebarCMPT = (props) => {
+const Titlebar: TitlebarCMPT = (props) => {
     const { nodeId } = props;
     const layout = useLayout(nodeId)!;
     const CustomTab = useCustomTab();
@@ -26,4 +26,4 @@ const DefaultTitlebar: TitlebarCMPT = (props) => {
     );
 };
 
-export default DefaultTitlebar;
+export default Titlebar;

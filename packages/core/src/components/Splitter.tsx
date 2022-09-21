@@ -8,7 +8,7 @@ import { useLayout } from "../stores/layouts";
 import { useSplitter } from "../stores/splitters";
 import { SplitterCMPT } from "../type";
 
-const DefaultSplitter: SplitterCMPT = (props) => {
+const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
     const splitter = useSplitter(id);
     const { ref, shadowRef, dragging, movingOffset } = useSplitterRef({
@@ -47,4 +47,4 @@ const DefaultSplitter: SplitterCMPT = (props) => {
     );
 };
 
-export default DefaultSplitter;
+export default Splitter;
