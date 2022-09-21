@@ -1,4 +1,3 @@
-import { ScopeProvider } from "@idealjs/effector";
 import GrapeLayout from "@idealjs/grape-layout";
 import {
     CMPTFactory,
@@ -13,7 +12,7 @@ import {
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
-import Counter from "./Counter";
+import Counter, { CounterProvider } from "./Counter";
 
 const ROOT = new LayoutNode({
     layoutJSON: {
@@ -187,9 +186,9 @@ const factory: CMPTFactory = (page: string) => {
                 return (
                     <div>
                         <div>with new scope</div>
-                        <ScopeProvider>
+                        <CounterProvider>
                             <Counter />
-                        </ScopeProvider>
+                        </CounterProvider>
                     </div>
                 );
             };

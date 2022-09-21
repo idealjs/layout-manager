@@ -1,35 +1,16 @@
-import {
-    createEvent,
-    createStore,
-    useEvent,
-    useStore,
-} from "@idealjs/effector";
-import { UNIT_TYPE } from "@idealjs/effector/src/creator/createUnit";
-
-const $counter = createStore(1, {
-    id: "counter",
-    type: UNIT_TYPE.STORE,
-});
-
-const $add = createEvent<number>({
-    id: "add",
-});
-
-$counter.on($add, (state) => {
-    console.log("test test on add", state);
-    return state + 1;
-});
+import { createContext, PropsWithChildren, useContext, useRef } from "react";
+import { proxy, useSnapshot } from "valtio";
 
 const Counter = () => {
-    const counter = useStore($counter);
-    const add = useEvent($add);
-    console.log("test test counter", counter);
+    const ctx = useCounterContext();
+    const snap = useSnapshot(ctx);
+
     return (
         <div>
-            {counter}
+            {snap.count}
             <button
                 onClick={() => {
-                    add(10);
+                    ctx.count = snap.count + 10;
                 }}
             >
                 plus
@@ -37,4 +18,20 @@ const Counter = () => {
         </div>
     );
 };
+
 export default Counter;
+
+const context = createContext<{
+    count: number;
+}>(proxy({ count: 0 }));
+
+export const CounterProvider = (props: PropsWithChildren<{}>) => {
+    const { children } = props;
+    const state = useRef(proxy({ count: 0 })).current;
+    return <context.Provider value={state}>{children}</context.Provider>;
+};
+
+const useCounterContext = () => {
+    const ctx = useContext(context);
+    return ctx;
+};

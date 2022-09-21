@@ -22,7 +22,6 @@
     },
     "dependencies": {
         "@idealjs/drag-drop": "^1.12.0",
-        "@idealjs/effector": "^1.12.0",
         "@idealjs/sns": "^1.12.0",
         "valtio": "^1.7.0"
     },

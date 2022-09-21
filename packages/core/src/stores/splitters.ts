@@ -1,27 +1,18 @@
-import {
-    createEvent,
-    createStore,
-    useStore,
-    useStoreMap,
-} from "@idealjs/effector";
+import { useSnapshot } from "valtio";
 
 import { ISplitterNode } from "../type";
-
-const $splitters = createStore<ISplitterNode[]>([]);
-
-export const $setAllSplitters = createEvent<ISplitterNode[]>();
-
-$splitters.on($setAllSplitters, (_, splitters) => splitters);
-
-export default $splitters;
+import state from "./state";
 
 export const useSplitters = () => {
-    return useStore($splitters);
+  const snapshot = useSnapshot(state);
+  return snapshot.splitters;
 };
 
 export const useSplitter = (nodeId: string) => {
-    const splitter = useStoreMap($splitters, (splitters) =>
-        splitters.find((splitter) => splitter.id === nodeId)
-    );
-    return splitter;
+  const snapshot = useSnapshot(state);
+  return snapshot.splitters.find((splitter) => splitter.id === nodeId);
+};
+
+export const setAllSplitters = (splitters: ISplitterNode[]) => {
+  state.splitters = splitters;
 };

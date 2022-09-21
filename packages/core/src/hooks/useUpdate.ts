@@ -1,4 +1,3 @@
-import { useEvent } from "@idealjs/effector";
 import { useCallback } from "react";
 
 import {
@@ -8,17 +7,14 @@ import {
 import { useLayoutNode } from "../components/providers/LayoutNodeProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { useUpdateHook } from "../components/providers/UpdateHookProvider";
-import { $setAllLayouts } from "../stores/layouts";
-import { $setAllPanels } from "../stores/panels";
-import { $setAllSplitters } from "../stores/splitters";
+import { setAllLayouts } from "../stores/layouts";
+import { setAllPanels } from "../stores/panels";
+import { setAllSplitters } from "../stores/splitters";
 
 const useUpdate = (rect?: { height: number; width: number }) => {
     const layoutSymbol = useLayoutSymbol();
     const layoutNode = useLayoutNode();
     const hook = useUpdateHook();
-    const setAllLayouts = useEvent($setAllLayouts);
-    const setAllPanels = useEvent($setAllPanels);
-    const setAllSplitters = useEvent($setAllSplitters);
 
     const titlebarHeight = useTitlebarHeight();
     const splitterThickness = useSplitterThickness();
@@ -53,9 +49,6 @@ const useUpdate = (rect?: { height: number; width: number }) => {
         layoutNode,
         layoutSymbol,
         rect,
-        setAllLayouts,
-        setAllPanels,
-        setAllSplitters,
         splitterThickness,
         titlebarHeight,
     ]);

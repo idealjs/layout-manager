@@ -1,3 +1,5 @@
+import "valtio";
+
 import { Slot as ISlot, Sns as ISns } from "@idealjs/sns";
 
 declare module "@idealjs/sns" {
@@ -51,4 +53,8 @@ declare module "@idealjs/sns" {
             data: SELECT_TAB_DATA
         ): this;
     }
+}
+
+declare module "valtio" {
+    function useSnapshot<T extends object>(p: T): T;
 }

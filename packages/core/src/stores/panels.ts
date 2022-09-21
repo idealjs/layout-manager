@@ -1,26 +1,18 @@
-import {
-    createEvent,
-    createStore,
-    useStore,
-    useStoreMap,
-} from "@idealjs/effector";
+import { useSnapshot } from "valtio";
 
 import { IPanelNode } from "../type";
-
-const $panels = createStore<IPanelNode[]>([]);
-
-export const $setAllPanels = createEvent<IPanelNode[]>();
-
-$panels.on($setAllPanels, (_, panels) => panels);
-
-export default $panels;
+import state from "./state";
 
 export const usePanels = () => {
-    return useStore($panels);
+  const snapshot = useSnapshot(state);
+  return snapshot.panels;
 };
 
 export const usePanel = (nodeId: string) => {
-    return useStoreMap($panels, (panels) =>
-        panels.find((panel) => panel.id === nodeId)
-    );
+  const snapshot = useSnapshot(state);
+  return snapshot.panels.find((panel) => panel.id === nodeId);
+};
+
+export const setAllPanels = (panels: IPanelNode[]) => {
+  state.panels = panels;
 };

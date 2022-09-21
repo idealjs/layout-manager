@@ -1,4 +1,3 @@
-import { ScopeProvider } from "@idealjs/effector";
 import {
     createContext,
     CSSProperties,
@@ -71,7 +70,7 @@ const Provider: FC<
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
-                        <ScopeProvider>{children}</ScopeProvider>
+                        {children}
                     </LayoutSymbolProvider>
                 </CMPTContext.Provider>
             </LayoutNodeProvider>

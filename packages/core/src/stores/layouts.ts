@@ -1,26 +1,18 @@
-import {
-    createEvent,
-    createStore,
-    useStore,
-    useStoreMap,
-} from "@idealjs/effector";
+import { useSnapshot } from "valtio";
 
 import { ILayoutNode } from "../type";
+import state from "./state";
 
-const $layouts = createStore<ILayoutNode[]>([]);
-
-export const $setAllLayouts = createEvent<ILayoutNode[]>();
-
-$layouts.on($setAllLayouts, (_, layouts) => layouts);
-
-export default $layouts;
-
-export const useLayouts = (): ILayoutNode[] => {
-    return useStore($layouts);
+export const useLayouts = () => {
+  const snapshot = useSnapshot(state);
+  return snapshot.layouts;
 };
 
 export const useLayout = (nodeId: string) => {
-    return useStoreMap($layouts, (layouts) =>
-        layouts.find((layout) => layout.id === nodeId)
-    );
+  const snapshot = useSnapshot(state);
+  return snapshot.layouts.find((layout) => layout.id === nodeId);
+};
+
+export const setAllLayouts = (layouts: ILayoutNode[]) => {
+  state.layouts = layouts;
 };
