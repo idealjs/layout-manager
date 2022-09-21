@@ -1,15 +1,17 @@
 import { ILayoutNode } from "@idealjs/layout-manager";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import state from "./state";
+import { useValtioState } from "../components/providers/ValtioStateProvider";
 
 export const useLayouts = () => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return snapshot.layouts;
 };
 
 export const useLayout = (nodeId: string) => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return useMemo(
         () => snapshot.layouts.find((layout) => layout.id === nodeId),
@@ -17,6 +19,9 @@ export const useLayout = (nodeId: string) => {
     );
 };
 
-export const setAllLayouts = (layouts: ILayoutNode[]) => {
-    state.layouts = layouts;
+export const useSetAllLayouts = () => {
+    const state = useValtioState();
+    return useCallback((layouts: ILayoutNode[]) => {
+        state.layouts = layouts;
+    }, [state]);
 };

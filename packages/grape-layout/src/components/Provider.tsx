@@ -4,6 +4,7 @@ import { createContext, FC, FunctionComponent, useContext } from "react";
 import LayoutNodeProvider from "./providers/LayoutNodeProvider";
 import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
 import UpdateHookProvider from "./providers/UpdateHookProvider";
+import ValtioStateProvider from "./providers/ValtioStateProvider";
 
 export type CMPTFactory = (
     page: string,
@@ -48,7 +49,7 @@ const Provider: FC<
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
-                        {children}
+                        <ValtioStateProvider>{children}</ValtioStateProvider>
                     </LayoutSymbolProvider>
                 </CMPTContext.Provider>
             </LayoutNodeProvider>

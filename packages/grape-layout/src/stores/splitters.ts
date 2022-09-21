@@ -1,15 +1,17 @@
 import { ISplitterNode } from "@idealjs/layout-manager";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import state from "./state";
+import { useValtioState } from "../components/providers/ValtioStateProvider";
 
 export const useSplitters = () => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return snapshot.splitters;
 };
 
 export const useSplitter = (nodeId: string) => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return useMemo(
         () => snapshot.splitters.find((splitter) => splitter.id === nodeId),
@@ -17,6 +19,12 @@ export const useSplitter = (nodeId: string) => {
     );
 };
 
-export const setAllSplitters = (splitters: ISplitterNode[]) => {
-    state.splitters = splitters;
+export const useSetAllSplitters = () => {
+    const state = useValtioState();
+    return useCallback(
+        (splitters: ISplitterNode[]) => {
+            state.splitters = splitters;
+        },
+        [state]
+    );
 };

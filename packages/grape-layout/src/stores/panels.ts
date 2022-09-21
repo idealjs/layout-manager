@@ -1,15 +1,17 @@
 import { IPanelNode } from "@idealjs/layout-manager";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import state from "./state";
+import { useValtioState } from "../components/providers/ValtioStateProvider";
 
 export const usePanels = () => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return snapshot.panels;
 };
 
 export const usePanel = (nodeId: string) => {
+    const state = useValtioState();
     const snapshot = useSnapshot(state);
     return useMemo(
         () => snapshot.panels.find((panel) => panel.id === nodeId),
@@ -17,6 +19,12 @@ export const usePanel = (nodeId: string) => {
     );
 };
 
-export const setAllPanels = (panels: IPanelNode[]) => {
-    state.panels = panels;
+export const useSetAllPanels = () => {
+    const state = useValtioState();
+    return useCallback(
+        (panels: IPanelNode[]) => {
+            state.panels = panels;
+        },
+        [state]
+    );
 };

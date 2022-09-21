@@ -7,9 +7,9 @@ import {
 import { useLayoutNode } from "../components/providers/LayoutNodeProvider";
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
 import { useUpdateHook } from "../components/providers/UpdateHookProvider";
-import { setAllLayouts } from "../stores/layouts";
-import { setAllPanels } from "../stores/panels";
-import { setAllSplitters } from "../stores/splitters";
+import { useSetAllLayouts } from "../stores/layouts";
+import { useSetAllPanels } from "../stores/panels";
+import { useSetAllSplitters } from "../stores/splitters";
 
 const useUpdate = () => {
     const layoutSymbol = useLayoutSymbol();
@@ -18,6 +18,10 @@ const useUpdate = () => {
 
     const titlebarHeight = useTitlebarHeight();
     const splitterThickness = useSplitterThickness();
+
+    const setAllLayouts = useSetAllLayouts();
+    const setAllPanels = useSetAllPanels();
+    const setAllSplitters = useSetAllSplitters();
 
     return useCallback(
         (rect: { height: number; width: number }) => {
@@ -50,7 +54,7 @@ const useUpdate = () => {
 
             hook?.after && hook.after(layoutSymbol, layoutNode);
         },
-        [hook, layoutNode, layoutSymbol, splitterThickness, titlebarHeight]
+        [hook, layoutNode, layoutSymbol, setAllLayouts, setAllPanels, setAllSplitters, splitterThickness, titlebarHeight]
     );
 };
 
