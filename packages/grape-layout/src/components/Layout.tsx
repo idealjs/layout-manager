@@ -1,24 +1,25 @@
 import {
     ADD_PANEL_DATA,
+    LAYOUT_DIRECTION,
+    LayoutNodeActionType,
+    LayoutNodeUpdate,
     MOVE_PANEL_DATA,
     MOVE_SPLITTER_DATA,
     REMOVE_PANEL_DATA,
     SELECT_TAB_DATA,
+    SLOT_EVENT,
+    useLayoutNode,
+    useLayouts,
+    useLayoutSymbol,
+    usePanels,
+    useSplitters,
+    useUpdate,
 } from "@idealjs/layout-manager";
-import { useLayoutNode } from "@idealjs/layout-manager";
-import { useLayoutSymbol } from "@idealjs/layout-manager";
-import { LAYOUT_DIRECTION, SLOT_EVENT } from "@idealjs/layout-manager";
-import { useRect } from "@idealjs/layout-manager";
-import { useUpdate } from "@idealjs/layout-manager";
-import Panel from "@idealjs/layout-manager/src/components/Panel";
-import { LayoutNodeUpdate } from "@idealjs/layout-manager/src/lib/LayoutNode";
-import { LayoutNodeActionType } from "@idealjs/layout-manager/src/lib/LayoutNode";
-import { useLayouts } from "@idealjs/layout-manager/src/stores/layouts";
-import { usePanels } from "@idealjs/layout-manager/src/stores/panels";
-import { useSplitters } from "@idealjs/layout-manager/src/stores/splitters";
 import { useSlot, useSns } from "@idealjs/sns";
 import { useCallback, useEffect, useRef } from "react";
 
+import useRect from "../hooks/useRect";
+import Panel from "./Panel";
 import Splitter from "./Splitter";
 import Tab from "./Tab";
 import Titlebar from "./Titlebar";

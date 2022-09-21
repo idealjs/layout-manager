@@ -7,16 +7,16 @@ import {
     useState,
 } from "react";
 
-import useMountedRef from "./useMounted";
+import useMountedRef from "./useMountedRef";
 
 const useRect = (
     ref: MutableRefObject<HTMLDivElement | null>
 ): [
-        {
-            height: number;
-            width: number;
-        }
-    ] => {
+    {
+        height: number;
+        width: number;
+    }
+] => {
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
     const requestRef = useRef<number>();

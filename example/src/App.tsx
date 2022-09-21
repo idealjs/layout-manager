@@ -1,7 +1,6 @@
-import GrapeLayout from "@idealjs/grape-layout";
+import GrapeLayout, { Layout } from "@idealjs/grape-layout";
 import {
     CMPTFactory,
-    Layout,
     LAYOUT_DIRECTION,
     LayoutNode,
     LayoutNodeActionType,
