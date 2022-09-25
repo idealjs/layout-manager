@@ -13,5 +13,8 @@
     "dependencies": {
         "@idealjs/sns-core": "^1.12.0",
         "events": "^3.3.0"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0"
     }
 }
