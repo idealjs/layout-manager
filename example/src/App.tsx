@@ -1,12 +1,13 @@
-import GrapeLayout, { CMPTFactory, Layout } from "@idealjs/grape-layout";
-import {
+import GrapeLayout, {
+    CMPTFactory,
+    Layout,
     LAYOUT_DIRECTION,
     LayoutNode,
     LayoutNodeActionType,
     MASK_PART,
     PanelNode,
     ROOTID,
-} from "@idealjs/layout-manager";
+} from "@idealjs/grape-layout";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
