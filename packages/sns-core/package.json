@@ -10,7 +10,7 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "devDependencies": {
+    "dependencies": {
         "events": "^3.3.0"
     }
 }

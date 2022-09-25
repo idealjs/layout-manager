@@ -11,10 +11,13 @@
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
     "dependencies": {
-        "@idealjs/sns-core": "^1.12.0",
-        "events": "^3.3.0"
+        "@idealjs/sns-core": "^1.12.0"
     },
     "peerDependencies": {
         "react": "^18.0.0"
+    },
+    "devDependencies": {
+        "@testing-library/react-hooks": "^8.0.1",
+        "events": "^3.3.0"
     }
 }
