@@ -9,7 +9,7 @@ import {
     SELECT_TAB_DATA,
     SLOT_EVENT,
 } from "@idealjs/layout-manager";
-import { useSlot, useSns } from "@idealjs/sns";
+import { useSlot, useSns } from "@idealjs/sns-react";
 import { useCallback, useEffect, useRef } from "react";
 
 import useRect from "../hooks/useRect";

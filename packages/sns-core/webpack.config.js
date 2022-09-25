@@ -21,10 +21,6 @@ module.exports = {
                 },
                 exclude: /node_modules/,
             },
-            {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader"],
-            },
         ],
     },
     resolve: {
@@ -38,13 +34,6 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: [
-        "@idealjs/layout-manager",
-        "@idealjs/portal-window",
-        "@idealjs/sns-react",
-        "react",
-        "react/jsx-runtime",
-        "react-dom",
-    ],
+    externals: ["events"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

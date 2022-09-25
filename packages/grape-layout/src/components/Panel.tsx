@@ -8,7 +8,7 @@ import {
     SLOT_EVENT,
     useStateRef,
 } from "@idealjs/layout-manager";
-import { useSns } from "@idealjs/sns";
+import { useSns } from "@idealjs/sns-react";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useFactory } from "./Provider";

@@ -1,9 +1,9 @@
 /// <reference types="@idealjs/layout-manager/custom" />
 
 import "valtio";
-import "@idealjs/sns";
+import "@idealjs/sns-react";
 
-declare module "@idealjs/sns" {
+declare module "@idealjs/sns-react" {
     interface Slot extends ISlot {}
 
     interface Sns extends ISns {
@@ -11,7 +11,7 @@ declare module "@idealjs/sns" {
     }
 }
 
-declare module "@idealjs/sns" {
+declare module "@idealjs/sns-react" {
     interface Slot extends ISlot {
         addListener(event: "ready", listener: (...args: any[]) => void): this;
         addListener(

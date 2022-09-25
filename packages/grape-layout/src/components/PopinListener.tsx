@@ -4,7 +4,7 @@ import {
     PanelNode,
     ROOTID,
 } from "@idealjs/layout-manager";
-import { useSlot } from "@idealjs/sns";
+import { useSlot } from "@idealjs/sns-react";
 import { useCallback, useEffect } from "react";
 
 import { rules } from "../lib/constant";

@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 
-export type SlotId = string | number | symbol;
+import { SlotId } from "./type";
 
 class Slot extends EventEmitter {
     public id: SlotId;

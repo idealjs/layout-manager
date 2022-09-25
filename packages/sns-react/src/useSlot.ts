@@ -1,6 +1,6 @@
+import { Slot, SlotId } from "@idealjs/sns-core";
 import { useEffect, useState } from "react";
 
-import Slot, { SlotId } from "./Slot";
 import useSns from "./useSns";
 
 const useSlot = (slotId: SlotId): Slot | null => {

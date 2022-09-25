@@ -1,23 +1,16 @@
 {
-    "name": "@idealjs/sns",
+    "name": "@idealjs/sns-core",
     "version": "1.12.0",
-    "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "scripts": {
         "test": "jest",
         "build": "tsc -p tsconfig.build.json",
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "peerDependencies": {
-        "events": "^3.3.0",
-        "nanoid": "^3.3.2",
-        "react": "^18.0.0"
-    },
     "devDependencies": {
-        "@testing-library/react-hooks": "^8.0.0"
+        "events": "^3.3.0"
     }
 }

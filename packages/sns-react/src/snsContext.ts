@@ -1,6 +1,7 @@
+import { Sns } from "@idealjs/sns-core";
 import { createContext } from "react";
 
-import Sns, { sns } from "./Sns";
+export const sns = new Sns();
 
 const snsContext = createContext<Sns>(sns);
 

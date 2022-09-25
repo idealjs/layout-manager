@@ -10,7 +10,7 @@ import {
     SLOT_EVENT,
     TABCMPT,
 } from "@idealjs/layout-manager";
-import { useSlot, useSns } from "@idealjs/sns";
+import { useSlot, useSns } from "@idealjs/sns-react";
 import clsx from "clsx";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";

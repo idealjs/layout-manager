@@ -5,7 +5,7 @@ import {
     MOVE_SPLITTER_DATA,
     SLOT_EVENT,
 } from "@idealjs/layout-manager";
-import { useSns } from "@idealjs/sns";
+import { useSns } from "@idealjs/sns-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
