@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/layout-manager",
-    "version": "1.12.0",
+    "version": "2.0.0-alpha.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -20,7 +20,6 @@
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "dependencies": {},
     "peerDependencies": {
         "events": "^3.3.0",
         "nanoid": "^3.3.2",
