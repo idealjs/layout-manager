@@ -1,24 +1,20 @@
 {
-    "name": "@idealjs/grape-layout",
+    "name": "@idealjs/dnd-react",
     "version": "1.12.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "license": "MIT",
     "scripts": {
-        "lint": "eslint src/**/*.{tsx,ts} --fix",
         "test": "jest",
         "build": "tsc -p tsconfig.build.json",
         "build:webpack": "webpack -c webpack.config.js",
         "prepublishOnly": "rm -rf dist&yarn build:webpack"
     },
-    "dependencies": {
-        "@idealjs/dnd-react": "^1.12.0",
-        "@idealjs/layout-manager": "^1.12.0",
-        "@idealjs/portal-window": "^1.12.0",
-        "@idealjs/sns-react": "^1.12.0",
-        "clsx": "^1.1.1",
-        "valtio": "^1.7.0"
-    },
     "peerDependencies": {
+        "events": "^3.3.0",
         "react": "^18.0.0"
+    },
+    "dependencies": {
+        "@idealjs/dnd-core": "^1.12.0"
     }
 }

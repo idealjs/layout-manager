@@ -1,4 +1,4 @@
-import { DND_EVENT, IDragData, useDnd } from "@idealjs/drag-drop";
+import { DND_EVENT, IDragData, useDnd } from "@idealjs/dnd-react";
 import {
     ILayoutNode,
     LAYOUT_DIRECTION,

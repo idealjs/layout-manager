@@ -1,4 +1,4 @@
-import { DND_EVENT, IDropData, useDnd } from "@idealjs/drag-drop";
+import { DND_EVENT, IDropData, useDnd } from "@idealjs/dnd-react";
 import {
     ADD_PANEL_DATA,
     MASK_PART,

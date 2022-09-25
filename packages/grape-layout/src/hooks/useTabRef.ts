@@ -1,4 +1,4 @@
-import { DND_EVENT, IPoint, useDnd } from "@idealjs/drag-drop";
+import { DND_EVENT, IPoint, useDnd } from "@idealjs/dnd-react";
 import { useEffect, useRef } from "react";
 
 import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";

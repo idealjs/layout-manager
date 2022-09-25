@@ -1,4 +1,4 @@
-import { IPoint } from "@idealjs/drag-drop";
+import { IPoint } from "@idealjs/dnd-react";
 import {
     ADD_PANEL_DATA,
     LayoutNodeActionType,
