@@ -31,6 +31,6 @@ module.exports = {
         libraryTarget: "umd",
         filename: "index.js",
     },
-    externals: ["@idealjs/dnd-core", "react"],
+    externals: ["@idealjs/dnd-core", "react", "react/jsx-runtime"],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };
