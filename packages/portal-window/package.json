@@ -8,7 +8,8 @@
         "test": "jest",
         "build": "tsc -p tsconfig.build.json",
         "build:webpack": "webpack -c webpack.config.js",
-        "prepublishOnly": "rm -rf dist&yarn build:webpack"
+        "prepublishOnly": "rm -rf dist&yarn build:webpack",
+        "postpublish": "rm -rf dist"
     },
     "peerDependencies": {
         "react": "^18.0.0",
