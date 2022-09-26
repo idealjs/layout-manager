@@ -46,6 +46,7 @@ module.exports = {
         "@idealjs/layout-manager",
         "@idealjs/portal-window",
         "@idealjs/sns-react",
+        "@idealjs/dnd-react",
         "react",
         "react/jsx-runtime",
         "react-dom",
