@@ -1,4 +1,4 @@
-[example_online]: https://codesandbox.io/s/grape-layout-example-irh1p5
+[example_online]: https://githubbox.com/idealjs/layout-manager/tree/main/example
 [example_folder]: https://github.com/idealjs/layout-manager/tree/main/example
 
 # Getting Started
@@ -6,30 +6,18 @@
 ## Install
 
 ```
-npm install @idealjs/layout-manager @idealjs/portal-window @idealjs/sns nanoid
-```
-
-or
-
-```
-yarn add @idealjs/layout-manager @idealjs/portal-window @idealjs/sns nanoid
+npm install @idealjs/layout-manager @idealjs/portal-window @idealjs/dnd-react @idealjs/sns-react
 ```
 
 ## Use directly with popout window
 
 ```
-npm install @idealjs/grape-layout html2canvas nanoid
+npm install @idealjs/grape-layout
 ```
-
-or
-
-```
-yarn add @idealjs/grape-layout html2canvas nanoid
-```
-
-For more details you can check the [online example][example_online] or [example folder][example_folder]
 
 ## Example
+
+For more details you can check
 
 -   [CodeSandbox][example_online]
 -   [Example Create by CRA][example_folder]
