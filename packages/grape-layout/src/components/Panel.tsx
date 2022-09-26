@@ -6,11 +6,11 @@ import {
     PanelNode,
     REMOVE_PANEL_DATA,
     SLOT_EVENT,
-    useStateRef,
 } from "@idealjs/layout-manager";
 import { useSns } from "@idealjs/sns-react";
 import { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 
+import useStateRef from "../hooks/useStateRef";
 import { useFactory } from "./Provider";
 import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
 import { usePanel } from "./providers/ValtioStateProvider";

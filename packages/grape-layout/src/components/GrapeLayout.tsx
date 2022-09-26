@@ -1,6 +1,7 @@
-import { LayoutNode, useStateRef } from "@idealjs/layout-manager";
+import { LayoutNode } from "@idealjs/layout-manager";
 import { PropsWithChildren, useState } from "react";
 
+import useStateRef from "../hooks/useStateRef";
 import MainLayoutSymbolProvider from "./MainLayoutSymbolProvider";
 import PopinListener from "./PopinListener";
 import PopoutManager, { IPortal, PortalsProvider } from "./PopoutManager";
