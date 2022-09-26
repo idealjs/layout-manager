@@ -16,6 +16,7 @@
         "react": "^18.0.0"
     },
     "dependencies": {
-        "@idealjs/dnd-core": "^2.0.0"
+        "@idealjs/dnd-core": "^2.0.0",
+        "html2canvas": "^1.4.1"
     }
 }

@@ -12,9 +12,7 @@
         "postpublish": "rm -rf dist"
     },
     "peerDependencies": {
-        "events": "^3.3.0"
-    },
-    "dependencies": {
+        "events": "^3.3.0",
         "html2canvas": "^1.4.1"
     }
 }
