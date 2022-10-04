@@ -60,7 +60,7 @@ const Provider: FC<
 export const useFactory = (): CMPTFactory => {
     const content = useContext(CMPTContext);
     if (content == null) {
-        throw new Error("CMPT Factory not Provide");
+        throw new Error("hook should work in provider");
     }
     return content.factory;
 };
@@ -68,7 +68,7 @@ export const useFactory = (): CMPTFactory => {
 export const useTitlebarHeight = (): number => {
     const content = useContext(CMPTContext);
     if (content == null) {
-        throw new Error("Tab CMPT not Provide");
+        throw new Error("hook should work in provider");
     }
     return content.titlebarHeight;
 };
@@ -76,7 +76,7 @@ export const useTitlebarHeight = (): number => {
 export const useSplitterThickness = (): number => {
     const content = useContext(CMPTContext);
     if (content == null) {
-        throw new Error("Tab CMPT not Provide");
+        throw new Error("hook should work in provider");
     }
     return content.splitterThickness;
 };
