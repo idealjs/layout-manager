@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 
-import { useSplitterThickness, useTitlebarHeight } from "../features/Provider";
 import { useLayoutNode } from "../features/Provider/LayoutNodeProvider";
 import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
 import { useUpdateHook } from "../features/Provider/UpdateHookProvider";
@@ -15,9 +14,6 @@ const useUpdate = () => {
     const layoutNode = useLayoutNode();
     const hook = useUpdateHook();
 
-    const titlebarHeight = useTitlebarHeight();
-    const splitterThickness = useSplitterThickness();
-
     const setAllLayouts = useSetAllLayouts();
     const setAllPanels = useSetAllPanels();
     const setAllSplitters = useSetAllSplitters();
@@ -28,24 +24,18 @@ const useUpdate = () => {
             hook?.before && hook.before(layoutSymbol, layoutNode);
             layoutNode.shakeTree();
             if (rect != null) {
-                layoutNode.fill(
-                    { ...rect, left: 0, top: 0 },
-                    splitterThickness
-                );
+                layoutNode.fill({ ...rect, left: 0, top: 0 });
             } else {
-                layoutNode.fill(
-                    {
-                        height: layoutNode.height,
-                        width: layoutNode.width,
-                        left: layoutNode.left,
-                        top: layoutNode.top,
-                    },
-                    splitterThickness
-                );
+                layoutNode.fill({
+                    height: layoutNode.height,
+                    width: layoutNode.width,
+                    left: layoutNode.left,
+                    top: layoutNode.top,
+                });
             }
             const layouts = layoutNode.parseLayout();
-            const splitters = layoutNode.parseSplitter(splitterThickness);
-            const panels = layoutNode.parsePanel(titlebarHeight);
+            const splitters = layoutNode.parseSplitter();
+            const panels = layoutNode.parsePanel();
 
             setAllLayouts(layouts);
             setAllPanels(panels);
@@ -60,8 +50,6 @@ const useUpdate = () => {
             setAllLayouts,
             setAllPanels,
             setAllSplitters,
-            splitterThickness,
-            titlebarHeight,
         ]
     );
 };

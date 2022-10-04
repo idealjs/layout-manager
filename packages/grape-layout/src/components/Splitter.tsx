@@ -39,12 +39,23 @@ const Splitter: SplitterCMPT = (props) => {
         return createShadowStyle({ parent, dragging, movingOffset });
     }, [dragging, movingOffset, parent]);
 
+    const [height, width] = useMemo(() => {
+        let { height, width } = splitter;
+        if (splitter.height === 0) {
+            height = 5;
+        }
+        if (splitter.width === 0) {
+            width = 5;
+        }
+        return [height, width];
+    }, [splitter]);
+
     return (
         <div
             style={{
                 position: "absolute",
-                height: splitter.height,
-                width: splitter.width,
+                height: height,
+                width: width,
                 left: splitter.left,
                 top: splitter.top,
             }}

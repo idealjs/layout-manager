@@ -285,8 +285,8 @@ class LayoutNode extends EventEmitter implements LayoutNode {
             width: number;
             left: number;
             top: number;
-        },
-        splitterThickness: number
+        }
+        // splitterThickness: number
     ) {
         this.height = rect.height;
         this.width = rect.width;
@@ -313,10 +313,7 @@ class LayoutNode extends EventEmitter implements LayoutNode {
                     childTop = this.top;
                 }
                 if (this.direction === LAYOUT_DIRECTION.COL) {
-                    avgHeight =
-                        (rect.height -
-                            (this.layoutNodes.length - 1) * splitterThickness) /
-                        this.layoutNodes.length;
+                    avgHeight = rect.height / this.layoutNodes.length;
                     avgWidth = rect.width;
 
                     childHeight =
@@ -326,38 +323,30 @@ class LayoutNode extends EventEmitter implements LayoutNode {
                     childLeft = rect.left;
                     childTop =
                         currentIndex * avgHeight +
-                        rect.top +
-                        currentIndex * splitterThickness -
+                        rect.top -
                         node.primaryOffset;
                 }
 
                 if (this.direction === LAYOUT_DIRECTION.ROW) {
                     avgHeight = rect.height;
-                    avgWidth =
-                        (rect.width -
-                            (this.layoutNodes.length - 1) * splitterThickness) /
-                        this.layoutNodes.length;
+                    avgWidth = rect.width / this.layoutNodes.length;
 
                     childHeight = avgHeight;
                     childWidth =
                         avgWidth + (node.primaryOffset + node.secondaryOffset);
                     childLeft =
                         currentIndex * avgWidth +
-                        rect.left +
-                        currentIndex * splitterThickness -
+                        rect.left -
                         node.primaryOffset;
                     childTop = rect.top;
                 }
 
-                node.fill(
-                    {
-                        height: childHeight,
-                        width: childWidth,
-                        left: childLeft,
-                        top: childTop,
-                    },
-                    splitterThickness
-                );
+                node.fill({
+                    height: childHeight,
+                    width: childWidth,
+                    left: childLeft,
+                    top: childTop,
+                });
             });
         }
     }
@@ -391,7 +380,7 @@ class LayoutNode extends EventEmitter implements LayoutNode {
             .concat(layout);
     }
 
-    public parseSplitter(splitterThickness: number): ISplitterNode[] {
+    public parseSplitter(): ISplitterNode[] {
         const index = this.parent?.layoutNodes.findIndex(
             (node) => node === this
         );
@@ -401,9 +390,7 @@ class LayoutNode extends EventEmitter implements LayoutNode {
             index === -1 ||
             index === this.parent.layoutNodes.length - 1
         ) {
-            return this.layoutNodes.flatMap((node) =>
-                node.parseSplitter(splitterThickness)
-            );
+            return this.layoutNodes.flatMap((node) => node.parseSplitter());
         }
 
         let splitterHeight = 0;
@@ -412,7 +399,6 @@ class LayoutNode extends EventEmitter implements LayoutNode {
         let splitterTop = 0;
 
         if (this.parent.direction === LAYOUT_DIRECTION.COL) {
-            splitterHeight = splitterThickness;
             splitterWidth = this.parent.width;
             splitterLeft = this.parent.left;
             splitterTop = this.top + this.height;
@@ -420,7 +406,6 @@ class LayoutNode extends EventEmitter implements LayoutNode {
 
         if (this.parent.direction === LAYOUT_DIRECTION.ROW) {
             splitterHeight = this.parent.height;
-            splitterWidth = splitterThickness;
             splitterLeft = this.left + this.width;
             splitterTop = this.parent.top;
         }
@@ -439,18 +424,14 @@ class LayoutNode extends EventEmitter implements LayoutNode {
         };
 
         return this.layoutNodes
-            .flatMap((node) => node.parseSplitter(splitterThickness))
+            .flatMap((node) => node.parseSplitter())
             .concat(splitter);
     }
 
-    public parsePanel(titlebarHeight: number = 25): IPanelNode[] {
+    public parsePanel(): IPanelNode[] {
         return this.layoutNodes
-            .flatMap((node) => node.parsePanel(titlebarHeight))
-            .concat(
-                this.panelNodes.map((pChild) =>
-                    pChild.parsePanel(titlebarHeight)
-                )
-            );
+            .flatMap((node) => node.parsePanel())
+            .concat(this.panelNodes.map((pChild) => pChild.parsePanel()));
     }
 
     public toJSON(): ILayoutJSON {

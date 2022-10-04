@@ -13,8 +13,6 @@ export type CMPTFactory = (
 
 export interface ILayoutProviderProps {
     factory: CMPTFactory;
-    titlebarHeight: number;
-    splitterThickness: number;
 }
 
 const CMPTContext = createContext<ILayoutProviderProps | null>(null);
@@ -28,15 +26,7 @@ const Provider: FC<
         } & Partial<ILayoutProviderProps>
     >
 > = (props) => {
-    const {
-        children,
-        layoutSymbol,
-        layoutNode,
-        updateHook,
-        factory,
-        titlebarHeight,
-        splitterThickness,
-    } = props;
+    const { children, layoutSymbol, layoutNode, updateHook, factory } = props;
 
     return (
         <UpdateHookProvider hook={updateHook}>
@@ -44,8 +34,6 @@ const Provider: FC<
                 <CMPTContext.Provider
                     value={{
                         factory: factory ?? (() => () => null),
-                        titlebarHeight: titlebarHeight ?? 24,
-                        splitterThickness: splitterThickness ?? 4,
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
@@ -63,22 +51,6 @@ export const useFactory = (): CMPTFactory => {
         throw new Error("hook should work in provider");
     }
     return content.factory;
-};
-
-export const useTitlebarHeight = (): number => {
-    const content = useContext(CMPTContext);
-    if (content == null) {
-        throw new Error("hook should work in provider");
-    }
-    return content.titlebarHeight;
-};
-
-export const useSplitterThickness = (): number => {
-    const content = useContext(CMPTContext);
-    if (content == null) {
-        throw new Error("hook should work in provider");
-    }
-    return content.splitterThickness;
 };
 
 export default Provider;

@@ -26,13 +26,13 @@ class PanelNode {
         }
     }
 
-    public parsePanel(titlebarHeight: number): IPanelNode {
+    public parsePanel(): IPanelNode {
         return {
             id: this.id,
-            height: (this.parent?.height || 0) - titlebarHeight,
+            height: this.parent?.height || 0,
             width: this.parent?.width || 0,
             left: this.parent?.left || 0,
-            top: (this.parent?.top || 0) + titlebarHeight,
+            top: this.parent?.top || 0,
             parentId: this.parent?.id || "",
             page: this.page,
             selected: this.selected,

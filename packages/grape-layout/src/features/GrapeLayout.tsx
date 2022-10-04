@@ -28,20 +28,12 @@ const GrapeLayout = (props: PropsWithChildren<IProps>) => {
                         layoutSymbol={mainLayoutSymbol}
                         layoutNode={layout}
                         factory={factory}
-                        splitterThickness={4}
-                        titlebarHeight={24}
                     >
                         {children}
                         <PopinListener />
                     </Provider>
                 </div>
-                <PopoutManager
-                    factory={factory}
-                    splitterThickness={4}
-                    titlebarHeight={24}
-                >
-                    {children}
-                </PopoutManager>
+                <PopoutManager factory={factory}>{children}</PopoutManager>
             </PortalsProvider>
         </MainLayoutSymbolProvider>
     );
