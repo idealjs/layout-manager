@@ -1,6 +1,6 @@
-import GrapeLayout, {
+import {
     CMPTFactory,
-    Layout,
+    GrapeLayout,
     LAYOUT_DIRECTION,
     LayoutNode,
     LayoutNodeActionType,
@@ -11,6 +11,7 @@ import GrapeLayout, {
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
+import Layout from "./components/Layout";
 import Counter, { CounterProvider } from "./Counter";
 
 const ROOT = new LayoutNode({
