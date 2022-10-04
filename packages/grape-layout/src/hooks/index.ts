@@ -1,3 +1,4 @@
+export { default as useInitSlotListener } from "./useInitSlotListener";
 export { default as useMountedRef } from "./useMountedRef";
 export { default as usePanelRef } from "./usePanelRef";
 export { default as useRect } from "./useRect";
