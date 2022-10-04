@@ -71,15 +71,11 @@ const hide: CSSProperties = {
 
 const Panel = (props: { nodeId: string }) => {
     const { nodeId } = props;
-    const ref = useRef<HTMLDivElement>(null);
     const panel = usePanel(nodeId)!;
-    const [maskPartRef, maskPart, setMaskPart] = useStateRef<MASK_PART | null>(
-        null
-    );
-    const dnd = useDnd();
-    const sns = useSns();
-    const layoutSymbol = useLayoutSymbol();
+
     const hidden = useMemo(() => !panel.selected, [panel.selected]);
+    const [ref, maskPart] = usePanelRef(nodeId);
+
     const maskPartStyle = useMemo(() => {
         switch (maskPart) {
             case MASK_PART.BOTTOM:
@@ -96,6 +92,49 @@ const Panel = (props: { nodeId: string }) => {
                 return hide;
         }
     }, [maskPart]);
+
+    const node = usePanel(nodeId);
+    const factory = useFactory();
+    const Page = useMemo(
+        () => factory(node?.page!, node?.data),
+        [factory, node?.data, node?.page]
+    );
+
+    return (
+        <div
+            ref={ref}
+            id={panel.id}
+            key={panel.id}
+            style={{
+                position: "absolute",
+                height: panel.height,
+                width: panel.width,
+                left: panel.left,
+                top: panel.top,
+
+                overflow: "hidden",
+                backgroundColor: "#dcdcdd",
+                visibility: hidden ? "hidden" : undefined,
+            }}
+        >
+            <div style={maskPartStyle} />
+            {Page ? <Page nodeData={node?.data} /> : null}
+        </div>
+    );
+};
+
+export default Panel;
+
+const usePanelRef = <E extends Element = HTMLDivElement>(
+    nodeId: string
+): [React.RefObject<E>, MASK_PART | null] => {
+    const ref = useRef<E>(null);
+    const [maskPartRef, maskPart, setMaskPart] = useStateRef<MASK_PART | null>(
+        null
+    );
+    const dnd = useDnd();
+    const sns = useSns();
+    const layoutSymbol = useLayoutSymbol();
 
     const onDrop = useCallback(
         (
@@ -225,33 +264,5 @@ const Panel = (props: { nodeId: string }) => {
         }
     }, [dnd, onDragLeave, onDragOver, onDrop]);
 
-    const node = usePanel(nodeId);
-    const factory = useFactory();
-    const Page = useMemo(
-        () => factory(node?.page!, node?.data),
-        [factory, node?.data, node?.page]
-    );
-    return (
-        <div
-            ref={ref}
-            id={panel.id}
-            key={panel.id}
-            style={{
-                position: "absolute",
-                height: panel.height,
-                width: panel.width,
-                left: panel.left,
-                top: panel.top,
-
-                overflow: "hidden",
-                backgroundColor: "#dcdcdd",
-                visibility: hidden ? "hidden" : undefined,
-            }}
-        >
-            <div style={maskPartStyle} />
-            {Page ? <Page nodeData={node?.data} /> : null}
-        </div>
-    );
+    return [ref, maskPart];
 };
-
-export default Panel;
