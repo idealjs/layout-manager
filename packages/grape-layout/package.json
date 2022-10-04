@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/grape-layout",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -12,10 +12,10 @@
         "postpublish": "rm -rf dist"
     },
     "dependencies": {
-        "@idealjs/dnd-react": "^2.0.0",
-        "@idealjs/layout-manager": "^2.0.0",
-        "@idealjs/portal-window": "^1.12.0",
-        "@idealjs/sns-react": "^2.0.0",
+        "@idealjs/dnd-react": "^2.0.1",
+        "@idealjs/layout-manager": "^2.0.1",
+        "@idealjs/portal-window": "^2.0.1",
+        "@idealjs/sns-react": "^2.0.1",
         "clsx": "^1.1.1",
         "valtio": "^1.7.0"
     },

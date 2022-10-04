@@ -1,6 +1,6 @@
 {
     "name": "@idealjs/sns-react",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
@@ -12,7 +12,7 @@
         "postpublish": "rm -rf dist"
     },
     "dependencies": {
-        "@idealjs/sns-core": "^2.0.0"
+        "@idealjs/sns-core": "^2.0.1"
     },
     "peerDependencies": {
         "react": "^18.0.0"
