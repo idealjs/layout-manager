@@ -8,8 +8,8 @@ import {
 import { useSns } from "@idealjs/sns-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
-import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { useLayout } from "../components/providers/ValtioStateProvider";
+import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
+import { useLayout } from "../features/Provider/ValtioStateProvider";
 
 export const createSplitterStyle = (config: {
     dragging: boolean;

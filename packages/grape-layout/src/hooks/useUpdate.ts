@@ -1,17 +1,14 @@
 import { useCallback } from "react";
 
-import {
-    useSplitterThickness,
-    useTitlebarHeight,
-} from "../components/Provider";
-import { useLayoutNode } from "../components/providers/LayoutNodeProvider";
-import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { useUpdateHook } from "../components/providers/UpdateHookProvider";
+import { useSplitterThickness, useTitlebarHeight } from "../features/Provider";
+import { useLayoutNode } from "../features/Provider/LayoutNodeProvider";
+import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
+import { useUpdateHook } from "../features/Provider/UpdateHookProvider";
 import {
     useSetAllLayouts,
     useSetAllPanels,
     useSetAllSplitters,
-} from "../components/providers/ValtioStateProvider";
+} from "../features/Provider/ValtioStateProvider";
 
 const useUpdate = () => {
     const layoutSymbol = useLayoutSymbol();

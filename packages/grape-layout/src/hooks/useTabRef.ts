@@ -1,8 +1,8 @@
 import { DND_EVENT, IPoint, useDnd } from "@idealjs/dnd-react";
 import { useEffect, useRef } from "react";
 
-import { useLayoutSymbol } from "../components/providers/LayoutSymbolProvider";
-import { usePanel } from "../components/providers/ValtioStateProvider";
+import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
+import { usePanel } from "../features/Provider/ValtioStateProvider";
 
 const useTabRef = <T extends HTMLElement>(
     nodeId: string,

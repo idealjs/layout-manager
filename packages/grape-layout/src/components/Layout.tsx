@@ -12,16 +12,16 @@ import {
 import { useSlot, useSns } from "@idealjs/sns-react";
 import { useCallback, useEffect, useRef } from "react";
 
-import useRect from "../hooks/useRect";
-import useUpdate from "../hooks/useUpdate";
-import Panel from "./Panel";
-import { useLayoutNode } from "./providers/LayoutNodeProvider";
-import { useLayoutSymbol } from "./providers/LayoutSymbolProvider";
+import { useLayoutNode } from "../features/Provider/LayoutNodeProvider";
+import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
 import {
     useLayouts,
     usePanels,
     useSplitters,
-} from "./providers/ValtioStateProvider";
+} from "../features/Provider/ValtioStateProvider";
+import useRect from "../hooks/useRect";
+import useUpdate from "../hooks/useUpdate";
+import Panel from "./Panel";
 import Splitter from "./Splitter";
 import Tab from "./Tab";
 import Titlebar from "./Titlebar";

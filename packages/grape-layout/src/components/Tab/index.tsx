@@ -16,12 +16,12 @@ import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { useMemo } from "react";
 
+import { useMainLayoutSymbol } from "../../features/MainLayoutSymbolProvider";
+import { usePortals } from "../../features/PopoutManager";
+import { useLayoutNode } from "../../features/Provider/LayoutNodeProvider";
+import { useLayoutSymbol } from "../../features/Provider/LayoutSymbolProvider";
+import { usePanel } from "../../features/Provider/ValtioStateProvider";
 import useTabRef from "../../hooks/useTabRef";
-import { useMainLayoutSymbol } from "../MainLayoutSymbolProvider";
-import { usePortals } from "../PopoutManager";
-import { useLayoutNode } from "../providers/LayoutNodeProvider";
-import { useLayoutSymbol } from "../providers/LayoutSymbolProvider";
-import { usePanel } from "../providers/ValtioStateProvider";
 import Close from "../svg/Close";
 import Popin from "../svg/Popin";
 import Popout from "../svg/Popout";

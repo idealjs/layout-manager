@@ -1,10 +1,10 @@
 import { LayoutNode, UPDATE_HOOK } from "@idealjs/layout-manager";
 import { createContext, FC, FunctionComponent, useContext } from "react";
 
-import LayoutNodeProvider from "./providers/LayoutNodeProvider";
-import LayoutSymbolProvider from "./providers/LayoutSymbolProvider";
-import UpdateHookProvider from "./providers/UpdateHookProvider";
-import ValtioStateProvider from "./providers/ValtioStateProvider";
+import LayoutNodeProvider from "./LayoutNodeProvider";
+import LayoutSymbolProvider from "./LayoutSymbolProvider";
+import UpdateHookProvider from "./UpdateHookProvider";
+import ValtioStateProvider from "./ValtioStateProvider";
 
 export type CMPTFactory = (
     page: string,

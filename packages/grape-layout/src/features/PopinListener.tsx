@@ -9,7 +9,7 @@ import { useCallback, useEffect } from "react";
 
 import { rules } from "../lib/constant";
 import { useMainLayoutSymbol } from "./MainLayoutSymbolProvider";
-import { useLayoutNode } from "./providers/LayoutNodeProvider";
+import { useLayoutNode } from "./Provider/LayoutNodeProvider";
 
 const PopinListener = () => {
     const layoutNode = useLayoutNode();

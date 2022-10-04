@@ -1,11 +1,14 @@
 import { LAYOUT_DIRECTION, SplitterCMPT } from "@idealjs/layout-manager";
 import { useMemo } from "react";
 
+import {
+    useLayout,
+    useSplitter,
+} from "../features/Provider/ValtioStateProvider";
 import useSplitterRef, {
     createShadowStyle,
     createSplitterStyle,
 } from "../hooks/useSplitterRef";
-import { useLayout, useSplitter } from "./providers/ValtioStateProvider";
 
 const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
