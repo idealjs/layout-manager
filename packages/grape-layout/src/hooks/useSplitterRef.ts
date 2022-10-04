@@ -1,52 +1,14 @@
 import { DND_EVENT, IDragData, useDnd } from "@idealjs/dnd-react";
 import {
-    ILayoutNode,
     LAYOUT_DIRECTION,
     MOVE_SPLITTER_DATA,
     SLOT_EVENT,
 } from "@idealjs/layout-manager";
 import { useSns } from "@idealjs/sns-react";
-import { CSSProperties, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
 import { useLayout } from "../features/Provider/ValtioStateProvider";
-
-export const createSplitterStyle = (config: {
-    dragging: boolean;
-}): CSSProperties => {
-    const { dragging } = config;
-    const hoverBackgroundColor = "#00000085";
-    return {
-        width: "100%",
-        height: "100%",
-        backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
-        userSelect: "none",
-        position: "relative",
-        zIndex: 1,
-    };
-};
-
-export const createShadowStyle = (config: {
-    parent: ILayoutNode | undefined;
-    movingOffset: number;
-    dragging: boolean;
-}): CSSProperties => {
-    const { parent, movingOffset, dragging } = config;
-    const parentDirection = parent?.direction;
-
-    let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
-    let y = parentDirection === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
-    const transform = `translate(${x}px, ${y}px)`;
-    return {
-        display: dragging ? undefined : "none",
-        position: "relative",
-        zIndex: -1,
-        transform,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#00000065",
-    } as CSSProperties;
-};
 
 const useSplitterRef = (data: {
     id: string;

@@ -1,9 +1,6 @@
+import { useFactory,usePanel, usePanelRef } from "@idealjs/grape-layout";
 import { MASK_PART } from "@idealjs/layout-manager";
 import { CSSProperties, useMemo } from "react";
-
-import { useFactory } from "../features/Provider";
-import { usePanel } from "../features/Provider/ValtioStateProvider";
-import usePanelRef from "../hooks/usePanelRef";
 
 const top: CSSProperties = {
     zIndex: 1,
