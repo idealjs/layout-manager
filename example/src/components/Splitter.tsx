@@ -1,47 +1,7 @@
 import { useLayout, useSplitter, useSplitterRef } from "@idealjs/grape-layout";
-import {
-    ILayoutNode,
-    LAYOUT_DIRECTION,
-    SplitterCMPT,
-} from "@idealjs/layout-manager";
-import { CSSProperties, useMemo } from "react";
-
-export const createSplitterStyle = (config: {
-    dragging: boolean;
-}): CSSProperties => {
-    const { dragging } = config;
-    const hoverBackgroundColor = "#00000085";
-    return {
-        width: "100%",
-        height: "100%",
-        backgroundColor: dragging ? hoverBackgroundColor : "#00000065",
-        userSelect: "none",
-        position: "relative",
-        zIndex: 1,
-    };
-};
-
-export const createShadowStyle = (config: {
-    parent: ILayoutNode | undefined;
-    movingOffset: number;
-    dragging: boolean;
-}): CSSProperties => {
-    const { parent, movingOffset, dragging } = config;
-    const parentDirection = parent?.direction;
-
-    let x = parentDirection === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
-    let y = parentDirection === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
-    const transform = `translate(${x}px, ${y}px)`;
-    return {
-        display: dragging ? undefined : "none",
-        position: "relative",
-        zIndex: -1,
-        transform,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#00000065",
-    } as CSSProperties;
-};
+import { LAYOUT_DIRECTION, SplitterCMPT } from "@idealjs/layout-manager";
+import clsx from "clsx";
+import { useMemo } from "react";
 
 const Splitter: SplitterCMPT = (props) => {
     const { id, parentId, primaryId, secondaryId } = props;
@@ -55,47 +15,54 @@ const Splitter: SplitterCMPT = (props) => {
 
     const parent = useLayout(parentId);
 
-    const splitterStyle = useMemo(() => {
-        const cursor =
-            parent?.direction === LAYOUT_DIRECTION.ROW
-                ? "ew-resize"
-                : "ns-resize";
-        return {
-            ...createSplitterStyle({
-                dragging,
-            }),
-            cursor: cursor,
-        };
-    }, [dragging, parent?.direction]);
+    const isCOL = useMemo(
+        () => parent?.direction === LAYOUT_DIRECTION.COL,
+        [parent?.direction]
+    );
 
-    const shadowStyle = useMemo(() => {
-        return createShadowStyle({ parent, dragging, movingOffset });
-    }, [dragging, movingOffset, parent]);
+    const transform = useMemo(() => {
+        let x = parent?.direction === LAYOUT_DIRECTION.ROW ? movingOffset : 0;
+        let y = parent?.direction === LAYOUT_DIRECTION.ROW ? 0 : movingOffset;
+        const transform = `translate(${x}px, ${y}px)`;
+        return transform;
+    }, [movingOffset, parent?.direction]);
 
     const [height, width] = useMemo(() => {
         let { height, width } = splitter;
         if (splitter.height === 0) {
-            height = 5;
+            height = 4;
         }
         if (splitter.width === 0) {
-            width = 5;
+            width = 4;
         }
         return [height, width];
     }, [splitter]);
 
     return (
         <div
+            id={id}
+            ref={ref}
+            className={clsx(
+                "absolute select-none z-10 bg-slate-500 hover:bg-sky-600",
+                {
+                    "cursor-ew-resize": !isCOL,
+                    "cursor-ns-resize": isCOL,
+                }
+            )}
             style={{
-                position: "absolute",
                 height: height,
                 width: width,
-                left: splitter.left,
-                top: splitter.top,
+                left: !isCOL ? splitter.left - 4 : splitter.left,
+                top: isCOL ? splitter.top - 4 : splitter.top,
             }}
         >
-            <div id={id} ref={ref} style={splitterStyle}>
-                <div ref={shadowRef} style={shadowStyle}></div>
-            </div>
+            <div
+                ref={shadowRef}
+                className={clsx("relative bg-sky-600 h-full w-full", {
+                    hidden: !dragging,
+                })}
+                style={{ transform }}
+            ></div>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { useFactory,usePanel, usePanelRef } from "@idealjs/grape-layout";
+import { useFactory, usePanel, usePanelRef } from "@idealjs/grape-layout";
 import { MASK_PART } from "@idealjs/layout-manager";
 import { CSSProperties, useMemo } from "react";
 
@@ -94,10 +94,10 @@ const Panel = (props: { nodeId: string }) => {
             key={panel.id}
             style={{
                 position: "absolute",
-                height: panel.height,
+                height: panel.height - 24,
                 width: panel.width,
                 left: panel.left,
-                top: panel.top,
+                top: panel.top + 24,
 
                 overflow: "hidden",
                 backgroundColor: "#dcdcdd",
