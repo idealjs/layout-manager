@@ -5,7 +5,7 @@
 
 Building Multi-Window Application's Frameworkless Library
 
-![snapshot](./snapshot.png)
+![snapshot](./snapshot2.png)
 
 ## Use directly with Grape Layout
 
