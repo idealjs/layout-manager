@@ -7,8 +7,7 @@ import {
 import { useSns } from "@idealjs/sns-react";
 import { useEffect, useRef, useState } from "react";
 
-import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
-import { useLayout } from "../features/Provider/ValtioStateProvider";
+import { useLayout,useLayoutSymbol } from "../features";
 
 const useSplitterRef = (data: {
     id: string;

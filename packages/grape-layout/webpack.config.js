@@ -50,6 +50,8 @@ module.exports = {
         "react",
         "react/jsx-runtime",
         "react-dom",
+        "react-redux",
+        "@reduxjs/toolkit",
     ],
     plugins: [new BundleAnalyzerPlugin({ analyzerMode: "static" })],
 };

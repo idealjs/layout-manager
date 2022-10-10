@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 
-import { useLayoutNode } from "../features/Provider/LayoutNodeProvider";
-import { useLayoutSymbol } from "../features/Provider/LayoutSymbolProvider";
-import { useUpdateHook } from "../features/Provider/UpdateHookProvider";
 import {
+    useLayoutNode,
+    useLayoutSymbol,
     useSetAllLayouts,
     useSetAllPanels,
     useSetAllSplitters,
-} from "../features/Provider/ValtioStateProvider";
+    useUpdateHook,
+} from "../features";
 
 const useUpdate = () => {
     const layoutSymbol = useLayoutSymbol();

@@ -16,7 +16,9 @@
         "@idealjs/layout-manager": "^2.0.1",
         "@idealjs/portal-window": "^2.0.1",
         "@idealjs/sns-react": "^2.0.1",
+        "@reduxjs/toolkit": "^1.8.6",
         "clsx": "^1.1.1",
+        "react-redux": "^8.0.4",
         "valtio": "^1.7.0"
     },
     "peerDependencies": {

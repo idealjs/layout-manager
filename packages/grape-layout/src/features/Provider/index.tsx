@@ -3,6 +3,7 @@ import { createContext, FC, FunctionComponent, useContext } from "react";
 
 import LayoutNodeProvider from "./LayoutNodeProvider";
 import LayoutSymbolProvider from "./LayoutSymbolProvider";
+import ReduxProvider from "./ReduxProvider";
 import UpdateHookProvider from "./UpdateHookProvider";
 import ValtioStateProvider from "./ValtioStateProvider";
 
@@ -37,7 +38,11 @@ const Provider: FC<
                     }}
                 >
                     <LayoutSymbolProvider uniqueSymbol={layoutSymbol}>
-                        <ValtioStateProvider>{children}</ValtioStateProvider>
+                        <ReduxProvider>
+                            <ValtioStateProvider>
+                                {children}
+                            </ValtioStateProvider>
+                        </ReduxProvider>
                     </LayoutSymbolProvider>
                 </CMPTContext.Provider>
             </LayoutNodeProvider>
@@ -63,3 +68,5 @@ export * from "./UpdateHookProvider";
 export { default as UpdateHookProvider } from "./UpdateHookProvider";
 export * from "./ValtioStateProvider";
 export { default as ValtioStateProvider } from "./ValtioStateProvider";
+// export * from "./ReduxProvider";
+// export { default as ReduxProvider } from "./ReduxProvider";

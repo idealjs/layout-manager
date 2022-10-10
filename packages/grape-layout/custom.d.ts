@@ -2,6 +2,9 @@
 
 import "valtio";
 import "@idealjs/sns-react";
+import "react-redux";
+
+import type { RootState } from "./src/features/Provider/ReduxProvider";
 
 declare module "@idealjs/sns-react" {
     interface Slot extends ISlot {}
@@ -74,4 +77,11 @@ declare module "@idealjs/sns-react" {
 
 declare module "valtio" {
     function useSnapshot<T extends object>(p: T): T;
+}
+
+declare module "react-redux" {
+    export declare const useSelector: <TState = RootState, Selected = unknown>(
+        selector: (state: TState) => Selected,
+        equalityFn?: EqualityFn<Selected> | undefined
+    ) => Selected;
 }
