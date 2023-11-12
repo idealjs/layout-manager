@@ -1,13 +1,4 @@
 {
-    "npmClient": "yarn",
-    "useWorkspaces": true,
-    "version": "2.1.0",
-    "command": {
-        "version": {
-            "allowBranch": ["main", "v2.x"]
-        },
-        "publish": {
-            "registry": "https://registry.npmjs.org"
-        }
-    }
+  "npmClient": "yarn",
+  "version": "3.0.0"
 }
