@@ -1,0 +1,27 @@
+name: CI Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  merge_group:
+    branches:
+      - main
+  push:
+    branches:
+      - refactor
+
+jobs:
+  ci-test:
+    name: CI Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --immutable
+      - name: Pack Packages
+        run: yarn workspaces foreach run prepack

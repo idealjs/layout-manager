@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@idealjs/reactive"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../../packages/core"
+    }
+  ]
+}
