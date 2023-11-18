@@ -1997,12 +1997,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealjs/reactive@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@idealjs/reactive@npm:0.1.5"
+"@idealjs/reactive@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@idealjs/reactive@npm:0.1.6"
   dependencies:
     csstype: "npm:^3.1.2"
-  checksum: 9d01d17dde0727ea90e8fe0c31059a996dad69be42b5c1e67f1bf98d5892e4fd25646d31e01d90a196d4386840bd8b6d715caf732ebf57cd64782f1582f14c67
+  checksum: 2659bf2bd1d8f922eeae13c55d3be238658567a6854a1564f2ddd331c2361a629889926c863692d394341b78f13cf865e603a9ed0a42b25eba5468b9e98d0376
   languageName: node
   linkType: hard
 
@@ -4375,7 +4375,7 @@ __metadata:
   resolution: "demo@workspace:apps/demo"
   dependencies:
     "@idealjs/layout-manager": "workspace:^"
-    "@idealjs/reactive": "npm:^0.1.5"
+    "@idealjs/reactive": "npm:^0.1.6"
     "@types/node": "npm:^20.6.0"
     typescript: "npm:^5.0.2"
     vite: "npm:^4.4.5"
@@ -6873,7 +6873,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:^7.0.2":
+"lerna@npm:^7.4.2":
   version: 7.4.2
   resolution: "lerna@npm:7.4.2"
   dependencies:
@@ -9148,7 +9148,7 @@ __metadata:
     eslint: "npm:^8.43.0"
     eslint-config-react-app: "npm:^7.0.1"
     eslint-plugin-simple-import-sort: "npm:^10.0.0"
-    lerna: "npm:^7.0.2"
+    lerna: "npm:^7.4.2"
     lerna-update-wizard: "npm:^1.1.2"
     lodash: "npm:^4.17.21"
     prettier: "npm:^2.8.8"

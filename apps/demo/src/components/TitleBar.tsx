@@ -1,4 +1,4 @@
-import { derive, JSXChildren, JSXNode } from "@idealjs/reactive";
+import { derive, JSXChildren } from "@idealjs/reactive";
 
 import { layouts } from "../store";
 

@@ -18,7 +18,7 @@ const Tab = (props: { panelId: string }) => {
       style={() => ({
         backgroundColor: style.val.backgroundColor,
       })}
-      onclick={() => {
+      onClick={() => {
         RootLayout.doAction(
           createSelectTabAction({
             search: panelId,
