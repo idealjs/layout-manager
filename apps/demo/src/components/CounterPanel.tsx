@@ -44,7 +44,7 @@ const CounterPanel = (props: { panelId: string }) => {
         }}
       >
         <button
-          onclick={() => {
+          onClick={() => {
             const target = findNodeByRules(RootLayout, [
               { part: MASK_PART.BOTTOM, max: 2 },
               { part: MASK_PART.RIGHT, max: 2 },
