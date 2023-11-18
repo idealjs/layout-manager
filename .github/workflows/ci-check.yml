@@ -7,9 +7,6 @@ on:
   merge_group:
     branches:
       - main
-  push:
-    branches:
-      - refactor
 
 jobs:
   ci-test:
@@ -23,5 +20,7 @@ jobs:
           cache: yarn
       - name: Install Dependencies
         run: yarn install --immutable
-      - name: Pack Packages
-        run: yarn workspaces foreach run prepack
+      - name: Test Packages
+        run: yarn workspaces foreach --all run test run
+      - name: Build Packages
+        run: yarn workspaces foreach --all run prepack
