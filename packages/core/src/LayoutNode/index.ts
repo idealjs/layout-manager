@@ -36,12 +36,12 @@ export const LayoutNodeUpdate = Symbol("LayoutNodeUpdate");
 
 class LayoutNode {
   id: string = nanoid();
-  height: number = 0;
-  width: number = 0;
-  left: number = 0;
-  top: number = 0;
-  primaryOffset: number = 0;
-  secondaryOffset: number = 0;
+  height = 0;
+  width = 0;
+  left = 0;
+  top = 0;
+  primaryOffset = 0;
+  secondaryOffset = 0;
   layoutNodes: LayoutNode[] = [];
   panelNodes: PanelNode[] = [];
 

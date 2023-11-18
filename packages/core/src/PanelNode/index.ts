@@ -7,9 +7,9 @@ export type * from "./type";
 class PanelNode {
   id: string = nanoid();
   parent: LayoutNode | null = null;
-  page: string = "";
-  selected: boolean = false;
-  data?: any;
+  page = "";
+  selected = false;
+  data?: unknown;
 
   constructor(panelJSON?: Partial<IPanelJSON>) {
     if (panelJSON?.id != null) {

@@ -1,7 +1,7 @@
 export interface IPanelJSON {
   id: string;
   page: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface IPanel {
@@ -13,5 +13,5 @@ export interface IPanel {
   parentId: string;
   page: string;
   selected: boolean;
-  data?: any;
+  data?: unknown;
 }
